@@ -239,6 +239,93 @@ paths:
           schema: { type: string }
       responses:
         '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/EventResource' } } } }
+  /auth/register:
+    post:
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '201': { description: Created }
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { email: { type: string }, password: { type: string } } } } }
+      responses:
+        '200': { description: OK }
+  /auth/me:
+    get:
+      summary: Get current user
+      responses:
+        '200': { description: OK }
+  /offerings:
+    get:
+      summary: List offerings
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: type
+          schema: { type: string, enum: [accommodation,experience,guide_service] }
+        - in: query
+          name: min_price
+          schema: { type: number }
+        - in: query
+          name: max_price
+          schema: { type: number }
+        - in: query
+          name: capacity
+          schema: { type: integer }
+        - in: query
+          name: city
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /offerings/{slug}:
+    get:
+      summary: Get offering by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /checkout/session:
+    post:
+      summary: Create checkout session
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { offering_id: { type: integer }, start_date: { type: string, format: date }, end_date: { type: string, format: date, nullable: true }, guests: { type: integer } } } } }
+      responses:
+        '201': { description: Created }
+  /bookings/{id}:
+    get:
+      summary: Get booking by id
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses:
+        '200': { description: OK }
+  /bookings/{id}/cancel:
+    post:
+      summary: Cancel booking
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses:
+        '200': { description: OK }
+  /payments/paystack/webhook:
+    post:
+      summary: Paystack webhook
+      responses:
+        '200': { description: OK }
 components:
   schemas:
     PlaceResource:

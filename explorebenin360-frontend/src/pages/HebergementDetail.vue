@@ -5,6 +5,9 @@
         <h1 class="text-3xl font-bold">{{ item.title }}</h1>
         <p class="text-[color:var(--color-text-muted)]">{{ item.city }} — {{ item.type }}</p>
       </div>
+      <RouterLink to="/offerings" class="btn-base focus-ring h-10 px-5 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
+        Réserver
+      </RouterLink>
     </div>
 
     <EBImage :src="item.cover_image_url || placeholder" :alt="item.title" :width="1200" :height="800" class="rounded-[var(--radius-lg)]"/>
@@ -21,7 +24,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { fetchAccommodation } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
