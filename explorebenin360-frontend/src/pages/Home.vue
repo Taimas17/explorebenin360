@@ -26,12 +26,79 @@
 
     <section>
       <h2 class="text-2xl font-bold mb-4">{{ t('sections.popular_destinations') }}</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card v-for="i in 6" :key="i">
-          <template #title>Destination {{ i }}</template>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <div v-if="loading.places" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
+      <div v-else-if="errors.places" class="text-red-600 text-sm">{{ errors.places }}</div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="p in places" :key="p.id">
+          <template #title>{{ p.title }}</template>
+          {{ p.city }}
           <template #actions>
-            <Button variant="secondary" size="sm">{{ t('hero.cta') }}</Button>
+            <RouterLink :to="{ name: 'destination-detail', params: { slug: p.slug } }" class="inline-block">
+              <Button variant="secondary" size="sm">{{ t('hero.cta') }}</Button>
+            </RouterLink>
+          </template>
+        </Card>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Hébergements</h2>
+      <div v-if="loading.accommodations" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
+      <div v-else-if="errors.accommodations" class="text-red-600 text-sm">{{ errors.accommodations }}</div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="h in accommodations" :key="h.id">
+          <template #title>{{ h.title }}</template>
+          {{ h.city }} · {{ h.price_per_night.toLocaleString() }} {{ h.currency }} / nuit
+          <template #actions>
+            <RouterLink :to="{ name: 'hebergement-detail', params: { slug: h.slug } }" class="inline-block">
+              <Button variant="secondary" size="sm">Voir</Button>
+            </RouterLink>
+          </template>
+        </Card>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Guides</h2>
+      <div v-if="loading.guides" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
+      <div v-else-if="errors.guides" class="text-red-600 text-sm">{{ errors.guides }}</div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="g in guides" :key="g.id">
+          <template #title>{{ g.name }}</template>
+          {{ g.city }}
+        </Card>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Blog</h2>
+      <div v-if="loading.articles" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
+      <div v-else-if="errors.articles" class="text-red-600 text-sm">{{ errors.articles }}</div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="a in articles" :key="a.id">
+          <template #title>{{ a.title }}</template>
+          {{ a.excerpt }}
+          <template #actions>
+            <RouterLink :to="{ name: 'article-detail', params: { slug: a.slug } }" class="inline-block">
+              <Button variant="secondary" size="sm">Lire</Button>
+            </RouterLink>
+          </template>
+        </Card>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Agenda</h2>
+      <div v-if="loading.events" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
+      <div v-else-if="errors.events" class="text-red-600 text-sm">{{ errors.events }}</div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="e in events" :key="e.id">
+          <template #title>{{ e.title }}</template>
+          {{ e.city }} · {{ e.start_date }}
+          <template #actions>
+            <RouterLink :to="{ name: 'event-detail', params: { slug: e.slug } }" class="inline-block">
+              <Button variant="secondary" size="sm">Détails</Button>
+            </RouterLink>
           </template>
         </Card>
       </div>
@@ -41,34 +108,23 @@
       <h2 class="text-2xl font-bold mb-4">Panorama 360°</h2>
       <EB360Viewer :src="svg('Panorama')" alt="Vue 360" />
     </section>
-
-    <section>
-      <h2 class="text-2xl font-bold mb-4">{{ t('sections.must_do') }}</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Badge v-for="i in 12" :key="i">Tag {{ i }}</Badge>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="text-2xl font-bold mb-4">{{ t('sections.testimonials') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Alert v-for="i in 3" :key="i" type="info">“Great trip {{ i }}”</Alert>
-      </div>
-    </section>
   </main>
 </template>
 
 <script setup>
+import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@vueuse/head'
+import { fetchPlaces, fetchAccommodations, fetchGuides, fetchArticles, fetchEvents } from '@/lib/api'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
-import Badge from '@/components/ui/Badge.vue'
-import Alert from '@/components/ui/Alert.vue'
+import Loader from '@/components/ui/Loader.vue'
 import Icon from '@/components/ui/Icon.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
 
 const { t } = useI18n()
+useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ] })
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`
@@ -83,4 +139,20 @@ const heroItems = [
   { src: svg('Cotonou', '#00796B', '#FFD166'), alt: 'Cotonou', caption: 'Plage de Cotonou' },
   { src: svg('Pendjari', '#FFD166', '#FF6B35'), alt: 'Pendjari', caption: 'Savane du parc Pendjari' },
 ]
+
+const loading = reactive({ places: true, accommodations: true, guides: true, articles: true, events: true })
+const errors = reactive({ places: '', accommodations: '', guides: '', articles: '', events: '' })
+const places = ref([])
+const accommodations = ref([])
+const guides = ref([])
+const articles = ref([])
+const events = ref([])
+
+onMounted(async () => {
+  try { const { data } = await fetchPlaces({ featured: true, per_page: 6 }); places.value = data } catch(e){ errors.places = 'Erreur de chargement'; } finally { loading.places = false }
+  try { const { data } = await fetchAccommodations({ featured: true, per_page: 6 }); accommodations.value = data } catch(e){ errors.accommodations = 'Erreur de chargement'; } finally { loading.accommodations = false }
+  try { const { data } = await fetchGuides({ per_page: 3 }); guides.value = data } catch(e){ errors.guides = 'Erreur de chargement'; } finally { loading.guides = false }
+  try { const { data } = await fetchArticles({ sort: 'recent', per_page: 3 }); articles.value = data } catch(e){ errors.articles = 'Erreur de chargement'; } finally { loading.articles = false }
+  try { const { data } = await fetchEvents({ featured: true, per_page: 3 }); events.value = data } catch(e){ errors.events = 'Erreur de chargement'; } finally { loading.events = false }
+})
 </script>

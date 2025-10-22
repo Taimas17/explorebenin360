@@ -4,12 +4,19 @@
       <div>
         <p class="text-lg font-semibold">Map coming soon</p>
         <p class="mt-1 text-sm text-[color:var(--color-text-muted)]">API Key: {{ maskedKey }}</p>
+        <p v-if="markers?.length" class="mt-2 text-sm">{{ markers.length }} marqueurs</p>
+        <div v-if="markers?.length" class="mt-3 flex flex-wrap justify-center gap-2 max-w-xl mx-auto">
+          <button v-for="(m,i) in markers" :key="i" @click="$emit('marker-click', m)" class="px-2 py-1 rounded bg-white/80 hover:bg-white shadow text-xs">
+            {{ m.title || ('#' + (i+1)) }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+const props = defineProps({ markers: { type: Array, default: () => [] } })
 const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''
 const maskedKey = key ? key.slice(0, 6) + '...' : 'not set'
 </script>
