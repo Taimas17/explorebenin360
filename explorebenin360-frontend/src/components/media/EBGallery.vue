@@ -18,7 +18,19 @@ const props = withDefaults(defineProps<{ items: Item[]; variant?: 'grid' | 'hero
 const isOpen = ref(false)
 const activeIndex = ref(0)
 const lightboxEl = ref<HTMLDivElement | null>(null)
+const heroEl = ref<HTMLElement | null>(null)
+const prefersReduced = ref(false)
 let timer: any
+
+function startAutoplay() {
+  if (props.variant !== 'hero') return
+  if (prefersReduced.value) return
+  stopAutoplay()
+  timer = setInterval(() => next(), props.autoplayMs)
+}
+function stopAutoplay() {
+  if (timer) { clearInterval(timer); timer = null }
+}
 
 function open(index: number) {
   activeIndex.value = index
@@ -33,21 +45,32 @@ function next() { activeIndex.value = (activeIndex.value + 1) % props.items.leng
 function prev() { activeIndex.value = (activeIndex.value + props.items.length - 1) % props.items.length }
 
 function onKey(e: KeyboardEvent) {
-  if (!isOpen.value) return
-  if (e.key === 'Escape') close()
-  if (e.key === 'ArrowRight') next()
-  if (e.key === 'ArrowLeft') prev()
+  if (isOpen.value) {
+    if (e.key === 'Escape') close()
+    if (e.key === 'ArrowRight') next()
+    if (e.key === 'ArrowLeft') prev()
+  }
 }
 
 onMounted(() => {
   window.addEventListener('keydown', onKey)
   if (props.variant === 'hero') {
-    timer = setInterval(() => next(), props.autoplayMs)
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => { prefersReduced.value = mq.matches }
+    mq.addEventListener?.('change', update)
+    update()
+    startAutoplay()
+
+    // Pause on focus inside hero
+    heroEl.value?.addEventListener('focusin', stopAutoplay)
+    heroEl.value?.addEventListener('focusout', startAutoplay)
   }
 })
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKey)
-  if (timer) clearInterval(timer)
+  stopAutoplay()
+  heroEl.value?.removeEventListener('focusin', stopAutoplay)
+  heroEl.value?.removeEventListener('focusout', startAutoplay)
 })
 </script>
 
@@ -67,12 +90,23 @@ onBeforeUnmount(() => {
     </button>
   </div>
 
-  <div v-else class="relative h-[56vh] md:h-[64vh] w-full overflow-hidden rounded-[var(--radius-lg)]">
+  <div
+    v-else
+    ref="heroEl"
+    class="relative h-[56vh] md:h-[64vh] w-full overflow-hidden rounded-[var(--radius-lg)] focus:outline-none"
+    tabindex="0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="Galerie héro"
+    @keydown.left.prevent="prev"
+    @keydown.right.prevent="next"
+  >
     <EBImage
       v-for="(it, i) in items"
       :key="i"
       :src="it.src"
-      :alt="it.alt"
+      :alt="''"
+      aria-hidden="true"
       :width="1600"
       :height="900"
       aspect-ratio="16 / 9"
@@ -84,10 +118,11 @@ onBeforeUnmount(() => {
     <div class="relative z-10 h-full flex items-end">
       <div class="container-px mx-auto pb-8">
         <slot name="hero-content" />
+        <div class="sr-only" aria-live="polite">Slide {{ activeIndex + 1 }} sur {{ items.length }}</div>
       </div>
     </div>
     <div class="absolute inset-x-0 bottom-3 flex justify-center gap-2">
-      <button v-for="(it,i) in items" :key="'d'+i" class="w-2.5 h-2.5 rounded-full" :style="{ background: i===activeIndex ? 'var(--color-accent)' : 'rgba(255,255,255,.6)' }" @click="activeIndex=i" aria-label="Slide {{ i+1 }}" />
+      <button v-for="(it,i) in items" :key="'d'+i" class="w-2.5 h-2.5 rounded-full" :style="{ background: i===activeIndex ? 'var(--color-accent)' : 'rgba(255,255,255,.6)' }" @click="activeIndex=i" :aria-label="`Slide ${i+1}`" />
     </div>
   </div>
 

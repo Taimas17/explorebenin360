@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6" v-if="item">
-    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.author_name + ' — ' + formatDate(item.published_at)">
+    <BrandBanner :src="item.cover_image_url || placeholder" :alt="buildAlt('article', item.title, item.author_name)" :title="item.title" :subtitle="item.author_name + ' — ' + formatDate(item.published_at)">
       <template #overlay>
         <FavoriteToggle type="article" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, excerpt: item.excerpt }" />
       </template>
@@ -19,6 +19,7 @@ import { fetchArticle } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import { buildAlt } from '@/utils/a11y'
 
 const route = useRoute()
 const item = ref(null)
