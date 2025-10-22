@@ -1,22 +1,18 @@
 <template>
-  <section class="relative h-[56vh] md:h-[64vh] w-full overflow-hidden rounded-b-[var(--radius-lg)]">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1528640930834-04394d6b76df?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-    <div class="relative z-10 h-full flex items-end">
-      <div class="container-px mx-auto pb-10">
-        <h1 class="text-4xl md:text-6xl font-bold text-white">ExploreBenin<span class="text-[color:var(--color-secondary)]">360</span></h1>
-        <p class="mt-2 text-white/90 text-lg">{{ t('brand.baseline') }}</p>
-        <div class="mt-6 flex gap-3">
-          <Button variant="primary" size="lg">
-            {{ t('hero.cta') }}
-          </Button>
-          <Button variant="outline" size="lg">
-            <span class="flex items-center gap-2">{{ t('nav.destinations') }} <Icon name="ArrowRight"/></span>
-          </Button>
-        </div>
+  <EBGallery :items="homeHero" variant="hero">
+    <template #hero-content>
+      <h1 class="text-4xl md:text-6xl font-bold text-white">ExploreBenin<span class="text-[color:var(--color-secondary)]">360</span></h1>
+      <p class="mt-2 text-white/90 text-lg">{{ t('brand.baseline') }}</p>
+      <div class="mt-6 flex gap-3">
+        <Button variant="primary" size="lg">
+          {{ t('hero.cta') }}
+        </Button>
+        <Button variant="outline" size="lg">
+          <span class="flex items-center gap-2">{{ t('nav.destinations') }} <Icon name="ArrowRight"/></span>
+        </Button>
       </div>
-    </div>
-  </section>
+    </template>
+  </EBGallery>
 
   <main class="container-px mx-auto py-10 space-y-12">
     <section>
@@ -124,7 +120,7 @@ import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
 
 const { t } = useI18n()
-useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ] })
+useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`
@@ -134,10 +130,16 @@ const svg = (label, from = '#FF6B35', to = '#FFD166') =>
     <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' font-family='Poppins, Inter, sans-serif' fill='#0b0f16'>${label}</text>
   </svg>`)
 
+const homeHero = [
+  { src: '/src/assets/brand/images/home/hero-1.png', alt: 'Plage du Bénin au lever du soleil' },
+  { src: '/src/assets/brand/images/home/hero-2.png', alt: 'Village lacustre de Ganvié au coucher du soleil' },
+  { src: '/src/assets/brand/images/home/hero-3.png', alt: 'Savane du parc de la Pendjari' },
+]
+
 const heroItems = [
-  { src: svg('Ganvié'), alt: 'Ganvié', caption: 'Ganvié au coucher du soleil' },
-  { src: svg('Cotonou', '#00796B', '#FFD166'), alt: 'Cotonou', caption: 'Plage de Cotonou' },
-  { src: svg('Pendjari', '#FFD166', '#FF6B35'), alt: 'Pendjari', caption: 'Savane du parc Pendjari' },
+  { src: '/src/assets/brand/images/home/hero-1.png', alt: 'Plage — ExploreBenin360', caption: 'Côte béninoise' },
+  { src: '/src/assets/brand/images/home/hero-2.png', alt: 'Ganvié — ExploreBenin360', caption: 'Ganvié' },
+  { src: '/src/assets/brand/images/home/hero-3.png', alt: 'Pendjari — ExploreBenin360', caption: 'Pendjari' },
 ]
 
 const loading = reactive({ places: true, accommodations: true, guides: true, articles: true, events: true })

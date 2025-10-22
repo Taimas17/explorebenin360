@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import { buildCloudinaryUrl } from '@/utils/media'
+import { computed, onMounted, ref } from 'vue'
+import { buildCloudinaryUrl, buildWidthSrcset, buildDprSrcset, buildCloudinaryLqip } from '@/utils/media'
 
 interface Props {
   src: string
@@ -12,12 +12,16 @@ interface Props {
   sizes?: string
   aspectRatio?: string
   class?: string
+  lqip?: boolean
+  priority?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   provider: (import.meta.env.VITE_MEDIA_PROVIDER as 'cloudinary' | 's3') || 'cloudinary',
   maxWidth: Number(import.meta.env.VITE_MEDIA_MAX_WIDTH || 1600),
   sizes: '(max-width: 768px) 100vw, 50vw',
+  lqip: true,
+  priority: false,
 })
 
 const isVisible = ref(false)
@@ -33,21 +37,23 @@ onMounted(() => {
   if (el.value) io.observe(el.value)
 })
 
-onBeforeUnmount(() => {})
-
-const srcset = computed(() => {
-  const widths = [400, 800, 1200, Math.min(1600, props.maxWidth || 1600)]
+const widthBasedSrcset = computed(() => {
   if (!isVisible.value) return undefined
-  if (props.provider === 'cloudinary') {
-    return widths.map(w => `${buildCloudinaryUrl(props.src, { width: w, quality: 'auto', format: 'auto' })} ${w}w`).join(', ')
-  }
-  return widths.map(w => `${props.src} ${w}w`).join(', ')
+  return buildWidthSrcset(props.src, props.provider)
+})
+
+const dprSrcset = computed(() => {
+  if (!props.width) return undefined
+  if (!isVisible.value) return undefined
+  return buildDprSrcset(props.src, props.width, props.provider)
 })
 
 const baseSrc = computed(() => {
-  if (!isVisible.value) return 'data:image/gif;base64,R0lGODlhAQABAAAAACw='
+  if (!isVisible.value && props.lqip && props.provider === 'cloudinary') {
+    return buildCloudinaryLqip(props.src)
+  }
   if (props.provider === 'cloudinary') {
-    return buildCloudinaryUrl(props.src, { width: 800, quality: 'auto', format: 'auto' })
+    return buildCloudinaryUrl(props.src, { width: Math.min(800, props.maxWidth || 800), quality: 'auto', format: 'auto' })
   }
   return props.src
 })
@@ -60,11 +66,12 @@ const baseSrc = computed(() => {
       :alt="alt"
       :width="width"
       :height="height"
-      :srcset="srcset"
+      :srcset="dprSrcset || widthBasedSrcset"
       :sizes="sizes"
-      loading="lazy"
+      :loading="priority ? 'eager' : 'lazy'"
+      :fetchpriority="priority ? 'high' : undefined"
       decoding="async"
-      @error="($event.target as HTMLImageElement).src = baseSrc"
+      @error="($event.target as HTMLImageElement).src = baseSrc as string"
       :class="[$props.class, 'rounded-md bg-[#0b0f16] object-cover']"
     />
     <figcaption v-if="$slots.default" class="mt-2 text-sm text-gray-500 dark:text-gray-400">

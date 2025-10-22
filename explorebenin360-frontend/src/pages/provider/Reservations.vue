@@ -1,8 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8">
-    <div class="flex items-center justify-between mb-4">
-      <h1 class="text-2xl font-bold">{{ t('provider.reservations') }}</h1>
-    </div>
+    <BrandBanner :src="banner" alt="Bannière Prestataire" :title="t('provider.reservations')" class="mb-6" />
 
     <div class="grid md:grid-cols-4 gap-3 mb-6" v-if="!loading">
       <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
@@ -42,12 +40,15 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { providerBookings } from '@/lib/api'
+import BrandBanner from '@/components/ui/BrandBanner.vue'
+import EmptyState from '@/components/ui/EmptyState.vue'
 
 const { t } = useI18n()
 const items = ref([])
 const loading = ref(false)
 const currency = 'XOF'
 const totals = ref({ total: 0, confirmed: 0, gross: 0, commission: 0, net: 0 })
+const banner = '/src/assets/brand/images/destinations/banner-default.png'
 
 const formatNumber = (n) => new Intl.NumberFormat(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n)
 
