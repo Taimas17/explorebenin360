@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6">
-    <h1 class="text-3xl font-bold mb-2">{{ t('nav.destinations') }}</h1>
+    <BrandBanner :src="banner" alt="Bannière Destinations" :title="t('nav.destinations')" subtitle="{{ t('brand.baseline') }}" class="mb-6" />
 
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-[240px]">
@@ -33,6 +33,9 @@
       <div v-else-if="error" class="text-red-600 text-sm">{{ error }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="p in items" :key="p.id" :data-id="'p-' + p.id" :class="highlighted === p.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
+          <template #media>
+            <EBImage :src="p.cover_image_url || banner" :alt="p.title" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" />
+          </template>
           <template #title>{{ p.title }}</template>
           {{ p.city }}
           <template #actions>
@@ -67,9 +70,12 @@ import MultiSelect from '@/components/filters/MultiSelect.vue'
 import RangeSlider from '@/components/filters/RangeSlider.vue'
 import TagChips from '@/components/filters/TagChips.vue'
 import MapShell from '@/components/maps/MapShell.vue'
+import EBImage from '@/components/media/EBImage.vue'
+import BrandBanner from '@/components/ui/BrandBanner.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Destinations — ExploreBenin360' })
+const banner = '/src/assets/brand/images/destinations/banner-default.png'
 
 const route = useRoute(); const router = useRouter()
 

@@ -10,11 +10,15 @@ interface Item {
   height?: number
 }
 
-const props = defineProps<{ items: Item[] }>()
+const props = withDefaults(defineProps<{ items: Item[]; variant?: 'grid' | 'hero'; autoplayMs?: number }>(), {
+  variant: 'grid',
+  autoplayMs: 6000,
+})
 
 const isOpen = ref(false)
 const activeIndex = ref(0)
 const lightboxEl = ref<HTMLDivElement | null>(null)
+let timer: any
 
 function open(index: number) {
   activeIndex.value = index
@@ -35,12 +39,20 @@ function onKey(e: KeyboardEvent) {
   if (e.key === 'ArrowLeft') prev()
 }
 
-onMounted(() => window.addEventListener('keydown', onKey))
-onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
+onMounted(() => {
+  window.addEventListener('keydown', onKey)
+  if (props.variant === 'hero') {
+    timer = setInterval(() => next(), props.autoplayMs)
+  }
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKey)
+  if (timer) clearInterval(timer)
+})
 </script>
 
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+  <div v-if="props.variant === 'grid'" class="grid grid-cols-2 md:grid-cols-3 gap-3">
     <button
       v-for="(it, i) in items"
       :key="i"
@@ -53,6 +65,30 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         {{ it.caption }}
       </span>
     </button>
+  </div>
+
+  <div v-else class="relative h-[56vh] md:h-[64vh] w-full overflow-hidden rounded-[var(--radius-lg)]">
+    <EBImage
+      v-for="(it, i) in items"
+      :key="i"
+      :src="it.src"
+      :alt="it.alt"
+      :width="1600"
+      :height="900"
+      aspect-ratio="16 / 9"
+      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+      :class="i === activeIndex ? 'opacity-100' : 'opacity-0'"
+      :priority="i === 0"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none"></div>
+    <div class="relative z-10 h-full flex items-end">
+      <div class="container-px mx-auto pb-8">
+        <slot name="hero-content" />
+      </div>
+    </div>
+    <div class="absolute inset-x-0 bottom-3 flex justify-center gap-2">
+      <button v-for="(it,i) in items" :key="'d'+i" class="w-2.5 h-2.5 rounded-full" :style="{ background: i===activeIndex ? 'var(--color-accent)' : 'rgba(255,255,255,.6)' }" @click="activeIndex=i" aria-label="Slide {{ i+1 }}" />
+    </div>
   </div>
 
   <teleport to="body">

@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6">
-    <h1 class="text-3xl font-bold">{{ t('nav.guides') }}</h1>
+    <BrandBanner :src="banner" alt="Bannière Guides" :title="t('nav.guides')" class="mb-6" />
 
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-[240px]">
@@ -32,6 +32,12 @@
       <div v-else-if="error" class="text-red-600 text-sm">{{ error }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="g in items" :key="g.id">
+          <template #media>
+            <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg-white/5">
+              <img v-if="g.avatar_url" :src="g.avatar_url" :alt="g.name" class="w-20 h-20 rounded-full object-cover" />
+              <AvatarFallback v-else :name="g.name" :size="72" />
+            </div>
+          </template>
           <template #title>{{ g.name }}</template>
           {{ g.city }} · {{ g.languages?.join(', ') }}
         </Card>
@@ -57,9 +63,13 @@ import { fetchGuides } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
 import Loader from '@/components/ui/Loader.vue'
 import RangeSlider from '@/components/filters/RangeSlider.vue'
+import EBImage from '@/components/media/EBImage.vue'
+import BrandBanner from '@/components/ui/BrandBanner.vue'
+import AvatarFallback from '@/components/ui/AvatarFallback.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Guides — ExploreBenin360' })
+const banner = '/src/assets/brand/images/destinations/banner-default.png'
 const route = useRoute(); const router = useRouter()
 
 const q = ref(route.query.q?.toString() || '')
