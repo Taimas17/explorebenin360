@@ -1,37 +1,38 @@
-# explorebenin360-frontend
+# ExploreBenin360 — Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue 3 + Vite app with Tailwind CSS v4, Vue Router, and Vue I18n.
 
-## Recommended IDE Setup
+## Design tokens
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Tokens live in `src/styles/tokens.css` using Tailwind v4 `@theme` variables:
 
-## Recommended Browser Setup
+- Colors: `--color-primary` `--color-secondary` `--color-accent`, plus light/dark text and backgrounds
+- Radii, shadows, transitions
+- Fonts: `--font-display` (Poppins) and `--font-sans` (Inter)
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Global styles are in `src/styles/globals.css` and include Tailwind imports, base typography, link hovers, focus rings, and dark mode support. Add your components/pages and rely on these tokens for consistent styling.
 
-## Customize configuration
+## Branding
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Logo assets live in `src/assets/brand/`. Variants include full-color, icon-only, and monochrome. Favicon and OG image are in `public/`.
 
-## Project Setup
+## Internationalization
+
+- Locale files: `src/i18n/fr.json`, `src/i18n/en.json`
+- Initial locale is detected and stored in `localStorage (eb360:locale)`
+
+## Maps
+
+`src/components/maps/MapShell.vue` reads `VITE_GOOGLE_MAPS_API_KEY`. Copy `.env.example` to `.env` and set your key if needed.
+
+## Development
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Build
 
 ```sh
 npm run build
