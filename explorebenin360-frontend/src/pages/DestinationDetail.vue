@@ -1,6 +1,17 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6" v-if="item">
-    <BrandBanner :src="item.cover_image_url || placeholder" :alt="buildAlt('destination', item.title, item.city)" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" />
+    <EBGallery v-if="galleryItems.length" :items="galleryItems" variant="hero" class="mb-4">
+      <template #hero-content>
+        <div class="flex items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <h1 class="text-3xl md:text-4xl font-bold text-white drop-shadow">{{ item.title }}</h1>
+            <p class="mt-2 text-white/90">{{ item.city }} — {{ item.type }}</p>
+          </div>
+          <FavoriteToggle type="destination" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, city: item.city }" />
+        </div>
+      </template>
+    </EBGallery>
+    <BrandBanner v-else :src="item.cover_image_url || placeholder" alt="" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" />
 
     <div class="prose dark:prose-invert max-w-none" v-html="item.description"></div>
 
@@ -10,21 +21,23 @@
     <div class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
   </div>
 </template>
-<script setup>
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { fetchPlace } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
-import EBImage from '@/components/media/EBImage.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
-import { buildAlt } from '@/utils/a11y'
+import EBGallery from '@/components/media/EBGallery.vue'
+import { mapToGalleryItems } from '@/utils/media'
 
 const route = useRoute()
-const item = ref(null)
-const placeholder = 'https://picsum.photos/seed/place/1200/800'
+const item = ref<any>(null)
+const placeholder = '/src/assets/brand/images/destinations/banner-default.png'
+
+const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
 
 onMounted(async () => {
   const slug = route.params.slug.toString()

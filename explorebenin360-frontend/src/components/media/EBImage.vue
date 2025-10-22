@@ -7,7 +7,7 @@ defineOptions({ inheritAttrs: false })
 interface Props {
   src: string
   alt: string
-  provider?: 'cloudinary' | 's3'
+  provider?: 'cloudinary' | 's3' | 'local'
   width?: number
   height?: number
   maxWidth?: number
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  provider: (import.meta.env.VITE_MEDIA_PROVIDER as 'cloudinary' | 's3') || 'cloudinary',
+  provider: 'local',
   maxWidth: Number(import.meta.env.VITE_MEDIA_MAX_WIDTH || 1600),
   sizes: '(max-width: 768px) 100vw, 50vw',
   lqip: true,
