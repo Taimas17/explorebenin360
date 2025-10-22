@@ -25,6 +25,24 @@ Logo assets live in `src/assets/brand/`. Variants include full-color, icon-only,
 
 `src/components/maps/MapShell.vue` reads `VITE_GOOGLE_MAPS_API_KEY`. Copy `.env.example` to `.env` and set your key if needed.
 
+## Media system
+
+Reusable media components with responsive images, galleries, videos, and 360° panoramas are provided in `src/components/media/`:
+
+- EBImage — responsive image with srcset, sizes, lazy-loading and decoding="async"
+- EBGallery — grid + accessible lightbox with captions and keyboard nav
+- EB360Viewer — wrapper around Pannellum loaded dynamically from CDN
+- EBVideo — HTML5 video with poster and controls
+
+Env variables (copy from `.env.example`):
+```
+VITE_MEDIA_PROVIDER=cloudinary|s3
+VITE_CLOUDINARY_CLOUD_NAME=
+VITE_CLOUDINARY_BASE_URL=
+VITE_MEDIA_MAX_WIDTH=1600
+```
+Pages (Home, Destinations, Hébergements, Guides, Blog) include sample usage.
+
 ## Development
 
 ```sh
