@@ -9,11 +9,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:sitemap": "tsx scripts/generate-sitemap.ts"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
+    "@vueuse/head": "^2.0.0",
     "axios": "^1.12.2",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
@@ -27,6 +29,7 @@
     "png-to-ico": "^3.0.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.15",
+    "tsx": "^4.19.2",
     "vite": "^7.1.11",
     "vite-plugin-vue-devtools": "^8.0.3"
   }

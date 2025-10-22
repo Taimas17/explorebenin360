@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6">
-    <h1 class="text-3xl font-bold">{{ t('nav.blog') }}</h1>
+    <h1 class="text-3xl font-bold">Agenda</h1>
 
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-[240px]">
@@ -8,25 +8,33 @@
         <input v-model="q" type="search" class="w-full rounded-lg border px-3 py-2" placeholder="Rechercher" />
       </div>
       <div class="min-w-[220px]">
+        <label class="block text-sm font-medium mb-1">Ville</label>
+        <input v-model.trim="city" class="w-full rounded-lg border px-3 py-2" placeholder="Ville" />
+      </div>
+      <div class="min-w-[220px]">
         <label class="block text-sm font-medium mb-1">Catégorie</label>
         <input v-model.trim="category" class="w-full rounded-lg border px-3 py-2" placeholder="Catégorie" />
       </div>
       <div class="min-w-[220px]">
-        <label class="block text-sm font-medium mb-1">Tag</label>
-        <input v-model.trim="tag" class="w-full rounded-lg border px-3 py-2" placeholder="Tag" />
+        <label class="block text-sm font-medium mb-1">Du</label>
+        <input v-model="from" type="date" class="w-full rounded-lg border px-3 py-2" />
+      </div>
+      <div class="min-w-[220px]">
+        <label class="block text-sm font-medium mb-1">Au</label>
+        <input v-model="to" type="date" class="w-full rounded-lg border px-3 py-2" />
       </div>
     </div>
 
     <div class="mt-6">
       <div v-if="loading" class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
       <div v-else-if="error" class="text-red-600 text-sm">{{ error }}</div>
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card v-for="a in items" :key="a.id">
-          <template #title>{{ a.title }}</template>
-          {{ a.excerpt }}
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card v-for="e in items" :key="e.id">
+          <template #title>{{ e.title }}</template>
+          {{ e.city }} · {{ e.start_date }} → {{ e.end_date }}
           <template #actions>
-            <RouterLink :to="{ name: 'article-detail', params: { slug: a.slug } }" class="inline-block">
-              <Button size="sm" variant="outline">Lire</Button>
+            <RouterLink :to="{ name: 'event-detail', params: { slug: e.slug } }" class="inline-block">
+              <Button size="sm" variant="outline">Détails</Button>
             </RouterLink>
           </template>
         </Card>
@@ -45,47 +53,42 @@
 </template>
 <script setup>
 import { onMounted, reactive, ref, watch, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { useRoute, useRouter } from 'vue-router'
-import { fetchArticles } from '@/lib/api'
+import { fetchEvents } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Loader from '@/components/ui/Loader.vue'
 
-const { t } = useI18n()
-useHead({ title: 'Blog — ExploreBenin360' })
+useHead({ title: 'Agenda — ExploreBenin360' })
 
 const route = useRoute(); const router = useRouter()
 const q = ref(route.query.q?.toString() || '')
+const city = ref(route.query.city?.toString() || '')
 const category = ref(route.query.category?.toString() || '')
-const tag = ref(route.query.tag?.toString() || '')
+const from = ref(route.query.from?.toString() || '')
+const to = ref(route.query.to?.toString() || '')
 const page = ref(route.query.page ? Number(route.query.page) : 1)
-const per_page = ref(10)
+const per_page = ref(12)
 
 const items = ref([])
-const meta = reactive({ total: 0, current_page: 1, per_page: 10 })
+const meta = reactive({ total: 0, current_page: 1, per_page: 12 })
 const loading = ref(false)
 const error = ref('')
 
 const updateQuery = () => {
-  const query = {
-    q: q.value || undefined,
-    category: category.value || undefined,
-    tag: tag.value || undefined,
-    page: page.value !== 1 ? page.value : undefined,
-  }
+  const query = { q: q.value || undefined, city: city.value || undefined, category: category.value || undefined, from: from.value || undefined, to: to.value || undefined, page: page.value !== 1 ? page.value : undefined }
   router.replace({ query })
 }
 
 let tHandle
-watch([q, category, tag], () => { clearTimeout(tHandle); tHandle = setTimeout(() => { page.value = 1; updateQuery(); load() }, 350) })
+watch([q, city, category, from, to], () => { clearTimeout(tHandle); tHandle = setTimeout(() => { page.value = 1; updateQuery(); load() }, 350) })
 watch(page, () => { updateQuery(); load() })
 
 const load = async () => {
   loading.value = true; error.value = ''
   try {
-    const { data, meta: m } = await fetchArticles({ q: q.value, category: category.value || undefined, tag: tag.value || undefined, page: page.value, per_page: per_page.value, sort: 'recent' })
+    const { data, meta: m } = await fetchEvents({ q: q.value, city: city.value || undefined, category: category.value || undefined, from: from.value || undefined, to: to.value || undefined, page: page.value, per_page: per_page.value, sort: 'date' })
     items.value = data; Object.assign(meta, m)
   } catch (e) { error.value = 'Erreur de chargement' } finally { loading.value = false }
 }
