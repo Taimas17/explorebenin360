@@ -13,6 +13,7 @@
           <RouterLink v-for="item in menu" :key="item.to" :to="item.to" class="text-sm font-medium text-[color:var(--color-text)]/90 hover:text-[color:var(--color-secondary)] focus-ring">
             {{ t(item.label) }}
           </RouterLink>
+          <RouterLink to="/offerings" class="text-sm font-medium text-[color:var(--color-text)]/90 hover:text-[color:var(--color-secondary)] focus-ring">{{ t('nav.offerings') }}</RouterLink>
         </nav>
         <div class="flex items-center gap-2">
           <select :value="locale" @change="setLocale($event.target.value)" class="text-sm rounded-md border border-black/10 dark:border-white/10 bg-transparent px-2 py-1 focus-ring">
@@ -22,9 +23,19 @@
           <button @click="toggleDark()" class="btn-base focus-ring h-9 w-9 rounded-full" :aria-label="isDark ? t('common.light_mode') : t('common.dark_mode')">
             <Icon :name="isDark ? 'Sun' : 'Moon'" />
           </button>
-          <RouterLink to="/login" class="hidden sm:inline-flex btn-base focus-ring h-9 px-4 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
-            {{ t('nav.login') }}
-          </RouterLink>
+          <template v-if="!isAuthenticated">
+            <RouterLink to="/login" class="hidden sm:inline-flex btn-base focus-ring h-9 px-4 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
+              {{ t('nav.login') }}
+            </RouterLink>
+          </template>
+          <template v-else>
+            <RouterLink to="/dashboard/reservations" class="hidden sm:inline-flex btn-base focus-ring h-9 px-3 rounded-md">
+              {{ t('nav.my_reservations') }}
+            </RouterLink>
+            <button @click="logout" class="hidden sm:inline-flex btn-base focus-ring h-9 px-3 rounded-md border border-black/10 dark:border-white/10">
+              {{ t('nav.logout') }}
+            </button>
+          </template>
         </div>
       </div>
     </div>
@@ -37,8 +48,12 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import Icon from '@/components/ui/Icon.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const { t, locale } = useI18n()
+const auth = useAuthStore()
+const isAuthenticated = computed(() => auth.isAuthenticated)
+const logout = () => auth.logout()
 
 const menu = [
   { to: '/', label: 'nav.home' },

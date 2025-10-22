@@ -14,7 +14,10 @@
     "login": "Connexion",
     "register": "Inscription",
     "profile": "Profil",
-    "explorer": "Explorer"
+    "explorer": "Explorer",
+    "offerings": "Offres",
+    "my_reservations": "Mes réservations",
+    "logout": "Déconnexion"
   },
   "hero": {
     "cta": "Explorer maintenant"
@@ -31,6 +34,59 @@
   "common": {
     "language": "Langue",
     "dark_mode": "Mode sombre",
-    "light_mode": "Mode clair"
+    "light_mode": "Mode clair",
+    "loading": "Chargement...",
+    "optional": "optionnel",
+    "details": "Détails"
+  },
+  "auth": {
+    "name": "Nom",
+    "password": "Mot de passe"
+  },
+  "offerings": {
+    "title": "Offres réservables",
+    "capacity": "Capacité"
+  },
+  "checkout": {
+    "title": "Réserver",
+    "book_now": "Réserver",
+    "start_date": "Date de début",
+    "end_date": "Date de fin",
+    "guests": "invités",
+    "pay_with_paystack": "Payer via Paystack",
+    "callback_title": "Merci pour votre paiement",
+    "callback_subtitle": "Nous confirmons votre réservation. Un email vous sera envoyé."
+  },
+  "dashboard": {
+    "my_reservations": "Mes réservations",
+    "reservation_detail": "Détail de la réservation",
+    "status": "Statut",
+    "amount": "Montant",
+    "cancel": "Annuler",
+    "no_reservations": "Aucune réservation pour le moment"
+  },
+  "provider": {
+    "reservations": "Réservations (prestataire)",
+    "no_reservations": "Aucune réservation",
+    "summary": {
+      "title": "Résumé des gains",
+      "total_bookings": "Total réservations",
+      "confirmed_bookings": "Confirmées",
+      "gross_amount": "Brut",
+      "commission_total": "Commission",
+      "net_earnings": "Gains nets"
+    }
+  },
+  "admin": {
+    "reservations": "Réservations (admin)",
+    "no_reservations": "Aucune réservation",
+    "change_status": "Changer le statut",
+    "update": "Mettre à jour",
+    "updated_success": "Statut mis à jour"
+  },
+  "errors": {
+    "login_failed": "Échec de la connexion",
+    "register_failed": "Échec de l'inscription",
+    "checkout_failed": "Échec de l'initialisation du paiement"
   }
 }
