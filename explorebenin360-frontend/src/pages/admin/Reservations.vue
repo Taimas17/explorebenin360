@@ -3,7 +3,7 @@
     <BrandBanner :src="banner" alt="Bannière Admin" :title="t('admin.reservations')" class="mb-6" />
     <div v-if="loading" class="text-sm text-[color:var(--color-text-muted)]">{{ t('common.loading') }}</div>
     <div v-else>
-      <EmptyState v-if="items.length === 0" variant="default" :title="t('admin.no_reservations')" />
+      <EmptyState v-if="items.length === 0" variant="bookings" :title="t('admin.no_reservations')" />
       <div v-else class="space-y-3">
         <div v-for="b in items" :key="b.id" class="border border-black/10 dark:border-white/10 rounded-md p-4">
           <div class="flex justify-between items-center">
@@ -40,7 +40,7 @@ const loading = ref(false)
 const statuses = ['pending','authorized','confirmed','cancelled','refunded']
 const selected = ref({})
 const saving = ref({})
-const banner = '/src/assets/brand/images/destinations/banner-default.png'
+const banner = '/src/assets/brand/images/dashboard/admin/header.png'
 
 onMounted(async () => {
   loading.value = true
