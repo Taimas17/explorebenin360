@@ -1,38 +1,26 @@
-# explorebenin360-frontend
+# ExploreBenin360 Frontend – Media Components
 
-This template should help get you started developing with Vue 3 in Vite.
+Reusable media components with responsive images, galleries, videos, and 360° panoramas. Brand tokens: primary #FF6B35, secondary #00796B, accent #FFD166. Typography: Poppins/Inter.
 
-## Recommended IDE Setup
+## Components
+- EBImage — responsive image with srcset, sizes, lazy-loading.
+- EBGallery — grid + accessible lightbox with captions and keyboard nav.
+- EB360Viewer — wrapper around Pannellum loaded dynamically from CDN.
+- EBVideo — HTML5 video with poster and controls.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+See `src/views` for sample usage on Home, Destinations, Hébergements, Guides, Blog.
 
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+## Env
+Create a `.env` and set:
+```
+VITE_MEDIA_PROVIDER=cloudinary|s3
+VITE_CLOUDINARY_CLOUD_NAME=
+VITE_CLOUDINARY_BASE_URL=
+VITE_MEDIA_MAX_WIDTH=1600
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+## Usage example
+```vue
+<EBImage :src="'my-folder/my-public-id'" alt="Lac Nokoué" />
 ```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+When provider is Cloudinary, `src` can be a public_id or a full Cloudinary URL and will be transformed to optimized formats (q=auto, f=auto). For S3, the URL is passed through.
