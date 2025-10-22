@@ -24,7 +24,7 @@
 
     <div v-if="loading" class="text-sm text-[color:var(--color-text-muted)]">{{ t('common.loading') }}</div>
     <div v-else>
-      <div v-if="items.length === 0" class="text-sm text-[color:var(--color-text-muted)]">{{ t('provider.no_reservations') }}</div>
+      <EmptyState v-if="items.length === 0" variant="bookings" title="Aucune réservation" description="Vos futures réservations s’affichent ici." />
       <div v-else class="space-y-3">
         <div v-for="b in items" :key="b.id" class="border border-black/10 dark:border-white/10 rounded-md p-4">
           <div class="font-medium">{{ b.offering.title }}</div>
@@ -48,7 +48,7 @@ const items = ref([])
 const loading = ref(false)
 const currency = 'XOF'
 const totals = ref({ total: 0, confirmed: 0, gross: 0, commission: 0, net: 0 })
-const banner = '/src/assets/brand/images/destinations/banner-default.png'
+const banner = '/src/assets/brand/images/dashboard/provider/header.png'
 
 const formatNumber = (n) => new Intl.NumberFormat(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n)
 
