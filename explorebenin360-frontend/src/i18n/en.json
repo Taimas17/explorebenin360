@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "ExploreBenin360",
+    "baseline": "Discover. Connect. Experience Benin."
+  },
+  "nav": {
+    "home": "Home",
+    "destinations": "Destinations",
+    "experiences": "Experiences",
+    "hebergements": "Stays",
+    "guides": "Guides",
+    "blog": "Blog",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "explorer": "Explore"
+  },
+  "hero": {
+    "cta": "Explore now"
+  },
+  "sections": {
+    "popular_destinations": "Popular destinations",
+    "must_do": "Must-do activities",
+    "testimonials": "Traveler testimonials"
+  },
+  "footer": {
+    "tagline": "Discover. Connect. Experience Benin.",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "language": "Language",
+    "dark_mode": "Dark mode",
+    "light_mode": "Light mode"
+  }
+}

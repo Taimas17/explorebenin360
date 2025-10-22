@@ -1,26 +1,57 @@
-# ExploreBenin360 Frontend – Media Components
+# ExploreBenin360 — Frontend
 
-Reusable media components with responsive images, galleries, videos, and 360° panoramas. Brand tokens: primary #FF6B35, secondary #00796B, accent #FFD166. Typography: Poppins/Inter.
+Vue 3 + Vite app with Tailwind CSS v4, Vue Router, and Vue I18n.
 
-## Components
-- EBImage — responsive image with srcset, sizes, lazy-loading.
-- EBGallery — grid + accessible lightbox with captions and keyboard nav.
-- EB360Viewer — wrapper around Pannellum loaded dynamically from CDN.
-- EBVideo — HTML5 video with poster and controls.
+## Design tokens
 
-See `src/views` for sample usage on Home, Destinations, Hébergements, Guides, Blog.
+Tokens live in `src/styles/tokens.css` using Tailwind v4 `@theme` variables:
 
-## Env
-Create a `.env` and set:
+- Colors: `--color-primary` `--color-secondary` `--color-accent`, plus light/dark text and backgrounds
+- Radii, shadows, transitions
+- Fonts: `--font-display` (Poppins) and `--font-sans` (Inter)
+
+Global styles are in `src/styles/globals.css` and include Tailwind imports, base typography, link hovers, focus rings, and dark mode support. Add your components/pages and rely on these tokens for consistent styling.
+
+## Branding
+
+Logo assets live in `src/assets/brand/`. Variants include full-color, icon-only, and monochrome. Favicon and OG image are in `public/`.
+
+## Internationalization
+
+- Locale files: `src/i18n/fr.json`, `src/i18n/en.json`
+- Initial locale is detected and stored in `localStorage (eb360:locale)`
+
+## Maps
+
+`src/components/maps/MapShell.vue` reads `VITE_GOOGLE_MAPS_API_KEY`. Copy `.env.example` to `.env` and set your key if needed.
+
+## Media system
+
+Reusable media components with responsive images, galleries, videos, and 360° panoramas are provided in `src/components/media/`:
+
+- EBImage — responsive image with srcset, sizes, lazy-loading and decoding="async"
+- EBGallery — grid + accessible lightbox with captions and keyboard nav
+- EB360Viewer — wrapper around Pannellum loaded dynamically from CDN
+- EBVideo — HTML5 video with poster and controls
+
+Env variables (copy from `.env.example`):
 ```
 VITE_MEDIA_PROVIDER=cloudinary|s3
 VITE_CLOUDINARY_CLOUD_NAME=
 VITE_CLOUDINARY_BASE_URL=
 VITE_MEDIA_MAX_WIDTH=1600
 ```
+Pages (Home, Destinations, Hébergements, Guides, Blog) include sample usage.
 
-## Usage example
-```vue
-<EBImage :src="'my-folder/my-public-id'" alt="Lac Nokoué" />
+## Development
+
+```sh
+npm install
+npm run dev
 ```
-When provider is Cloudinary, `src` can be a public_id or a full Cloudinary URL and will be transformed to optimized formats (q=auto, f=auto). For S3, the URL is passed through.
+
+## Build
+
+```sh
+npm run build
+```

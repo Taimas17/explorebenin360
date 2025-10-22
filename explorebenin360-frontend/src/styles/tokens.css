@@ -1,0 +1,25 @@
+@theme {
+  --color-primary: #FF6B35;
+  --color-primary-hover: #E85A27;
+  --color-secondary: #00796B;
+  --color-secondary-hover: #006B60;
+  --color-accent: #FFD166;
+  --color-bg: #F9F9F9;
+  --color-text: #1B1B1B;
+  --color-text-muted: #555555;
+  --color-dark-bg: #1B1B1B;
+  --color-dark-text: #F4F4F4;
+
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.12);
+
+  --transition-fast: 200ms;
+  --transition: 300ms;
+
+  --font-display: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+}

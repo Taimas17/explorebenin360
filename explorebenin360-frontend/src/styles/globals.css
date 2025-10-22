@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+@source './src/**/*.vue';
+@source './src/**/*.{js,ts}';
+@source './index.html';
+
+@import './tokens.css';
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: var(--color-bg);
+    --text: var(--color-text);
+  }
+  .dark {
+    color-scheme: dark;
+    --bg: var(--color-dark-bg);
+    --text: var(--color-dark-text);
+  }
+  html, body, #app { height: 100%; }
+  html, body {
+    font-family: var(--font-sans);
+    background-color: var(--bg);
+    color: var(--text);
+  }
+  h1, h2, h3 { font-family: var(--font-display); }
+  a { color: var(--color-secondary); text-decoration: none; }
+  a:hover { text-decoration: underline; box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.06); }
+}
+
+@layer utilities {
+  .container-px { @apply px-4 sm:px-6 lg:px-8; }
+  .btn-base { @apply inline-flex items-center justify-center rounded-md font-medium transition-all; }
+  .focus-ring { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[--color-accent]; }
+}
