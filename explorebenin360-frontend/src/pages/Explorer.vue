@@ -51,10 +51,11 @@ import MapShell from '@/components/maps/MapShell.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import Button from '@/components/ui/Button.vue'
+import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 
 const { t } = useI18n()
 const route = useRoute(); const router = useRouter()
-const banner = '/src/assets/brand/images/destinations/banner-default.png'
+const banner = destinationsBanner
 
 const q = ref(route.query.q?.toString() || '')
 const types = ref(route.query.type ? route.query.type.toString().split(',') : ['destination','hebergement'])

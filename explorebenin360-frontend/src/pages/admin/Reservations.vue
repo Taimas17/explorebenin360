@@ -33,6 +33,7 @@ import { useI18n } from 'vue-i18n'
 import { adminBookings, adminUpdateBooking } from '@/lib/api'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import adminHeader from '@/assets/brand/images/dashboard/admin/header.png'
 
 const { t } = useI18n()
 const items = ref([])
@@ -40,7 +41,7 @@ const loading = ref(false)
 const statuses = ['pending','authorized','confirmed','cancelled','refunded']
 const selected = ref({})
 const saving = ref({})
-const banner = '/src/assets/brand/images/dashboard/admin/header.png'
+const banner = adminHeader
 
 onMounted(async () => {
   loading.value = true

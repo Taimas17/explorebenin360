@@ -25,11 +25,12 @@ import { useI18n } from 'vue-i18n'
 import api from '@/lib/api'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import travelerHeader from '@/assets/brand/images/dashboard/traveler/header.png'
 
 const { t } = useI18n()
 const items = ref([])
 const loading = ref(false)
-const banner = '/src/assets/brand/images/dashboard/traveler/header.png'
+const banner = travelerHeader
 
 onMounted(async () => {
   loading.value = true

@@ -20,10 +20,11 @@ import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
+import blogCoverDefault from '@/assets/brand/images/blog/cover-default.png'
 
 const route = useRoute()
 const item = ref(null)
-const placeholder = '/src/assets/brand/images/blog/cover-default.png'
+const placeholder = blogCoverDefault
 const formatDate = (s) => s ? new Date(s).toLocaleDateString() : ''
 
 onMounted(async () => {

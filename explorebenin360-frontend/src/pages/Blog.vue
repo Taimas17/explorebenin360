@@ -23,7 +23,7 @@
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card v-for="a in items" :key="a.id">
           <template #media>
-            <EBImage :src="a.cover_image_url || banner" :alt="buildAlt('article', a.title)" :width="1200" :height="630" aspect-ratio="1200 / 630" class="w-full h-auto" sizes="(max-width: 768px) 100vw, 50vw" />
+            <EBImage :src="a.cover_image_url || articleThumb" :alt="buildAlt('article', a.title)" :width="1200" :height="630" aspect-ratio="1200 / 630" class="w-full h-auto" sizes="(max-width: 768px) 100vw, 50vw" />
             <div class="absolute top-2 right-2">
               <FavoriteToggle type="article" :id="a.id" size="sm" :entity="{ id: a.id, title: a.title, slug: a.slug, cover_image_url: a.cover_image_url, excerpt: a.excerpt }" />
             </div>
@@ -62,10 +62,12 @@ import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
+import blogCover from '@/assets/brand/images/blog/cover-default.png'
+import articleThumb from '@/assets/brand/images/thumbs/article-thumb.png'
 
 const { t } = useI18n()
 useHead({ title: 'Blog — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
-const banner = '/src/assets/brand/images/blog/cover-default.png'
+const banner = blogCover
 
 const route = useRoute(); const router = useRouter()
 const q = ref(route.query.q?.toString() || '')

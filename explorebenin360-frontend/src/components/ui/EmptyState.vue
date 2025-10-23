@@ -18,11 +18,16 @@ const props = withDefaults(defineProps<{
   decorative?: boolean
 }>(), { variant: 'default', decorative: false })
 
+import emptyDefault from '@/assets/brand/images/placeholders/empty-default.png'
+import emptySearch from '@/assets/brand/images/placeholders/empty-search.png'
+import emptyFavorites from '@/assets/brand/images/placeholders/empty-favorites.png'
+import emptyBookings from '@/assets/brand/images/placeholders/empty-bookings.png'
+
 const imageMap: Record<string,string> = {
-  default: '/src/assets/brand/images/placeholders/empty-default.png',
-  search: '/src/assets/brand/images/placeholders/empty-search.png',
-  favorites: '/src/assets/brand/images/placeholders/empty-favorites.png',
-  bookings: '/src/assets/brand/images/placeholders/empty-bookings.png',
+  default: emptyDefault,
+  search: emptySearch,
+  favorites: emptyFavorites,
+  bookings: emptyBookings,
 }
 
 const altMap: Record<string,string> = {

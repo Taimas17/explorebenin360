@@ -32,10 +32,11 @@ import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import { mapToGalleryItems } from '@/utils/media'
+import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 
 const route = useRoute()
 const item = ref<any>(null)
-const placeholder = '/src/assets/brand/images/destinations/banner-default.png'
+const placeholder = destinationsBanner
 
 const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
 

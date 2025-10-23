@@ -34,7 +34,7 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="h in items" :key="h.id" :data-id="'h-' + h.id" :class="highlighted === h.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
           <template #media>
-            <EBImage :src="h.cover_image_url || banner" :alt="buildAlt('hebergement', h.title, h.city)" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+            <EBImage :src="h.cover_image_url || hebergementThumb" :alt="buildAlt('hebergement', h.title, h.city)" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
             <div class="absolute top-2 right-2">
               <FavoriteToggle type="hebergement" :id="h.id" size="sm" :entity="{ id: h.id, title: h.title, slug: h.slug, cover_image_url: h.cover_image_url, city: h.city, price_per_night: h.price_per_night, currency: h.currency }" />
             </div>
@@ -76,10 +76,12 @@ import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
+import hebergementsBanner from '@/assets/brand/images/hebergements/banner-default.png'
+import hebergementThumb from '@/assets/brand/images/thumbs/hebergement-thumb.png'
 
 const { t } = useI18n()
 useHead({ title: 'Hébergements — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
-const banner = '/src/assets/brand/images/hebergements/banner-default.png'
+const banner = hebergementsBanner
 
 const route = useRoute(); const router = useRouter()
 const q = ref(route.query.q?.toString() || '')
