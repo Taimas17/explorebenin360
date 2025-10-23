@@ -6,6 +6,11 @@
       <div><span class="text-[color:var(--color-text-muted)]">Email:</span> {{ auth.user.email }}</div>
       <div><span class="text-[color:var(--color-text-muted)]">Nom:</span> {{ auth.user.name }}</div>
       <div><span class="text-[color:var(--color-text-muted)]">Rôles:</span> {{ auth.user.roles?.map(r=>r.name).join(', ') }}</div>
+      <div class="pt-4">
+        <RouterLink to="/dashboard/favorites" class="btn-base focus-ring h-10 px-4 rounded-md border border-black/10 dark:border-white/10">
+          {{ t('nav.favorites') }}
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>

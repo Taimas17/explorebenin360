@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { apiLogin, apiRegister, apiLogout, apiMe, setAuthToken } from '@/lib/api'
+import { useFavoritesStore } from './favorites'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({ user: null as any, token: (typeof window !== 'undefined' ? localStorage.getItem('eb360_token') : null) as string | null, loading: false }),
@@ -17,6 +18,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('eb360_token', this.token!)
         setAuthToken(this.token)
         this.user = res.user
+        try { await useFavoritesStore().syncOnLogin() } catch {}
       } finally { this.loading = false }
     },
     async login(payload: { email: string; password: string }) {
@@ -27,6 +29,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('eb360_token', this.token!)
         setAuthToken(this.token)
         this.user = res.user
+        try { await useFavoritesStore().syncOnLogin() } catch {}
       } finally { this.loading = false }
     },
     async logout() {
@@ -35,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
       this.user = null
       localStorage.removeItem('eb360_token')
       setAuthToken(null)
+      try { useFavoritesStore().onLogout() } catch {}
     },
     async fetchMe() {
       try {

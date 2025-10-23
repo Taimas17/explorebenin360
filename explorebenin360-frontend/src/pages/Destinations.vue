@@ -35,6 +35,9 @@
         <Card v-for="p in items" :key="p.id" :data-id="'p-' + p.id" :class="highlighted === p.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
           <template #media>
             <EBImage :src="p.cover_image_url || banner" :alt="p.title" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="destination" :id="p.id" size="sm" :entity="{ id: p.id, title: p.title, slug: p.slug, cover_image_url: p.cover_image_url, city: p.city }" />
+            </div>
           </template>
           <template #title>{{ p.title }}</template>
           {{ p.city }}
@@ -72,6 +75,7 @@ import TagChips from '@/components/filters/TagChips.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Destinations — ExploreBenin360' })

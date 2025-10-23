@@ -25,6 +25,7 @@ const Callback = () => import('@/pages/checkout/Callback.vue')
 
 const TravelerReservations = () => import('@/pages/dashboard/Reservations.vue')
 const TravelerReservationDetail = () => import('@/pages/dashboard/ReservationDetail.vue')
+const Favorites = () => import('@/pages/dashboard/Favorites.vue')
 const ProviderReservations = () => import('@/pages/provider/Reservations.vue')
 const AdminReservations = () => import('@/pages/admin/Reservations.vue')
 
@@ -53,6 +54,7 @@ const routes = [
 
   { path: '/dashboard/reservations', name: 'reservations', component: TravelerReservations, meta: { requiresAuth: true } },
   { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true } },
+  { path: '/dashboard/favorites', name: 'favorites', component: Favorites },
   { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true } },
   { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true } },
 ]
