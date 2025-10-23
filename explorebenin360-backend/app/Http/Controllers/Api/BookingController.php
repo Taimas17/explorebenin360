@@ -81,21 +81,15 @@ class BookingController extends Controller
 
     public function show(Request $request, int $id)
     {
-        $booking = Booking::with('offering','offering.provider')->findOrFail($id);
-        $user = $request->user();
-        if (!$user->hasRole('admin') && $booking->user_id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
+        $booking = Booking::with('offering','offering.provider','user')->findOrFail($id);
+        $this->authorize('view', $booking);
         return response()->json(['data' => $booking]);
     }
 
     public function cancel(Request $request, int $id)
     {
-        $booking = Booking::with('offering','offering.provider')->findOrFail($id);
-        $user = $request->user();
-        if (!$user->hasRole('admin') && $booking->user_id !== $user->id) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
+        $booking = Booking::with('offering','offering.provider','user')->findOrFail($id);
+        $this->authorize('cancel', $booking);
         if (!in_array($booking->status, ['pending','authorized'])) {
             return response()->json(['message' => 'Cannot cancel at this stage'], 422);
         }
@@ -116,7 +110,7 @@ class BookingController extends Controller
         if (!$user->hasRole('provider') && !$user->hasRole('admin')) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
-        $query = Booking::with('offering')
+        $query = Booking::with('offering','user')
             ->whereHas('offering', fn($q)=>$q->where('provider_id', $user->id))
             ->orderByDesc('id');
         return response()->json(['data' => $query->paginate(20)]);
@@ -146,7 +140,7 @@ class BookingController extends Controller
         if (!$user->hasRole('admin')) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::with('offering','user','offering.provider')->findOrFail($id);
         $data = $request->validate([
             'status' => ['required','in:pending,authorized,confirmed,cancelled,refunded'],
         ]);
@@ -154,6 +148,35 @@ class BookingController extends Controller
         if ($booking->status === 'confirmed') {
             $pct = (float) config('payments.commission_percent', 12);
             $booking->commission_amount = round($booking->amount * ($pct/100), 2);
+            Mail::to($booking->user->email)
+                ->cc(optional($booking->offering->provider)->email)
+                ->queue(new BookingConfirmed($booking));
+        }
+        if ($booking->status === 'cancelled') {
+            Mail::to($booking->user->email)
+                ->cc(optional($booking->offering->provider)->email)
+                ->queue(new BookingCancelled($booking));
+        }
+        $booking->save();
+        return response()->json(['data' => $booking]);
+    }
+
+    public function providerUpdate(Request $request, int $id)
+    {
+        $user = $request->user();
+        if (!$user->hasRole('provider') && !$user->hasRole('admin')) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+        $booking = Booking::with('offering','user','offering.provider')->findOrFail($id);
+        $this->authorize('update', $booking);
+        $data = $request->validate([
+            'status' => ['required','in:authorized,cancelled'],
+        ]);
+        $booking->status = $data['status'];
+        if ($booking->status === 'cancelled') {
+            Mail::to($booking->user->email)
+                ->cc(optional($booking->offering->provider)->email)
+                ->queue(new BookingCancelled($booking));
         }
         $booking->save();
         return response()->json(['data' => $booking]);

@@ -62,3 +62,8 @@ export async function adminUpdateBookingStatus(id: number, status: BookingStatus
   if (useStubs) { await delay(); return }
   await api.patch(`/admin/bookings/${id}`, { status })
 }
+
+export async function providerUpdateBookingStatus(id: number, status: Extract<BookingStatus, 'authorized'|'cancelled'>): Promise<void> {
+  if (useStubs) { await delay(); return }
+  await api.patch(`/provider/bookings/${id}`, { status })
+}

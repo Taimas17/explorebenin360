@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
             $provider = Config::get('media.provider', 'cloudinary');
             return match ($provider) {
                 's3' => new S3Storage(Config::get('media.s3.disk', 's3')),
+                'local', 'public' => new S3Storage('public'),
                 default => new CloudinaryStorage(),
             };
         });

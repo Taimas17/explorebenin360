@@ -89,6 +89,9 @@
     "dashboard": "Tableau de bord prestataire",
     "reservations": "Réservations (prestataire)",
     "no_reservations": "Aucune réservation",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "cancel": "Annuler",
     "summary": {
       "title": "Résumé des gains",
       "total_bookings": "Total réservations",

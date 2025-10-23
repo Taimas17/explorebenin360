@@ -89,6 +89,9 @@
     "dashboard": "Provider dashboard",
     "reservations": "Reservations (provider)",
     "no_reservations": "No reservations",
+    "accept": "Accept",
+    "refuse": "Refuse",
+    "cancel": "Cancel",
     "summary": {
       "title": "Earnings summary",
       "total_bookings": "Total bookings",

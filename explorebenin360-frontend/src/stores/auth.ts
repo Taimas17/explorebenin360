@@ -4,7 +4,11 @@ import { useFavoritesStore } from './favorites'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({ user: null as any, token: (typeof window !== 'undefined' ? localStorage.getItem('eb360_token') : null) as string | null, loading: false }),
-  getters: { isAuthenticated: (s) => !!s.token },
+  getters: {
+    isAuthenticated: (s) => !!s.token,
+    roles: (s) => Array.isArray(s.user?.roles) ? s.user.roles.map((r: any) => (typeof r === 'string' ? r : r.name)) : [],
+    hasRole() { return (role: string) => (this.roles as string[]).includes(role) },
+  },
   actions: {
     init() {
       if (this.token) setAuthToken(this.token)
@@ -18,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('eb360_token', this.token!)
         setAuthToken(this.token)
         this.user = res.user
+        await this.fetchMe()
         try { await useFavoritesStore().syncOnLogin() } catch {}
       } finally { this.loading = false }
     },
@@ -29,6 +34,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('eb360_token', this.token!)
         setAuthToken(this.token)
         this.user = res.user
+        await this.fetchMe()
         try { await useFavoritesStore().syncOnLogin() } catch {}
       } finally { this.loading = false }
     },
