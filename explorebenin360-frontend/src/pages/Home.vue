@@ -149,7 +149,7 @@ import EBImage from '@/components/media/EBImage.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
-useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
+useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`

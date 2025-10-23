@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6" v-if="item">
-    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4">
+    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" :priority="true">
       <template #overlay>
         <FavoriteToggle type="destination" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, city: item.city }" />
       </template>

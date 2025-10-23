@@ -1,6 +1,6 @@
 <template>
   <div v-if="item">
-    <BrandBanner :src="item.cover_image_url || bannerFallback" :alt="item.title" :title="item.title" :subtitle="`${item.city} — ${item.type}`" class="block">
+    <BrandBanner :src="item.cover_image_url || bannerFallback" :alt="item.title" :title="item.title" :subtitle="`${item.city} — ${item.type}`" class="block" :priority="true">
       <template #overlay>
         <FavoriteToggle type="hebergement" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, city: item.city, price_per_night: item.price_per_night, currency: item.currency }" />
       </template>

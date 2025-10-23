@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
       aspect-ratio="16 / 9"
       class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
       :class="i === activeIndex ? 'opacity-100' : 'opacity-0'"
-      :priority="i === 0"
+      :priority="i === 0" :sizes="'100vw'"
     />
     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none"></div>
     <div class="relative z-10 h-full flex items-end">
