@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { buildCloudinaryUrl, buildWidthSrcset, buildDprSrcset, buildCloudinaryLqip } from '@/utils/media'
 
+defineOptions({ inheritAttrs: false })
+
 interface Props {
   src: string
   alt: string
@@ -72,6 +74,7 @@ const baseSrc = computed(() => {
       :fetchpriority="priority ? 'high' : undefined"
       decoding="async"
       @error="($event.target as HTMLImageElement).src = baseSrc as string"
+      v-bind="$attrs"
       :class="[$props.class, 'rounded-md bg-[#0b0f16] object-cover']"
     />
     <figcaption v-if="$slots.default" class="mt-2 text-sm text-gray-500 dark:text-gray-400">

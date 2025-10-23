@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6">
-    <BrandBanner :src="banner" alt="Bannière Guides" :title="t('nav.guides')" class="mb-6" />
+    <BrandBanner :src="banner" alt="" :title="t('nav.guides')" class="mb-6" />
 
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-[240px]">
@@ -33,8 +33,8 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="g in items" :key="g.id">
           <template #media>
-            <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg-white/5">
-              <img v-if="g.avatar_url" :src="g.avatar_url" :alt="g.name" class="w-20 h-20 rounded-full object-cover" />
+            <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg:white/5">
+              <img v-if="g.avatar_url" :src="g.avatar_url" :alt="buildAlt('guide', g.name, g.city)" class="w-20 h-20 rounded-full object-cover" />
               <AvatarFallback v-else :name="g.name" :size="72" />
               <div class="absolute top-2 right-2">
                 <FavoriteToggle type="guide" :id="g.id" size="sm" :entity="{ id: g.id, name: g.name, slug: g.slug, avatar_url: g.avatar_url, city: g.city }" />
@@ -70,6 +70,7 @@ import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import AvatarFallback from '@/components/ui/AvatarFallback.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import { buildAlt } from '@/utils/a11y'
 
 const { t } = useI18n()
 useHead({ title: 'Guides — ExploreBenin360' })
