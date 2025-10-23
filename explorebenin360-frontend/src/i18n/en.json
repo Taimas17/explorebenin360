@@ -17,6 +17,7 @@
     "explorer": "Explore",
     "offerings": "Offerings",
     "my_reservations": "My reservations",
+    "favorites": "Favorites",
     "logout": "Logout"
   },
   "hero": {
@@ -83,6 +84,18 @@
     "change_status": "Change status",
     "update": "Update",
     "updated_success": "Status updated"
+  },
+  "favorites": {
+    "title": "Your favorites",
+    "destinations": "Destinations",
+    "hebergements": "Stays",
+    "articles": "Articles",
+    "guides": "Guides",
+    "empty_title": "No favorites yet",
+    "empty_desc": "Add destinations, stays, articles and guides to your favorites to find them here.",
+    "explore_cta": "Start exploring",
+    "add_aria": "Add to favorites",
+    "remove_aria": "Remove from favorites"
   },
   "errors": {
     "login_failed": "Login failed",

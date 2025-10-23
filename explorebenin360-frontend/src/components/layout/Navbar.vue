@@ -23,6 +23,9 @@
           <button @click="toggleDark()" class="btn-base focus-ring h-9 w-9 rounded-full" :aria-label="isDark ? t('common.light_mode') : t('common.dark_mode')">
             <Icon :name="isDark ? 'Sun' : 'Moon'" />
           </button>
+          <RouterLink to="/dashboard/favorites" class="btn-base focus-ring h-9 w-9 rounded-full inline-flex items-center justify-center" :aria-label="t('nav.favorites')">
+            <Icon name="Heart" />
+          </RouterLink>
           <template v-if="!isAuthenticated">
             <RouterLink to="/login" class="hidden sm:inline-flex btn-base focus-ring h-9 px-4 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
               {{ t('nav.login') }}

@@ -2,6 +2,7 @@
   <section class="relative w-full overflow-hidden rounded-[var(--radius-lg)]">
     <EBImage :src="src" :alt="alt" :width="1600" :height="900" aspect-ratio="16 / 9" class="w-full h-[36vh] md:h-[44vh] object-cover" :priority="priority" :sizes="'100vw'" />
     <div class="absolute inset-0" :class="overlayClass"></div>
+    <div class="absolute top-3 right-3 z-10"><slot name="overlay" /></div>
     <div class="absolute inset-0 flex items-end">
       <div class="container-px mx-auto py-6">
         <div class="max-w-3xl">

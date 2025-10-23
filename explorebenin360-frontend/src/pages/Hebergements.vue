@@ -35,6 +35,9 @@
         <Card v-for="h in items" :key="h.id" :data-id="'h-' + h.id" :class="highlighted === h.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
           <template #media>
             <EBImage :src="h.cover_image_url || banner" :alt="h.title" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="hebergement" :id="h.id" size="sm" :entity="{ id: h.id, title: h.title, slug: h.slug, cover_image_url: h.cover_image_url, city: h.city, price_per_night: h.price_per_night, currency: h.currency }" />
+            </div>
           </template>
           <template #title>{{ h.title }}</template>
           {{ h.city }} · {{ h.price_per_night.toLocaleString() }} {{ h.currency }}
@@ -71,6 +74,7 @@ import RangeSlider from '@/components/filters/RangeSlider.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Hébergements — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })

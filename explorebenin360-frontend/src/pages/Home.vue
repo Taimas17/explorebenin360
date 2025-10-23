@@ -26,6 +26,12 @@
       <div v-else-if="errors.places" class="text-red-600 text-sm">{{ errors.places }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="p in places" :key="p.id">
+          <template #media>
+            <EBImage :src="p.cover_image_url || thumbs.destination" :alt="p.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="destination" :id="p.id" size="sm" :entity="{ id: p.id, title: p.title, slug: p.slug, cover_image_url: p.cover_image_url, city: p.city }" />
+            </div>
+          </template>
           <template #title>{{ p.title }}</template>
           {{ p.city }}
           <template #actions>
@@ -43,6 +49,12 @@
       <div v-else-if="errors.accommodations" class="text-red-600 text-sm">{{ errors.accommodations }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="h in accommodations" :key="h.id">
+          <template #media>
+            <EBImage :src="h.cover_image_url || thumbs.hebergement" :alt="h.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="hebergement" :id="h.id" size="sm" :entity="{ id: h.id, title: h.title, slug: h.slug, cover_image_url: h.cover_image_url, city: h.city, price_per_night: h.price_per_night, currency: h.currency }" />
+            </div>
+          </template>
           <template #title>{{ h.title }}</template>
           {{ h.city }} · {{ h.price_per_night.toLocaleString() }} {{ h.currency }} / nuit
           <template #actions>
@@ -60,6 +72,12 @@
       <div v-else-if="errors.guides" class="text-red-600 text-sm">{{ errors.guides }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="g in guides" :key="g.id">
+          <template #media>
+            <EBImage :src="g.avatar_url || thumbs.guide" :alt="g.name" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="guide" :id="g.id" size="sm" :entity="{ id: g.id, name: g.name, slug: g.slug, avatar_url: g.avatar_url, city: g.city }" />
+            </div>
+          </template>
           <template #title>{{ g.name }}</template>
           {{ g.city }}
         </Card>
@@ -72,6 +90,12 @@
       <div v-else-if="errors.articles" class="text-red-600 text-sm">{{ errors.articles }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="a in articles" :key="a.id">
+          <template #media>
+            <EBImage :src="a.cover_image_url || thumbs.article" :alt="a.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="article" :id="a.id" size="sm" :entity="{ id: a.id, title: a.title, slug: a.slug, cover_image_url: a.cover_image_url, excerpt: a.excerpt }" />
+            </div>
+          </template>
           <template #title>{{ a.title }}</template>
           {{ a.excerpt }}
           <template #actions>
@@ -89,6 +113,9 @@
       <div v-else-if="errors.events" class="text-red-600 text-sm">{{ errors.events }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="e in events" :key="e.id">
+          <template #media>
+            <EBImage :src="e.cover_image_url || thumbs.event" :alt="e.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+          </template>
           <template #title>{{ e.title }}</template>
           {{ e.city }} · {{ e.start_date }}
           <template #actions>
@@ -118,6 +145,8 @@ import Loader from '@/components/ui/Loader.vue'
 import Icon from '@/components/ui/Icon.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
+import EBImage from '@/components/media/EBImage.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
@@ -144,11 +173,19 @@ const heroItems = [
 
 const loading = reactive({ places: true, accommodations: true, guides: true, articles: true, events: true })
 const errors = reactive({ places: '', accommodations: '', guides: '', articles: '', events: '' })
-const places = ref([])
-const accommodations = ref([])
-const guides = ref([])
-const articles = ref([])
-const events = ref([])
+const places = ref<any[]>([])
+const accommodations = ref<any[]>([])
+const guides = ref<any[]>([])
+const articles = ref<any[]>([])
+const events = ref<any[]>([])
+
+const thumbs = {
+  destination: '/src/assets/brand/images/thumbs/destination-thumb.png',
+  hebergement: '/src/assets/brand/images/thumbs/hebergement-thumb.png',
+  guide: '/src/assets/brand/images/thumbs/guide-thumb.png',
+  article: '/src/assets/brand/images/thumbs/article-thumb.png',
+  event: '/src/assets/brand/images/thumbs/event-thumb.png',
+}
 
 onMounted(async () => {
   try { const { data } = await fetchPlaces({ featured: true, per_page: 6 }); places.value = data } catch(e){ errors.places = 'Erreur de chargement'; } finally { loading.places = false }

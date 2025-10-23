@@ -36,6 +36,9 @@
             <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg-white/5">
               <img v-if="g.avatar_url" :src="g.avatar_url" :alt="g.name" class="w-20 h-20 rounded-full object-cover" />
               <AvatarFallback v-else :name="g.name" :size="72" />
+              <div class="absolute top-2 right-2">
+                <FavoriteToggle type="guide" :id="g.id" size="sm" :entity="{ id: g.id, name: g.name, slug: g.slug, avatar_url: g.avatar_url, city: g.city }" />
+              </div>
             </div>
           </template>
           <template #title>{{ g.name }}</template>
@@ -66,6 +69,7 @@ import RangeSlider from '@/components/filters/RangeSlider.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import AvatarFallback from '@/components/ui/AvatarFallback.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Guides — ExploreBenin360' })

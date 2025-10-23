@@ -24,6 +24,9 @@
         <Card v-for="a in items" :key="a.id">
           <template #media>
             <EBImage :src="a.cover_image_url || banner" :alt="a.title" :width="1200" :height="630" aspect-ratio="1200 / 630" class="w-full h-auto" sizes="(max-width: 768px) 100vw, 50vw" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="article" :id="a.id" size="sm" :entity="{ id: a.id, title: a.title, slug: a.slug, cover_image_url: a.cover_image_url, excerpt: a.excerpt }" />
+            </div>
           </template>
           <template #title>{{ a.title }}</template>
           {{ a.excerpt }}
@@ -57,6 +60,7 @@ import Button from '@/components/ui/Button.vue'
 import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'Blog — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
