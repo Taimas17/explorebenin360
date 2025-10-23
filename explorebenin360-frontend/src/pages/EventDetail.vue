@@ -18,10 +18,11 @@ import { useHead } from '@vueuse/head'
 import { fetchEvent } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
+import eventThumb from '@/assets/brand/images/thumbs/event-thumb.png'
 
 const route = useRoute()
 const item = ref(null)
-const placeholder = 'https://picsum.photos/seed/event/1200/630'
+const placeholder = eventThumb
 
 onMounted(async () => {
   const slug = route.params.slug.toString()

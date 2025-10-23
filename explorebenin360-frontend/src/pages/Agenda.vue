@@ -30,6 +30,9 @@
       <div v-else-if="error" class="text-red-600 text-sm">{{ error }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="e in items" :key="e.id">
+          <template #media>
+            <EBImage :src="e.cover_image_url || eventThumb" :alt="e.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+          </template>
           <template #title>{{ e.title }}</template>
           {{ e.city }} · {{ e.start_date }} → {{ e.end_date }}
           <template #actions>
@@ -59,6 +62,8 @@ import { fetchEvents } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Loader from '@/components/ui/Loader.vue'
+import EBImage from '@/components/media/EBImage.vue'
+import eventThumb from '@/assets/brand/images/thumbs/event-thumb.png'
 
 useHead({ title: 'Agenda — ExploreBenin360' })
 

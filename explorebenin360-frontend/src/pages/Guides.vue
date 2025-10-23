@@ -33,7 +33,7 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="g in items" :key="g.id">
           <template #media>
-            <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg:white/5">
+            <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg-white/5">
               <img v-if="g.avatar_url" :src="g.avatar_url" :alt="buildAlt('guide', g.name, g.city)" class="w-20 h-20 rounded-full object-cover" />
               <AvatarFallback v-else :name="g.name" :size="72" />
               <div class="absolute top-2 right-2">
@@ -71,10 +71,11 @@ import BrandBanner from '@/components/ui/BrandBanner.vue'
 import AvatarFallback from '@/components/ui/AvatarFallback.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
+import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 
 const { t } = useI18n()
 useHead({ title: 'Guides — ExploreBenin360' })
-const banner = '/src/assets/brand/images/destinations/banner-default.png'
+const banner = destinationsBanner
 const route = useRoute(); const router = useRouter()
 
 const q = ref(route.query.q?.toString() || '')

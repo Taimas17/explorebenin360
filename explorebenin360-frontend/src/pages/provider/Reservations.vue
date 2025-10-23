@@ -42,13 +42,14 @@ import { useI18n } from 'vue-i18n'
 import { providerBookings } from '@/lib/api'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import providerHeader from '@/assets/brand/images/dashboard/provider/header.png'
 
 const { t } = useI18n()
 const items = ref([])
 const loading = ref(false)
 const currency = 'XOF'
 const totals = ref({ total: 0, confirmed: 0, gross: 0, commission: 0, net: 0 })
-const banner = '/src/assets/brand/images/dashboard/provider/header.png'
+const banner = providerHeader
 
 const formatNumber = (n) => new Intl.NumberFormat(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n)
 

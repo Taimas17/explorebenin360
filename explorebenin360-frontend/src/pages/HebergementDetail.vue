@@ -63,10 +63,11 @@ import AmenitiesIcons from '@/components/hebergements/AmenitiesIcons.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
 import { mapToGalleryItems } from '@/utils/media'
+import hebergementsBanner from '@/assets/brand/images/hebergements/banner-default.png'
 
 const route = useRoute()
 const item = ref<any>(null)
-const placeholder = '/src/assets/brand/images/hebergements/banner-default.png'
+const placeholder = hebergementsBanner
 
 const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
 

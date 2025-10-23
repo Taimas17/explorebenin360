@@ -147,9 +147,17 @@ import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import destinationThumb from '@/assets/brand/images/thumbs/destination-thumb.png'
+import hebergementThumb from '@/assets/brand/images/thumbs/hebergement-thumb.png'
+import guideThumb from '@/assets/brand/images/thumbs/guide-thumb.png'
+import articleThumb from '@/assets/brand/images/thumbs/article-thumb.png'
+import eventThumb from '@/assets/brand/images/thumbs/event-thumb.png'
+import hero1 from '@/assets/brand/images/home/hero-1.png'
+import hero2 from '@/assets/brand/images/home/hero-2.png'
+import hero3 from '@/assets/brand/images/home/hero-3.png'
 
 const { t } = useI18n()
-useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
+useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: hero1, imagesrcset: hero1 + ' 1x', fetchpriority: 'high' } ] })
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`
@@ -160,15 +168,15 @@ const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   </svg>`)
 
 const homeHero = [
-  { src: '/src/assets/brand/images/home/hero-1.png', alt: 'Plage du Bénin au lever du soleil' },
-  { src: '/src/assets/brand/images/home/hero-2.png', alt: 'Village lacustre de Ganvié au coucher du soleil' },
-  { src: '/src/assets/brand/images/home/hero-3.png', alt: 'Savane du parc de la Pendjari' },
+  { src: hero1, alt: 'Plage du Bénin au lever du soleil' },
+  { src: hero2, alt: 'Village lacustre de Ganvié au coucher du soleil' },
+  { src: hero3, alt: 'Savane du parc de la Pendjari' },
 ]
 
 const heroItems = [
-  { src: '/src/assets/brand/images/home/hero-1.png', alt: 'Plage — ExploreBenin360', caption: 'Côte béninoise' },
-  { src: '/src/assets/brand/images/home/hero-2.png', alt: 'Ganvié — ExploreBenin360', caption: 'Ganvié' },
-  { src: '/src/assets/brand/images/home/hero-3.png', alt: 'Pendjari — ExploreBenin360', caption: 'Pendjari' },
+  { src: hero1, alt: 'Plage — ExploreBenin360', caption: 'Côte béninoise' },
+  { src: hero2, alt: 'Ganvié — ExploreBenin360', caption: 'Ganvié' },
+  { src: hero3, alt: 'Pendjari — ExploreBenin360', caption: 'Pendjari' },
 ]
 
 const loading = reactive({ places: true, accommodations: true, guides: true, articles: true, events: true })
@@ -180,11 +188,11 @@ const articles = ref<any[]>([])
 const events = ref<any[]>([])
 
 const thumbs = {
-  destination: '/src/assets/brand/images/thumbs/destination-thumb.png',
-  hebergement: '/src/assets/brand/images/thumbs/hebergement-thumb.png',
-  guide: '/src/assets/brand/images/thumbs/guide-thumb.png',
-  article: '/src/assets/brand/images/thumbs/article-thumb.png',
-  event: '/src/assets/brand/images/thumbs/event-thumb.png',
+  destination: destinationThumb,
+  hebergement: hebergementThumb,
+  guide: guideThumb,
+  article: articleThumb,
+  event: eventThumb,
 }
 
 onMounted(async () => {

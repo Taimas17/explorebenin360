@@ -34,7 +34,7 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="p in items" :key="p.id" :data-id="'p-' + p.id" :class="highlighted === p.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
           <template #media>
-            <EBImage :src="p.cover_image_url || banner" :alt="buildAlt('destination', p.title, p.city)" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+            <EBImage :src="p.cover_image_url || destinationThumb" :alt="buildAlt('destination', p.title, p.city)" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
             <div class="absolute top-2 right-2">
               <FavoriteToggle type="destination" :id="p.id" size="sm" :entity="{ id: p.id, title: p.title, slug: p.slug, cover_image_url: p.cover_image_url, city: p.city }" />
             </div>
@@ -77,10 +77,12 @@ import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
+import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
+import destinationThumb from '@/assets/brand/images/thumbs/destination-thumb.png'
 
 const { t } = useI18n()
 useHead({ title: 'Destinations — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
-const banner = '/src/assets/brand/images/destinations/banner-default.png'
+const banner = destinationsBanner
 
 const route = useRoute(); const router = useRouter()
 
