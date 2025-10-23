@@ -25,6 +25,10 @@ const post = async <T>(url: string, body?: any) => {
   const { data } = await api.post<T>(url, body)
   return data
 }
+const del = async <T>(url: string) => {
+  const { data } = await api.delete<T>(url)
+  return data
+}
 const patch = async <T>(url: string, body?: any) => {
   const { data } = await api.patch<T>(url, body)
   return data
@@ -60,5 +64,10 @@ export const cancelBooking = (id: number) => post(`/bookings/${id}/cancel`)
 export const providerBookings = () => get('/provider/bookings')
 export const adminBookings = (filters: any = {}) => get('/admin/bookings', filters)
 export const adminUpdateBooking = (id: number, body: any) => patch(`/admin/bookings/${id}`, body)
+
+// Favorites (graceful 404 fallback expected by callers)
+export const getFavorites = () => get<{ data: { destination: number[]; hebergement: number[]; article: number[]; guide: number[] } }>('/favorites')
+export const addFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites', { type, id })
+export const removeFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites/remove', { type, id })
 
 export default api

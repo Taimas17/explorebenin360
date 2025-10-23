@@ -1,6 +1,10 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6" v-if="item">
-    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.author_name + ' — ' + formatDate(item.published_at)" />
+    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.author_name + ' — ' + formatDate(item.published_at)">
+      <template #overlay>
+        <FavoriteToggle type="article" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, excerpt: item.excerpt }" />
+      </template>
+    </BrandBanner>
     <article class="prose dark:prose-invert max-w-none" v-html="item.body"></article>
   </div>
   <div class="container-px mx-auto py-16" v-else>
@@ -14,6 +18,7 @@ import { useHead } from '@vueuse/head'
 import { fetchArticle } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const route = useRoute()
 const item = ref(null)

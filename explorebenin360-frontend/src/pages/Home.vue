@@ -28,6 +28,9 @@
         <Card v-for="p in places" :key="p.id">
           <template #media>
             <EBImage :src="p.cover_image_url || thumbs.destination" :alt="p.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="destination" :id="p.id" size="sm" :entity="{ id: p.id, title: p.title, slug: p.slug, cover_image_url: p.cover_image_url, city: p.city }" />
+            </div>
           </template>
           <template #title>{{ p.title }}</template>
           {{ p.city }}
@@ -48,6 +51,9 @@
         <Card v-for="h in accommodations" :key="h.id">
           <template #media>
             <EBImage :src="h.cover_image_url || thumbs.hebergement" :alt="h.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="hebergement" :id="h.id" size="sm" :entity="{ id: h.id, title: h.title, slug: h.slug, cover_image_url: h.cover_image_url, city: h.city, price_per_night: h.price_per_night, currency: h.currency }" />
+            </div>
           </template>
           <template #title>{{ h.title }}</template>
           {{ h.city }} · {{ h.price_per_night.toLocaleString() }} {{ h.currency }} / nuit
@@ -68,6 +74,9 @@
         <Card v-for="g in guides" :key="g.id">
           <template #media>
             <EBImage :src="g.avatar_url || thumbs.guide" :alt="g.name" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="guide" :id="g.id" size="sm" :entity="{ id: g.id, name: g.name, slug: g.slug, avatar_url: g.avatar_url, city: g.city }" />
+            </div>
           </template>
           <template #title>{{ g.name }}</template>
           {{ g.city }}
@@ -83,6 +92,9 @@
         <Card v-for="a in articles" :key="a.id">
           <template #media>
             <EBImage :src="a.cover_image_url || thumbs.article" :alt="a.title" :width="1200" :height="900" aspect-ratio="4 / 3" />
+            <div class="absolute top-2 right-2">
+              <FavoriteToggle type="article" :id="a.id" size="sm" :entity="{ id: a.id, title: a.title, slug: a.slug, cover_image_url: a.cover_image_url, excerpt: a.excerpt }" />
+            </div>
           </template>
           <template #title>{{ a.title }}</template>
           {{ a.excerpt }}
@@ -134,6 +146,7 @@ import Icon from '@/components/ui/Icon.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
 import EBImage from '@/components/media/EBImage.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const { t } = useI18n()
 useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })

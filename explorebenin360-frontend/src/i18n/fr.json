@@ -17,6 +17,7 @@
     "explorer": "Explorer",
     "offerings": "Offres",
     "my_reservations": "Mes réservations",
+    "favorites": "Mes favoris",
     "logout": "Déconnexion"
   },
   "hero": {
@@ -83,6 +84,18 @@
     "change_status": "Changer le statut",
     "update": "Mettre à jour",
     "updated_success": "Statut mis à jour"
+  },
+  "favorites": {
+    "title": "Vos favoris",
+    "destinations": "Destinations",
+    "hebergements": "Hébergements",
+    "articles": "Articles",
+    "guides": "Guides",
+    "empty_title": "Aucun favori pour le moment",
+    "empty_desc": "Ajoutez des destinations, hébergements, articles et guides à vos favoris pour les retrouver ici.",
+    "explore_cta": "Commencer à explorer",
+    "add_aria": "Ajouter aux favoris",
+    "remove_aria": "Retirer des favoris"
   },
   "errors": {
     "login_failed": "Échec de la connexion",

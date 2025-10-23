@@ -1,6 +1,9 @@
 <template>
   <div v-if="item">
     <BrandBanner :src="item.cover_image_url || bannerFallback" :alt="item.title" :title="item.title" :subtitle="`${item.city} — ${item.type}`" class="block">
+      <template #overlay>
+        <FavoriteToggle type="hebergement" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, city: item.city, price_per_night: item.price_per_night, currency: item.currency }" />
+      </template>
       <RouterLink to="/offerings" class="btn-base focus-ring h-10 px-5 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
         Réserver
       </RouterLink>
@@ -32,6 +35,7 @@ import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import AmenitiesIcons from '@/components/hebergements/AmenitiesIcons.vue'
+import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 
 const route = useRoute()
 const item = ref<any>(null)
