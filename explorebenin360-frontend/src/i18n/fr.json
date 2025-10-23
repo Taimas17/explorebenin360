@@ -20,9 +20,7 @@
     "favorites": "Mes favoris",
     "logout": "Déconnexion"
   },
-  "hero": {
-    "cta": "Explorer maintenant"
-  },
+  "hero": { "cta": "Explorer maintenant" },
   "sections": {
     "popular_destinations": "Destinations populaires",
     "must_do": "Activités à ne pas manquer",
@@ -38,16 +36,12 @@
     "light_mode": "Mode clair",
     "loading": "Chargement...",
     "optional": "optionnel",
-    "details": "Détails"
+    "details": "Détails",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
   },
-  "auth": {
-    "name": "Nom",
-    "password": "Mot de passe"
-  },
-  "offerings": {
-    "title": "Offres réservables",
-    "capacity": "Capacité"
-  },
+  "auth": { "name": "Nom", "password": "Mot de passe" },
+  "offerings": { "title": "Offres réservables", "capacity": "Capacité" },
   "checkout": {
     "title": "Réserver",
     "book_now": "Réserver",
@@ -58,15 +52,41 @@
     "callback_title": "Merci pour votre paiement",
     "callback_subtitle": "Nous confirmons votre réservation. Un email vous sera envoyé."
   },
+  "filters": {
+    "all": "Tous",
+    "status": "Statut",
+    "apply": "Appliquer",
+    "date_from": "Du",
+    "date_to": "Au",
+    "search_placeholder": "Recherche rapide..."
+  },
   "dashboard": {
     "my_reservations": "Mes réservations",
     "reservation_detail": "Détail de la réservation",
     "status": "Statut",
     "amount": "Montant",
     "cancel": "Annuler",
-    "no_reservations": "Aucune réservation pour le moment"
+    "no_reservations": "Aucune réservation pour le moment",
+    "favorites": "Favoris",
+    "messages": "Messages",
+    "update_profile": "Mettre à jour le profil",
+    "no_favorites": "Aucun favori pour le moment",
+    "explore_now": "Explorer maintenant",
+    "favorite_places": "Lieux enregistrés",
+    "favorite_stays": "Hébergements enregistrés",
+    "favorite_articles": "Articles enregistrés",
+    "upcoming": "À venir",
+    "past": "Passées",
+    "all": "Toutes",
+    "view_receipt": "Voir le reçu",
+    "threads": "Conversations",
+    "pick_thread": "Choisissez une conversation",
+    "send_message": "Envoyer un message",
+    "type_message": "Écrivez votre message...",
+    "send": "Envoyer"
   },
   "provider": {
+    "dashboard": "Tableau de bord prestataire",
     "reservations": "Réservations (prestataire)",
     "no_reservations": "Aucune réservation",
     "summary": {
@@ -76,14 +96,70 @@
       "gross_amount": "Brut",
       "commission_total": "Commission",
       "net_earnings": "Gains nets"
-    }
+    },
+    "timespan": "Période (jours)",
+    "bookings_over_time": "Réservations dans le temps",
+    "manage_offers": "Gérer les offres",
+    "view_bookings": "Voir les réservations",
+    "view_earnings": "Voir les gains",
+    "offers": "Offres",
+    "offers_subtitle": "Créez, modifiez et publiez vos offres",
+    "create_offer": "Créer une offre",
+    "no_offers": "Aucune offre",
+    "offer_title": "Titre de l'offre",
+    "offer_description": "Description",
+    "price": "Prix",
+    "currency": "Devise",
+    "cover_image_url": "URL de l'image de couverture",
+    "status": "Statut",
+    "gallery": "Galerie",
+    "gallery_hint": "Utilisez des URLs pour le moment. Intégration au stockage à venir.",
+    "add_image": "Ajouter une image",
+    "clear_gallery": "Vider la galerie",
+    "saved": "Enregistré",
+    "edit_offer": "Modifier l'offre",
+    "calendar": "Calendrier et disponibilité",
+    "select_offer": "Sélectionnez une offre",
+    "month": "Mois",
+    "week": "Semaine",
+    "no_offer_selected": "Aucune offre sélectionnée",
+    "block_hint": "Bloquez les dates où l'offre n'est pas disponible.",
+    "blocked": "Bloquée",
+    "block_date": "Bloquer la date",
+    "earnings": "Gains",
+    "payouts_desc": "Versements et transactions",
+    "export_csv": "Exporter CSV",
+    "date": "Date",
+    "amount": "Montant",
+    "reference": "Référence",
+    "no_payouts": "Aucun versement"
   },
   "admin": {
+    "dashboard": "Tableau de bord admin",
     "reservations": "Réservations (admin)",
     "no_reservations": "Aucune réservation",
     "change_status": "Changer le statut",
     "update": "Mettre à jour",
-    "updated_success": "Statut mis à jour"
+    "updated_success": "Statut mis à jour",
+    "kpi_users": "Utilisateurs",
+    "kpi_providers_pending": "Prestataires en attente",
+    "kpi_bookings": "Réservations",
+    "kpi_revenue": "Revenus (est.)",
+    "bookings_over_time": "Réservations dans le temps",
+    "recent_activity": "Activité récente",
+    "providers": "Prestataires",
+    "provider": "Prestataire",
+    "email": "Email",
+    "phone": "Téléphone",
+    "kyc": "KYC",
+    "kyc_verified": "Vérifié",
+    "kyc_submitted": "Soumis",
+    "kyc_missing": "Manquant",
+    "status": "Statut",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "moderation": "Modération du contenu",
+    "nothing_to_moderate": "Rien à modérer"
   },
   "favorites": {
     "title": "Vos favoris",

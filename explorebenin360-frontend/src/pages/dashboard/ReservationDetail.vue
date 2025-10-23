@@ -6,30 +6,30 @@
       <div class="text-sm text-[color:var(--color-text-muted)] mb-2">{{ item.start_date }}<template v-if="item.end_date"> - {{ item.end_date }}</template> • {{ item.guests }} {{ t('checkout.guests') }}</div>
       <div class="text-sm mb-2">{{ t('dashboard.amount') }}: {{ item.currency }} {{ item.amount }}</div>
       <div class="text-sm mb-4">{{ t('dashboard.status') }}: <span class="font-medium">{{ item.status }}</span></div>
-      <button v-if="item.status==='pending' || item.status==='authorized'" @click="cancel" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.cancel') }}</button>
+      <div class="flex gap-2">
+        <a v-if="item.receipt_url" :href="item.receipt_url" target="_blank" rel="noopener" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.view_receipt') }}</a>
+        <button v-if="item.status==='pending' || item.status==='authorized'" @click="cancel" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.cancel') }}</button>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { fetchBooking, cancelBooking } from '@/lib/api'
+import { fetchBookingService, cancelBookingService } from '@/lib/services/bookings'
 
 const { t } = useI18n()
 const route = useRoute()
-const router = useRouter()
-const item = ref(null)
+const item = ref<any>(null)
 
 onMounted(async () => {
-  const res = await fetchBooking(Number(route.params.id))
-  item.value = res.data
+  item.value = await fetchBookingService(Number(route.params.id))
 })
 
 const cancel = async () => {
   if (!item.value) return
-  await cancelBooking(item.value.id)
-  const res = await fetchBooking(item.value.id)
-  item.value = res.data
+  await cancelBookingService(item.value.id)
+  item.value = await fetchBookingService(item.value.id)
 }
 </script>

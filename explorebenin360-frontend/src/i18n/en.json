@@ -20,9 +20,7 @@
     "favorites": "Favorites",
     "logout": "Logout"
   },
-  "hero": {
-    "cta": "Explore now"
-  },
+  "hero": { "cta": "Explore now" },
   "sections": {
     "popular_destinations": "Popular destinations",
     "must_do": "Must-do activities",
@@ -38,16 +36,12 @@
     "light_mode": "Light mode",
     "loading": "Loading...",
     "optional": "optional",
-    "details": "Details"
+    "details": "Details",
+    "cancel": "Cancel",
+    "save": "Save"
   },
-  "auth": {
-    "name": "Name",
-    "password": "Password"
-  },
-  "offerings": {
-    "title": "Bookable offerings",
-    "capacity": "Capacity"
-  },
+  "auth": { "name": "Name", "password": "Password" },
+  "offerings": { "title": "Bookable offerings", "capacity": "Capacity" },
   "checkout": {
     "title": "Checkout",
     "book_now": "Book now",
@@ -58,15 +52,41 @@
     "callback_title": "Thanks for your payment",
     "callback_subtitle": "We are confirming your booking. You'll receive an email shortly."
   },
+  "filters": {
+    "all": "All",
+    "status": "Status",
+    "apply": "Apply",
+    "date_from": "From",
+    "date_to": "To",
+    "search_placeholder": "Quick search..."
+  },
   "dashboard": {
     "my_reservations": "My reservations",
     "reservation_detail": "Reservation detail",
     "status": "Status",
     "amount": "Amount",
     "cancel": "Cancel",
-    "no_reservations": "No reservations yet"
+    "no_reservations": "No reservations yet",
+    "favorites": "Favorites",
+    "messages": "Messages",
+    "update_profile": "Update profile",
+    "no_favorites": "No favorites yet",
+    "explore_now": "Explore now",
+    "favorite_places": "Saved places",
+    "favorite_stays": "Saved stays",
+    "favorite_articles": "Saved articles",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "all": "All",
+    "view_receipt": "View receipt",
+    "threads": "Threads",
+    "pick_thread": "Pick a thread to view messages",
+    "send_message": "Send message",
+    "type_message": "Type your message...",
+    "send": "Send"
   },
   "provider": {
+    "dashboard": "Provider dashboard",
     "reservations": "Reservations (provider)",
     "no_reservations": "No reservations",
     "summary": {
@@ -76,14 +96,70 @@
       "gross_amount": "Gross",
       "commission_total": "Commission",
       "net_earnings": "Net earnings"
-    }
+    },
+    "timespan": "Timespan (days)",
+    "bookings_over_time": "Bookings over time",
+    "manage_offers": "Manage offers",
+    "view_bookings": "View bookings",
+    "view_earnings": "View earnings",
+    "offers": "Offers",
+    "offers_subtitle": "Create, edit and publish your offerings",
+    "create_offer": "Create offer",
+    "no_offers": "No offers yet",
+    "offer_title": "Offer title",
+    "offer_description": "Description",
+    "price": "Price",
+    "currency": "Currency",
+    "cover_image_url": "Cover image URL",
+    "status": "Status",
+    "gallery": "Gallery",
+    "gallery_hint": "Use URLs for now. Integration to storage coming soon.",
+    "add_image": "Add image",
+    "clear_gallery": "Clear gallery",
+    "saved": "Saved",
+    "edit_offer": "Edit offer",
+    "calendar": "Calendar & availability",
+    "select_offer": "Select an offer",
+    "month": "Month",
+    "week": "Week",
+    "no_offer_selected": "No offer selected",
+    "block_hint": "Block out dates when the offer is unavailable.",
+    "blocked": "Blocked",
+    "block_date": "Block date",
+    "earnings": "Earnings",
+    "payouts_desc": "Payouts and transactions",
+    "export_csv": "Export CSV",
+    "date": "Date",
+    "amount": "Amount",
+    "reference": "Reference",
+    "no_payouts": "No payouts yet"
   },
   "admin": {
+    "dashboard": "Admin dashboard",
     "reservations": "Reservations (admin)",
     "no_reservations": "No reservations",
     "change_status": "Change status",
     "update": "Update",
-    "updated_success": "Status updated"
+    "updated_success": "Status updated",
+    "kpi_users": "Users",
+    "kpi_providers_pending": "Providers pending approval",
+    "kpi_bookings": "Bookings",
+    "kpi_revenue": "Revenue (est.)",
+    "bookings_over_time": "Bookings over time",
+    "recent_activity": "Recent activity",
+    "providers": "Providers",
+    "provider": "Provider",
+    "email": "Email",
+    "phone": "Phone",
+    "kyc": "KYC",
+    "kyc_verified": "Verified",
+    "kyc_submitted": "Submitted",
+    "kyc_missing": "Missing",
+    "status": "Status",
+    "approve": "Approve",
+    "reject": "Reject",
+    "moderation": "Content moderation",
+    "nothing_to_moderate": "Nothing to moderate"
   },
   "favorites": {
     "title": "Your favorites",
