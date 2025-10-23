@@ -39,4 +39,13 @@ S3:
 
 ---
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo"></a></p>
+## Environment Setup (staging)
+
+- Copy .env.example to .env:
+  - Windows/Unix: `cp .env.example .env`
+- Fill in the Media / Cloudinary variables:
+  - Required: `MEDIA_PROVIDER`, and either `CLOUDINARY_URL` or `CLOUDINARY_CLOUD_NAME` + `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET`
+  - Required: `CLOUDINARY_FOLDER_BASE` (use `explorebenin360/staging`), `MEDIA_MAX_SIZE_MB`, `MEDIA_ALLOWED_TYPES`
+  - Optional: `CDN_BASE_URL`
+- Obtain Cloudinary values from Dashboard → Settings → Account (cloud name, API key, API secret). Do not commit secrets; store actual values only in `.env` (gitignored). Prefer staging-restricted API credentials if possible.
+- After setting `.env`, run `php artisan config:clear` and restart services as needed.
