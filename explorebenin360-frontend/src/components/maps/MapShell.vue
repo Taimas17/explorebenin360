@@ -1,22 +1,47 @@
 <template>
-  <div class="relative w-full h-[60vh] rounded-[var(--radius-lg)] overflow-hidden bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
-    <div class="absolute inset-0 grid place-items-center text-center p-6">
-      <div>
-        <p class="text-lg font-semibold">Map coming soon</p>
-        <p class="mt-1 text-sm text-[color:var(--color-text-muted)]">API Key: {{ maskedKey }}</p>
-        <p v-if="markers?.length" class="mt-2 text-sm">{{ markers.length }} marqueurs</p>
-        <div v-if="markers?.length" class="mt-3 flex flex-wrap justify-center gap-2 max-w-xl mx-auto">
-          <button v-for="(m,i) in markers" :key="i" @click="$emit('marker-click', m)" class="px-2 py-1 rounded bg-white/80 hover:bg-white shadow text-xs">
-            {{ m.title || ('#' + (i+1)) }}
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="relative w-full h-[60vh] rounded-[var(--radius-lg)] overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
+    <component
+      :is="providerComponent"
+      v-bind="passProps"
+      @marker-click="(id) => $emit('marker-click', id)"
+      @bounds-change="(p) => $emit('bounds-change', p)"
+      class="w-full h-full"
+    />
   </div>
 </template>
 
 <script setup>
-const props = defineProps({ markers: { type: Array, default: () => [] } })
-const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''
-const maskedKey = key ? key.slice(0, 6) + '...' : 'not set'
+import { computed } from 'vue'
+import LeafletMap from './LeafletMap.vue'
+
+const props = defineProps({
+  provider: { type: String, default: 'leaflet' },
+  markers: { type: Array, default: () => [] },
+  zoom: { type: Number, default: 6 },
+  center: { type: Object, default: null },
+  bbox: { type: Array, default: null },
+  cluster: { type: Boolean, default: true },
+  fitOnMarkersChange: { type: Boolean, default: true },
+})
+
+defineEmits(['marker-click','bounds-change'])
+
+const providerComponent = computed(() => {
+  switch (props.provider) {
+    case 'leaflet': return LeafletMap
+    case 'mapbox':
+    case 'google':
+    default:
+      return LeafletMap
+  }
+})
+
+const passProps = computed(() => ({
+  markers: props.markers,
+  zoom: props.zoom,
+  center: props.center,
+  bbox: props.bbox,
+  cluster: props.cluster,
+  fitOnMarkersChange: props.fitOnMarkersChange,
+}))
 </script>
