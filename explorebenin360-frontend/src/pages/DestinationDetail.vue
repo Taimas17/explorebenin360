@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6" v-if="item">
-    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" />
+    <BrandBanner :src="item.cover_image_url || placeholder" :alt="item.title" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" :priority="true" />
 
     <div class="prose dark:prose-invert max-w-none" v-html="item.description"></div>
 

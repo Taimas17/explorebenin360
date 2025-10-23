@@ -10,7 +10,7 @@
       </RouterLink>
     </div>
 
-    <EBImage :src="item.cover_image_url || placeholder" :alt="item.title" :width="1200" :height="800" class="rounded-[var(--radius-lg)]"/>
+    <EBImage :src="item.cover_image_url || placeholder" :alt="item.title" :width="1200" :height="800" aspect-ratio="3 / 2" sizes="100vw" :priority="true" class="rounded-[var(--radius-lg)]"/>
 
     <div class="prose dark:prose-invert max-w-none">
       <p>{{ item.description }}</p>

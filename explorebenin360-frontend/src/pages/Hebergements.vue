@@ -1,6 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8 space-y-6">
-    <BrandBanner :src="banner" alt="Bannière Hébergements" :title="t('nav.hebergements')" class="mb-6" />
+    <BrandBanner :src="banner" alt="Bannière Hébergements" :title="t('nav.hebergements')" class="mb-6" :priority="true" />
 
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-[240px]">
@@ -34,7 +34,7 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card v-for="h in items" :key="h.id" :data-id="'h-' + h.id" :class="highlighted === h.id ? 'ring-2 ring-[color:var(--color-secondary)]' : ''">
           <template #media>
-            <EBImage :src="h.cover_image_url || banner" :alt="h.title" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" />
+            <EBImage :src="h.cover_image_url || banner" :alt="h.title" :width="800" :height="600" aspect-ratio="4 / 3" class="w-full h-auto" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
           </template>
           <template #title>{{ h.title }}</template>
           {{ h.city }} · {{ h.price_per_night.toLocaleString() }} {{ h.currency }}
@@ -73,7 +73,7 @@ import EBImage from '@/components/media/EBImage.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 
 const { t } = useI18n()
-useHead({ title: 'Hébergements — ExploreBenin360' })
+useHead({ title: 'Hébergements — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
 const banner = '/src/assets/brand/images/hebergements/banner-default.png'
 
 const route = useRoute(); const router = useRouter()

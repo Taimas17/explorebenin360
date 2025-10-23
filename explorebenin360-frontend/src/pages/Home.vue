@@ -120,7 +120,7 @@ import EBGallery from '@/components/media/EBGallery.vue'
 import EB360Viewer from '@/components/media/EB360Viewer.vue'
 
 const { t } = useI18n()
-useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
+useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ], link: [ { rel: 'preload', as: 'image', href: '/src/assets/brand/images/home/hero-1.png', imagesrcset: '/src/assets/brand/images/home/hero-1.png 1x', fetchpriority: 'high' } ] })
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`

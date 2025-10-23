@@ -1,6 +1,6 @@
 <template>
   <section class="relative w-full overflow-hidden rounded-[var(--radius-lg)]">
-    <EBImage :src="src" :alt="alt" :width="1600" :height="900" aspect-ratio="16 / 9" class="w-full h-[36vh] md:h-[44vh] object-cover" :priority="priority" />
+    <EBImage :src="src" :alt="alt" :width="1600" :height="900" aspect-ratio="16 / 9" class="w-full h-[36vh] md:h-[44vh] object-cover" :priority="priority" :sizes="'100vw'" />
     <div class="absolute inset-0" :class="overlayClass"></div>
     <div class="absolute inset-0 flex items-end">
       <div class="container-px mx-auto py-6">
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import EBImage from '@/components/media/EBImage.vue'
+import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{ src: string; alt: string; title?: string; subtitle?: string; darkSrc?: string; priority?: boolean; overlay?: 'orange' | 'teal' | 'mixed' }>(), {
   overlay: 'mixed',
