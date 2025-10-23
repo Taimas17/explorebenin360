@@ -23,11 +23,26 @@ const OfferingDetail = () => import('@/pages/offerings/OfferingDetail.vue')
 const Checkout = () => import('@/pages/checkout/Checkout.vue')
 const Callback = () => import('@/pages/checkout/Callback.vue')
 
+// Traveler
 const TravelerReservations = () => import('@/pages/dashboard/Reservations.vue')
 const TravelerReservationDetail = () => import('@/pages/dashboard/ReservationDetail.vue')
-const Favorites = () => import('@/pages/dashboard/Favorites.vue')
+const TravelerFavorites = () => import('@/pages/dashboard/Favorites.vue')
+const TravelerMessages = () => import('@/pages/dashboard/Messages.vue')
+
+// Provider
+const ProviderDashboard = () => import('@/pages/provider/ProviderDashboard.vue')
 const ProviderReservations = () => import('@/pages/provider/Reservations.vue')
+const ProviderOffers = () => import('@/pages/provider/Offers.vue')
+const ProviderOfferCreate = () => import('@/pages/provider/OfferCreate.vue')
+const ProviderOfferEdit = () => import('@/pages/provider/OfferEdit.vue')
+const ProviderCalendar = () => import('@/pages/provider/Calendar.vue')
+const ProviderEarnings = () => import('@/pages/provider/Earnings.vue')
+
+// Admin
+const AdminDashboard = () => import('@/pages/admin/AdminDashboard.vue')
 const AdminReservations = () => import('@/pages/admin/Reservations.vue')
+const AdminProviders = () => import('@/pages/admin/Providers.vue')
+const AdminModeration = () => import('@/pages/admin/ContentModeration.vue')
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -52,11 +67,26 @@ const routes = [
   { path: '/checkout/:slug', name: 'checkout', component: Checkout, meta: { requiresAuth: true } },
   { path: '/checkout/callback', name: 'checkout-callback', component: Callback },
 
+  // Traveler
   { path: '/dashboard/reservations', name: 'reservations', component: TravelerReservations, meta: { requiresAuth: true } },
   { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true } },
-  { path: '/dashboard/favorites', name: 'favorites', component: Favorites },
+  { path: '/dashboard/favorites', name: 'favorites', component: TravelerFavorites, meta: { requiresAuth: true } },
+  { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true } },
+
+  // Provider
+  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true } },
   { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true } },
+  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true } },
+  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true } },
+  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true } },
+  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true } },
+  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true } },
+
+  // Admin
+  { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true } },
   { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true } },
+  { path: '/admin/providers', name: 'admin-providers', component: AdminProviders, meta: { requiresAuth: true } },
+  { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({

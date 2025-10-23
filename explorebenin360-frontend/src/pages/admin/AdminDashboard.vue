@@ -1,0 +1,52 @@
+<template>
+  <div class="container-px mx-auto py-8">
+    <BrandBanner :src="banner" alt="Bannière Admin" :title="t('admin.dashboard')" class="mb-6" />
+
+    <div class="grid md:grid-cols-4 gap-3 mb-6">
+      <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+        <div class="text-xs text-[color:var(--color-text-muted)]">{{ t('admin.kpi_users') }}</div>
+        <div class="text-xl font-semibold">12,450</div>
+      </div>
+      <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+        <div class="text-xs text-[color:var(--color-text-muted)]">{{ t('admin.kpi_providers_pending') }}</div>
+        <div class="text-xl font-semibold">3</div>
+      </div>
+      <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+        <div class="text-xs text-[color:var(--color-text-muted)]">{{ t('admin.kpi_bookings') }}</div>
+        <div class="text-xl font-semibold">1,125</div>
+      </div>
+      <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+        <div class="text-xs text-[color:var(--color-text-muted)]">{{ t('admin.kpi_revenue') }}</div>
+        <div class="text-xl font-semibold">XOF 85,200,000</div>
+      </div>
+    </div>
+
+    <div class="rounded-md border border-black/10 dark:border-white/10 p-4 mb-6">
+      <div class="text-sm font-medium mb-2">{{ t('admin.bookings_over_time') }}</div>
+      <SmallAreaChart :data="series" color="#16a34a" />
+    </div>
+
+    <div>
+      <div class="text-sm font-medium mb-2">{{ t('admin.recent_activity') }}</div>
+      <ul class="rounded-md border border-black/10 dark:border-white/10 divide-y divide-black/10 dark:divide-white/10">
+        <li v-for="a in activity" :key="a.id" class="px-3 py-2 text-sm">{{ a.text }}</li>
+      </ul>
+    </div>
+  </div>
+</template>
+<script setup>
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import BrandBanner from '@/components/ui/BrandBanner.vue'
+import SmallAreaChart from '@/components/charts/SmallAreaChart.vue'
+import { buildTimeseries } from '@/lib/services/analytics'
+
+const { t } = useI18n()
+const banner = '/src/assets/brand/images/dashboard/admin/header.png'
+const series = buildTimeseries(30, 7)
+const activity = ref([
+  { id: 1, text: 'Booking #1125 confirmed' },
+  { id: 2, text: 'Provider “Agence Bénin Aventures” submitted KYC' },
+  { id: 3, text: 'Article “Voyager à Ouidah” reported' },
+])
+</script>
