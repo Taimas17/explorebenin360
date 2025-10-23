@@ -1,11 +1,24 @@
-<script setup></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="min-h-screen flex flex-col">
+    <Navbar />
+    <main class="flex-1">
+      <RouterView />
+    </main>
+    <Footer />
+    <MobileTabBar />
+  </div>
 </template>
 
-<style scoped></style>
+<script setup>
+import { RouterView } from 'vue-router'
+import Navbar from '@/components/layout/Navbar.vue'
+import Footer from '@/components/layout/Footer.vue'
+import MobileTabBar from '@/components/layout/MobileTabBar.vue'
+
+const stored = localStorage.getItem('eb360:theme')
+if (stored) {
+  document.documentElement.classList.toggle('dark', stored === 'dark')
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark')
+}
+</script>

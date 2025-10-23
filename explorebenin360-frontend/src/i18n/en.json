@@ -1,0 +1,105 @@
+{
+  "brand": {
+    "name": "ExploreBenin360",
+    "baseline": "Discover. Connect. Experience Benin."
+  },
+  "nav": {
+    "home": "Home",
+    "destinations": "Destinations",
+    "experiences": "Experiences",
+    "hebergements": "Stays",
+    "guides": "Guides",
+    "blog": "Blog",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "explorer": "Explore",
+    "offerings": "Offerings",
+    "my_reservations": "My reservations",
+    "favorites": "Favorites",
+    "logout": "Logout"
+  },
+  "hero": {
+    "cta": "Explore now"
+  },
+  "sections": {
+    "popular_destinations": "Popular destinations",
+    "must_do": "Must-do activities",
+    "testimonials": "Traveler testimonials"
+  },
+  "footer": {
+    "tagline": "Discover. Connect. Experience Benin.",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "language": "Language",
+    "dark_mode": "Dark mode",
+    "light_mode": "Light mode",
+    "loading": "Loading...",
+    "optional": "optional",
+    "details": "Details"
+  },
+  "auth": {
+    "name": "Name",
+    "password": "Password"
+  },
+  "offerings": {
+    "title": "Bookable offerings",
+    "capacity": "Capacity"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "book_now": "Book now",
+    "start_date": "Start date",
+    "end_date": "End date",
+    "guests": "guests",
+    "pay_with_paystack": "Pay with Paystack",
+    "callback_title": "Thanks for your payment",
+    "callback_subtitle": "We are confirming your booking. You'll receive an email shortly."
+  },
+  "dashboard": {
+    "my_reservations": "My reservations",
+    "reservation_detail": "Reservation detail",
+    "status": "Status",
+    "amount": "Amount",
+    "cancel": "Cancel",
+    "no_reservations": "No reservations yet"
+  },
+  "provider": {
+    "reservations": "Reservations (provider)",
+    "no_reservations": "No reservations",
+    "summary": {
+      "title": "Earnings summary",
+      "total_bookings": "Total bookings",
+      "confirmed_bookings": "Confirmed",
+      "gross_amount": "Gross",
+      "commission_total": "Commission",
+      "net_earnings": "Net earnings"
+    }
+  },
+  "admin": {
+    "reservations": "Reservations (admin)",
+    "no_reservations": "No reservations",
+    "change_status": "Change status",
+    "update": "Update",
+    "updated_success": "Status updated"
+  },
+  "favorites": {
+    "title": "Your favorites",
+    "destinations": "Destinations",
+    "hebergements": "Stays",
+    "articles": "Articles",
+    "guides": "Guides",
+    "empty_title": "No favorites yet",
+    "empty_desc": "Add destinations, stays, articles and guides to your favorites to find them here.",
+    "explore_cta": "Start exploring",
+    "add_aria": "Add to favorites",
+    "remove_aria": "Remove from favorites"
+  },
+  "errors": {
+    "login_failed": "Login failed",
+    "register_failed": "Registration failed",
+    "checkout_failed": "Failed to initialize payment"
+  }
+}

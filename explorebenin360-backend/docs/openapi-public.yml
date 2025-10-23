@@ -1,0 +1,500 @@
+openapi: 3.0.3
+info:
+  title: ExploreBenin360 Public API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /places:
+    get:
+      summary: List places
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: type
+          schema: { type: string, enum: [city,site,museum,park,beach,culture,history,gastronomy,adventure,other] }
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: tag
+          schema: { type: string }
+        - in: query
+          name: featured
+          schema: { type: boolean }
+        - in: query
+          name: min_price
+          schema: { type: number }
+        - in: query
+          name: max_price
+          schema: { type: number }
+        - in: query
+          name: bounds
+          description: swLat,swLng,neLat,neLng
+          schema: { type: string }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [relevance,rating,price,recent] }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, maximum: 50 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPlace'
+  /places/{slug}:
+    get:
+      summary: Get place by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceResource'
+  /accommodations:
+    get:
+      summary: List accommodations
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: type
+          schema: { type: string, enum: [hotel,guesthouse,ecolodge,bnb,other] }
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: min_price
+          schema: { type: number }
+        - in: query
+          name: max_price
+          schema: { type: number }
+        - in: query
+          name: capacity
+          schema: { type: integer }
+        - in: query
+          name: featured
+          schema: { type: boolean }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [price,rating,recent] }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, maximum: 50 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAccommodation'
+  /accommodations/{slug}:
+    get:
+      summary: Get accommodation by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AccommodationResource' } } } }
+  /guides:
+    get:
+      summary: List guides
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: language
+          schema: { type: string }
+        - in: query
+          name: specialty
+          schema: { type: string }
+        - in: query
+          name: verified
+          schema: { type: boolean }
+        - in: query
+          name: min_price
+          schema: { type: number }
+        - in: query
+          name: max_price
+          schema: { type: number }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [rating,price,recent] }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, maximum: 50 }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PaginatedGuide' } } } }
+  /guides/{slug}:
+    get:
+      summary: Get guide by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/GuideResource' } } } }
+  /articles:
+    get:
+      summary: List articles
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: tag
+          schema: { type: string }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [recent,popular] }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, maximum: 50 }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PaginatedArticle' } } } }
+  /articles/{slug}:
+    get:
+      summary: Get article by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ArticleResource' } } } }
+  /events:
+    get:
+      summary: List events
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: from
+          schema: { type: string, format: date }
+        - in: query
+          name: to
+          schema: { type: string, format: date }
+        - in: query
+          name: featured
+          schema: { type: boolean }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [date,recent] }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, maximum: 50 }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PaginatedEvent' } } } }
+  /events/{slug}:
+    get:
+      summary: Get event by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/EventResource' } } } }
+  /auth/register:
+    post:
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '201': { description: Created }
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { email: { type: string }, password: { type: string } } } } }
+      responses:
+        '200': { description: OK }
+  /auth/me:
+    get:
+      summary: Get current user
+      responses:
+        '200': { description: OK }
+  /offerings:
+    get:
+      summary: List offerings
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: type
+          schema: { type: string, enum: [accommodation,experience,guide_service] }
+        - in: query
+          name: min_price
+          schema: { type: number }
+        - in: query
+          name: max_price
+          schema: { type: number }
+        - in: query
+          name: capacity
+          schema: { type: integer }
+        - in: query
+          name: city
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /offerings/{slug}:
+    get:
+      summary: Get offering by slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /checkout/session:
+    post:
+      summary: Create checkout session
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { offering_id: { type: integer }, start_date: { type: string, format: date }, end_date: { type: string, format: date, nullable: true }, guests: { type: integer } } } } }
+      responses:
+        '201': { description: Created }
+  /bookings/{id}:
+    get:
+      summary: Get booking by id
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses:
+        '200': { description: OK }
+  /bookings/{id}/cancel:
+    post:
+      summary: Cancel booking
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses:
+        '200': { description: OK }
+  /payments/paystack/webhook:
+    post:
+      summary: Paystack webhook
+      responses:
+        '200': { description: OK }
+components:
+  schemas:
+    PlaceResource:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Place'
+    AccommodationResource:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/Accommodation' }
+    GuideResource:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/Guide' }
+    ArticleResource:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/Article' }
+    EventResource:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/Event' }
+    PaginatedPlace:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Place' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginatedAccommodation:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Accommodation' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginatedGuide:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Guide' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginatedArticle:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Article' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginatedEvent:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Event' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginationMeta:
+      type: object
+      properties:
+        total: { type: integer }
+        current_page: { type: integer }
+        per_page: { type: integer }
+    Place:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        type: { type: string }
+        description: { type: string }
+        city: { type: string }
+        country: { type: string }
+        lat: { type: number }
+        lng: { type: number }
+        price_from: { type: number, nullable: true }
+        opening_hours: { type: object, nullable: true }
+        tags:
+          type: array
+          items: { type: string }
+        cover_image_url: { type: string, nullable: true }
+        rating_avg: { type: number }
+        review_count: { type: integer }
+        featured: { type: boolean }
+        status: { type: string }
+    Accommodation:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        type: { type: string }
+        description: { type: string }
+        address: { type: string }
+        city: { type: string }
+        lat: { type: number }
+        lng: { type: number }
+        price_per_night: { type: number }
+        currency: { type: string }
+        amenities:
+          type: array
+          items: { type: string }
+        capacity: { type: integer }
+        rating_avg: { type: number }
+        review_count: { type: integer }
+        featured: { type: boolean }
+        status: { type: string }
+        cover_image_url: { type: string, nullable: true }
+    Guide:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        slug: { type: string }
+        languages:
+          type: array
+          items: { type: string }
+        specialties:
+          type: array
+          items: { type: string }
+        bio: { type: string }
+        avatar_url: { type: string, nullable: true }
+        city: { type: string }
+        lat: { type: number, nullable: true }
+        lng: { type: number, nullable: true }
+        price_per_day: { type: number, nullable: true }
+        currency: { type: string }
+        verified: { type: boolean }
+        rating_avg: { type: number }
+        review_count: { type: integer }
+        status: { type: string }
+    Article:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        excerpt: { type: string }
+        body: { type: string }
+        author_name: { type: string }
+        category: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        cover_image_url: { type: string, nullable: true }
+        status: { type: string }
+        published_at: { type: string, format: date-time, nullable: true }
+    Event:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        place_id: { type: integer, nullable: true }
+        city: { type: string }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        organizer_name: { type: string, nullable: true }
+        organizer_contact: { type: string, nullable: true }
+        description: { type: string }
+        price: { type: number, nullable: true }
+        currency: { type: string }
+        category: { type: string }
+        cover_image_url: { type: string, nullable: true }
+        status: { type: string }
+        featured: { type: boolean }
