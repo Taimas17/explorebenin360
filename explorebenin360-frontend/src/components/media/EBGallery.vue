@@ -10,9 +10,10 @@ interface Item {
   height?: number
 }
 
-const props = withDefaults(defineProps<{ items: Item[]; variant?: 'grid' | 'hero'; autoplayMs?: number }>(), {
+const props = withDefaults(defineProps<{ items: Item[]; variant?: 'grid' | 'hero'; autoplayMs?: number; provider?: 'cloudinary' | 's3' | 'local' }>(), {
   variant: 'grid',
   autoplayMs: 6000,
+  provider: 'local',
 })
 
 const isOpen = ref(false)
@@ -44,7 +45,7 @@ function close() {
 function next() { activeIndex.value = (activeIndex.value + 1) % props.items.length }
 function prev() { activeIndex.value = (activeIndex.value + props.items.length - 1) % props.items.length }
 
-function onKey(e: KeyboardEvent) {
+function onGlobalKey(e: KeyboardEvent) {
   if (isOpen.value) {
     if (e.key === 'Escape') close()
     if (e.key === 'ArrowRight') next()
@@ -53,7 +54,7 @@ function onKey(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', onKey)
+  window.addEventListener('keydown', onGlobalKey)
   if (props.variant === 'hero') {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => { prefersReduced.value = mq.matches }
@@ -67,7 +68,7 @@ onMounted(() => {
   }
 })
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onKey)
+  window.removeEventListener('keydown', onGlobalKey)
   stopAutoplay()
   heroEl.value?.removeEventListener('focusin', stopAutoplay)
   heroEl.value?.removeEventListener('focusout', startAutoplay)
@@ -83,7 +84,7 @@ onBeforeUnmount(() => {
       class="group relative"
       @click="open(i)"
     >
-      <EBImage :src="it.src" :alt="it.alt" :width="it.width" :height="it.height" class="w-full h-40" />
+      <EBImage :src="it.src" :alt="it.alt" :width="it.width" :height="it.height" :provider="props.provider" class="w-full h-40" />
       <span v-if="it.caption" class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 opacity-0 group-hover:opacity-100 transition">
         {{ it.caption }}
       </span>
@@ -110,6 +111,7 @@ onBeforeUnmount(() => {
       :width="1600"
       :height="900"
       aspect-ratio="16 / 9"
+      :provider="props.provider"
       class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
       :class="i === activeIndex ? 'opacity-100' : 'opacity-0'"
       :priority="i === 0" :sizes="'100vw'"
@@ -127,7 +129,7 @@ onBeforeUnmount(() => {
   </div>
 
   <teleport to="body">
-    <div v-if="isOpen" ref="lightboxEl" class="fixed inset-0 z-50 bg-black/90 text-white flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div v-if="isOpen" class="fixed inset-0 z-50 bg-black/90 text-white flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <button class="absolute top-4 right-4 p-2 bg-white/10 rounded" @click="close" aria-label="Close">✕</button>
       <button class="absolute left-4 p-2 bg-white/10 rounded" @click="prev" aria-label="Previous">‹</button>
       <figure class="max-w-[90vw] max-h-[80vh]">
