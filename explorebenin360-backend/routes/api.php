@@ -57,6 +57,8 @@ Route::prefix('v1')->group(function () {
     // Provider & Admin JSON endpoints
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
+        Route::patch('/provider/bookings/{id}', [BookingController::class, 'providerUpdate']);
+
         Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
         Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
 

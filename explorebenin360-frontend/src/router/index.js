@@ -64,29 +64,29 @@ const routes = [
 
   { path: '/offerings', name: 'offerings', component: Offerings },
   { path: '/offerings/:slug', name: 'offering-detail', component: OfferingDetail },
-  { path: '/checkout/:slug', name: 'checkout', component: Checkout, meta: { requiresAuth: true } },
+  { path: '/checkout/:slug', name: 'checkout', component: Checkout, meta: { requiresAuth: true, roles: ['traveler','provider','admin'] } },
   { path: '/checkout/callback', name: 'checkout-callback', component: Callback },
 
   // Traveler
-  { path: '/dashboard/reservations', name: 'reservations', component: TravelerReservations, meta: { requiresAuth: true } },
-  { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true } },
-  { path: '/dashboard/favorites', name: 'favorites', component: TravelerFavorites, meta: { requiresAuth: true } },
-  { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true } },
+  { path: '/dashboard/reservations', name: 'reservations', component: TravelerReservations, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/favorites', name: 'favorites', component: TravelerFavorites, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true, roles: ['traveler'] } },
 
   // Provider
-  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true } },
-  { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true } },
-  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true } },
-  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true } },
-  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true } },
-  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true } },
-  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true } },
+  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true, roles: ['provider'] } },
 
   // Admin
-  { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true } },
-  { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true } },
-  { path: '/admin/providers', name: 'admin-providers', component: AdminProviders, meta: { requiresAuth: true } },
-  { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true } },
+  { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/providers', name: 'admin-providers', component: AdminProviders, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
 ]
 
 const router = createRouter({
@@ -98,7 +98,17 @@ const router = createRouter({
 router.beforeEach((to) => {
   const auth = useAuthStore()
   if (to.meta?.requiresAuth && !auth.isAuthenticated) {
-    return { name: 'login', query: { redirect: to.fullPath } }
+    return { name: 'login', query: { redirect: to.fullPath, reason: 'login_required' } }
+  }
+  const roles = to.meta?.roles as string[] | undefined
+  if (roles && roles.length) {
+    const hasRole = roles.some((r) => auth.hasRole(r))
+    if (!hasRole) {
+      if (auth.hasRole('admin')) return { name: 'admin-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('provider')) return { name: 'provider-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('traveler')) return { name: 'reservations', query: { guard: 'access_denied' } }
+      return { name: 'home', query: { guard: 'access_denied' } }
+    }
   }
 })
 

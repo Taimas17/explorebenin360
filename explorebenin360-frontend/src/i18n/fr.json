@@ -89,6 +89,9 @@
     "dashboard": "Tableau de bord prestataire",
     "reservations": "Réservations (prestataire)",
     "no_reservations": "Aucune réservation",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "cancel": "Annuler",
     "summary": {
       "title": "Résumé des gains",
       "total_bookings": "Total réservations",
@@ -160,6 +163,17 @@
     "reject": "Rejeter",
     "moderation": "Modération du contenu",
     "nothing_to_moderate": "Rien à modérer"
+  },
+  "statuses": {
+    "pending": "En attente",
+    "authorized": "Autorisé",
+    "confirmed": "Confirmé",
+    "cancelled": "Annulé",
+    "refunded": "Remboursé"
+  },
+  "guards": {
+    "access_denied": "Vous n'avez pas les permissions pour accéder à cette page.",
+    "login_required": "Veuillez vous connecter pour continuer."
   },
   "favorites": {
     "title": "Vos favoris",
