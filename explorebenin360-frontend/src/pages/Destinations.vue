@@ -65,6 +65,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { fetchPlaces } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
@@ -81,7 +82,7 @@ import destinationsBanner from '@/assets/brand/images/destinations/banner-defaul
 import destinationThumb from '@/assets/brand/images/thumbs/destination-thumb.png'
 
 const { t } = useI18n()
-useHead({ title: 'Destinations — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
+setPageMeta({ title: 'Destinations — ExploreBenin360', description: t('brand.baseline'), path: '/destinations', image: '/og-image.png' })
 const banner = destinationsBanner
 
 const route = useRoute(); const router = useRouter()

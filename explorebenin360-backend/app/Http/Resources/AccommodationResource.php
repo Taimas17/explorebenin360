@@ -9,6 +9,7 @@ class AccommodationResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $plain = trim(strip_tags((string) $this->description));
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -28,6 +29,12 @@ class AccommodationResource extends JsonResource
             'featured' => (bool) $this->featured,
             'status' => $this->status,
             'cover_image_url' => $this->cover_image_url,
+            'seo' => [
+                'title' => $this->title . ' — ExploreBenin360',
+                'description' => mb_substr($plain, 0, 160),
+                'image' => $this->cover_image_url,
+                'path' => '/hebergements/' . $this->slug,
+            ],
         ];
     }
 }

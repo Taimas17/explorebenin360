@@ -177,5 +177,21 @@
     "login_failed": "Login failed",
     "register_failed": "Registration failed",
     "checkout_failed": "Failed to initialize payment"
+  },
+  "filters": {
+    "type": "Type",
+    "price": "Price",
+    "price_per_night": "Price/night"
+  },
+  "search": { "placeholder": "Search" },
+  "meta": {
+    "home_title": "ExploreBenin360 — Home",
+    "home_desc": "Discover. Connect. Experience Benin.",
+    "destinations_title": "Destinations — ExploreBenin360",
+    "destinations_desc": "Explore the must-see destinations in Benin.",
+    "hebergements_title": "Stays — ExploreBenin360",
+    "hebergements_desc": "Find your perfect stay in Benin.",
+    "blog_title": "Blog — ExploreBenin360",
+    "blog_desc": "Travel tips and inspiration in Benin."
   }
 }

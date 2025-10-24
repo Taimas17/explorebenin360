@@ -9,6 +9,7 @@ class PlaceResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $plain = trim(strip_tags((string) $this->description));
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -27,6 +28,12 @@ class PlaceResource extends JsonResource
             'review_count' => $this->review_count,
             'featured' => (bool) $this->featured,
             'status' => $this->status,
+            'seo' => [
+                'title' => $this->title . ' — ExploreBenin360',
+                'description' => mb_substr($plain, 0, 160),
+                'image' => $this->cover_image_url,
+                'path' => '/destinations/' . $this->slug,
+            ],
         ];
     }
 }

@@ -5,17 +5,31 @@ import axios from 'axios'
 const base = process.env.VITE_API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:8000/api/v1'
 const site = process.env.SITE_URL || 'https://explorebenin360.com'
 
-const routes = ['/', '/destinations', '/hebergements', '/guides', '/blog', '/agenda']
+const routes = ['/', '/destinations', '/hebergements', '/guides', '/blog', '/agenda', '/offerings']
 
-const fetchList = async (url: string) => {
-  try { const { data } = await axios.get(url, { params: { per_page: 10, featured: true } }); return data.data || [] } catch { return [] }
+const fetchAll = async (url: string) => {
+  const items: any[] = []
+  let page = 1
+  while (true) {
+    try {
+      const { data } = await axios.get(url, { params: { per_page: 50, page } })
+      const arr = data.data || []
+      items.push(...arr)
+      const meta = data.meta || { total: arr.length, per_page: 50, current_page: page }
+      if (!meta || arr.length < (meta.per_page || 50)) break
+      page++
+      if (page > 50) break
+    } catch { break }
+  }
+  return items
 }
 
 const run = async () => {
-  const places = await fetchList(`${base}/places`)
-  const hebergements = await fetchList(`${base}/accommodations`)
-  const articles = await fetchList(`${base}/articles`)
-  const events = await fetchList(`${base}/events`)
+  const places = await fetchAll(`${base}/places`)
+  const hebergements = await fetchAll(`${base}/accommodations`)
+  const articles = await fetchAll(`${base}/articles`)
+  const events = await fetchAll(`${base}/events`)
+  const offerings = await fetchAll(`${base}/offerings`)
 
   const urls = [
     ...routes,
@@ -23,6 +37,7 @@ const run = async () => {
     ...hebergements.map((h: any) => `/hebergements/${h.slug}`),
     ...articles.map((a: any) => `/blog/${a.slug}`),
     ...events.map((e: any) => `/agenda/${e.slug}`),
+    ...offerings.map((o: any) => `/offerings/${o.slug}`),
   ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n` +

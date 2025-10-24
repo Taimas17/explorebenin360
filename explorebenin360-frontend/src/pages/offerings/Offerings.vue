@@ -19,9 +19,12 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchOfferings } from '@/lib/api'
+import { setPageMeta } from '@/utils/meta'
 
 const { t } = useI18n()
 const items = ref([])
+
+setPageMeta({ title: 'Offres — ExploreBenin360', description: t('brand.baseline'), path: '/offerings', image: '/og-image.png' })
 
 onMounted(async () => {
   const res = await fetchOfferings()

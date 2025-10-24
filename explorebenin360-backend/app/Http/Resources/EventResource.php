@@ -9,6 +9,7 @@ class EventResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $plain = trim(strip_tags((string) $this->description));
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -26,6 +27,12 @@ class EventResource extends JsonResource
             'cover_image_url' => $this->cover_image_url,
             'status' => $this->status,
             'featured' => (bool) $this->featured,
+            'seo' => [
+                'title' => $this->title . ' — ExploreBenin360',
+                'description' => mb_substr($plain, 0, 160),
+                'image' => $this->cover_image_url,
+                'path' => '/agenda/' . $this->slug,
+            ],
         ];
     }
 }

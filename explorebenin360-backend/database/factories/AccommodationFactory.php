@@ -22,7 +22,7 @@ class AccommodationFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title) . '-' . Str::random(6),
             'type' => $this->faker->randomElement($types),
-            'description' => $this->faker->paragraphs(3, true),
+            'description' => '<p>' . implode('</p><p>', $this->faker->paragraphs(3)) . '</p>',
             'address' => $this->faker->streetAddress(),
             'city' => $this->faker->randomElement(['Cotonou','Porto-Novo','Parakou','Ouidah','Abomey','Bohicon','Natitingou','Grand-Popo']),
             'lat' => $lat,
@@ -35,7 +35,7 @@ class AccommodationFactory extends Factory
             'review_count' => $this->faker->numberBetween(0, 300),
             'featured' => $this->faker->boolean(20),
             'status' => 'published',
-            'cover_image_url' => 'https://picsum.photos/seed/' . Str::random(6) . '/800/600',
+            'cover_image_url' => null,
         ];
     }
 }

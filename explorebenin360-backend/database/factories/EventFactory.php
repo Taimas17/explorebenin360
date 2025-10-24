@@ -24,11 +24,11 @@ class EventFactory extends Factory
             'end_date' => $end->toDateString(),
             'organizer_name' => $this->faker->boolean(70) ? $this->faker->company() : null,
             'organizer_contact' => $this->faker->boolean(50) ? $this->faker->phoneNumber() : null,
-            'description' => $this->faker->paragraphs(3, true),
+'description' => '<p>' . implode('</p><p>', $this->faker->paragraphs(3)) . '</p>',
             'price' => $this->faker->boolean(60) ? $this->faker->randomFloat(2, 0, 50000) : null,
             'currency' => 'XOF',
             'category' => $this->faker->randomElement(['Festival','Culture','Musique','Sport','Marché']),
-            'cover_image_url' => 'https://picsum.photos/seed/' . Str::random(6) . '/800/600',
+            'cover_image_url' => null,
             'status' => 'published',
             'featured' => $this->faker->boolean(20),
         ];

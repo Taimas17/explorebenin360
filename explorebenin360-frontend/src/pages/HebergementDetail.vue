@@ -54,6 +54,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { fetchAccommodation } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
@@ -75,6 +76,6 @@ onMounted(async () => {
   const slug = route.params.slug.toString()
   const { data } = await fetchAccommodation(slug)
   item.value = data
-  useHead({ title: `${data.title} — ExploreBenin360`, meta: [ { name: 'description', content: data.description?.slice(0,150) } ] })
+  setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || (data.description || '').replace(/<[^>]+>/g,'').slice(0,150), path: data.seo?.path || `/hebergements/${data.slug}`, image: data.cover_image_url })
 })
 </script>

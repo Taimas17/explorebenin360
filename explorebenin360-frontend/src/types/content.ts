@@ -1,3 +1,5 @@
+export type Seo = { title: string; description?: string; image?: string|null; path?: string }
+
 export type Place = {
   id: number
   title: string
@@ -16,6 +18,7 @@ export type Place = {
   review_count: number
   featured: boolean
   status: 'draft'|'published'
+  seo?: Seo
 }
 
 export type Accommodation = {
@@ -37,6 +40,7 @@ export type Accommodation = {
   featured: boolean
   status: 'draft'|'published'
   cover_image_url?: string|null
+  seo?: Seo
 }
 
 export type Guide = {
@@ -56,6 +60,7 @@ export type Guide = {
   rating_avg: number
   review_count: number
   status: 'draft'|'published'
+  seo?: Seo
 }
 
 export type Article = {
@@ -70,6 +75,7 @@ export type Article = {
   cover_image_url?: string|null
   status: 'draft'|'published'
   published_at?: string|null
+  seo?: Seo
 }
 
 export type Event = {
@@ -89,4 +95,5 @@ export type Event = {
   cover_image_url?: string|null
   status: 'draft'|'published'
   featured: boolean
+  seo?: Seo
 }

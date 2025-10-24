@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
             'author_name' => $this->faker->name(),
             'category' => $this->faker->randomElement(['Conseils','Destinations','Culture','Actualités']),
             'tags' => $this->faker->randomElements(['conseil','culture','histoire','gastronomie','plage','aventure'], $this->faker->numberBetween(1,3)),
-            'cover_image_url' => 'https://picsum.photos/seed/' . Str::random(6) . '/1200/630',
+            'cover_image_url' => null,
             'status' => 'published',
             'published_at' => now()->subDays($this->faker->numberBetween(0, 180)),
         ];
