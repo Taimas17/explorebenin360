@@ -164,6 +164,17 @@
     "moderation": "Content moderation",
     "nothing_to_moderate": "Nothing to moderate"
   },
+  "statuses": {
+    "pending": "Pending",
+    "authorized": "Authorized",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded"
+  },
+  "guards": {
+    "access_denied": "You don't have permission to access this page.",
+    "login_required": "Please log in to continue."
+  },
   "favorites": {
     "title": "Your favorites",
     "destinations": "Destinations",

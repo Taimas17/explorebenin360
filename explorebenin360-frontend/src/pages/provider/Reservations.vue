@@ -1,5 +1,6 @@
 <template>
   <div class="container-px mx-auto py-8">
+    <Alert v-if="$route.query.guard==='access_denied'" type="error" class="mb-4">{{ t('guards.access_denied') }}</Alert>
     <BrandBanner :src="banner" alt="" :title="t('provider.reservations')" class="mb-6" />
 
     <div class="grid md:grid-cols-4 gap-3 mb-6" v-if="!loading">
@@ -23,6 +24,7 @@
     </div>
 
     <div class="flex items-center gap-2 mb-4">
+      <Alert v-if="$route.query.reason==='login_required'" type="info" class="mr-2">{{ t('guards.login_required') }}</Alert>
       <label class="text-xs text-[color:var(--color-text-muted)]">{{ t('filters.status') }}</label>
       <select v-model="status" class="text-sm rounded-md border border-black/10 dark:border-white/10 bg-transparent px-2 py-1 focus-ring">
         <option value="">{{ t('filters.all') }}</option>
@@ -44,7 +46,7 @@
             <div>
               <div class="font-medium">{{ b.offering.title }}</div>
               <div class="text-xs text-[color:var(--color-text-muted)]">#{{ b.id }} • {{ b.start_date }}<template v-if="b.end_date"> - {{ b.end_date }}</template> • {{ b.guests }} {{ t('checkout.guests') }}</div>
-              <div class="text-xs mb-1">{{ t('dashboard.status') }}: <span class="font-medium">{{ b.status }}</span></div>
+              <div class="text-xs mb-1 flex items-center gap-2">{{ t('dashboard.status') }}: <StatusBadge :status="b.status" /></div>
               <div class="text-xs">{{ t('dashboard.amount') }}: {{ b.currency }} {{ b.amount }}</div>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -64,6 +66,8 @@ import { useI18n } from 'vue-i18n'
 import { providerBookingsService, providerUpdateBookingStatus } from '@/lib/services/bookings'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import StatusBadge from '@/components/ui/StatusBadge.vue'
+import Alert from '@/components/ui/Alert.vue'
 import providerHeader from '@/assets/brand/images/dashboard/provider/header.png'
 
 const { t } = useI18n()

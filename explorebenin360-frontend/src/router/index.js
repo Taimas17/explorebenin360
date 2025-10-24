@@ -98,16 +98,16 @@ const router = createRouter({
 router.beforeEach((to) => {
   const auth = useAuthStore()
   if (to.meta?.requiresAuth && !auth.isAuthenticated) {
-    return { name: 'login', query: { redirect: to.fullPath } }
+    return { name: 'login', query: { redirect: to.fullPath, reason: 'login_required' } }
   }
   const roles = to.meta?.roles as string[] | undefined
   if (roles && roles.length) {
     const hasRole = roles.some((r) => auth.hasRole(r))
     if (!hasRole) {
-      if (auth.hasRole('admin')) return { name: 'admin-dashboard' }
-      if (auth.hasRole('provider')) return { name: 'provider-dashboard' }
-      if (auth.hasRole('traveler')) return { name: 'reservations' }
-      return { name: 'home' }
+      if (auth.hasRole('admin')) return { name: 'admin-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('provider')) return { name: 'provider-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('traveler')) return { name: 'reservations', query: { guard: 'access_denied' } }
+      return { name: 'home', query: { guard: 'access_denied' } }
     }
   }
 })
