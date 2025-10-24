@@ -146,5 +146,5 @@ const clearFilters = () => {
   load()
 }
 
-onMounted(() => { setPageMeta({ title: 'Explorer — ExploreBenin360', description: t('brand.baseline'), path: '/explorer', image: '/og-image.png' }); load() })
+onMounted(() => { setPageMeta({ title: t('meta.explorer_title'), description: t('meta.explorer_desc'), path: '/explorer', image: '/og-image.png' }); load() })
 </script>

@@ -67,7 +67,7 @@ import blogCover from '@/assets/brand/images/blog/cover-default.png'
 import articleThumb from '@/assets/brand/images/thumbs/article-thumb.png'
 
 const { t } = useI18n()
-setPageMeta({ title: 'Blog — ExploreBenin360', description: t('brand.baseline'), path: '/blog', image: '/og-image.png' })
+setPageMeta({ title: t('meta.blog_title'), description: t('meta.blog_desc'), path: '/blog', image: '/og-image.png' })
 const banner = blogCover
 
 const route = useRoute(); const router = useRouter()

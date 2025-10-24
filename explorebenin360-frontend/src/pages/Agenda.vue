@@ -66,7 +66,7 @@ import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import eventThumb from '@/assets/brand/images/thumbs/event-thumb.png'
 
-setPageMeta({ title: 'Agenda — ExploreBenin360', description: 'Tous les événements à venir et en cours au Bénin.', path: '/agenda', image: '/og-image.png' })
+setPageMeta({ title: t('meta.agenda_title'), description: t('meta.agenda_desc'), path: '/agenda', image: '/og-image.png' })
 
 const route = useRoute(); const router = useRouter()
 const q = ref(route.query.q?.toString() || '')

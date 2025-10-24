@@ -82,7 +82,7 @@ import destinationsBanner from '@/assets/brand/images/destinations/banner-defaul
 import destinationThumb from '@/assets/brand/images/thumbs/destination-thumb.png'
 
 const { t } = useI18n()
-setPageMeta({ title: 'Destinations — ExploreBenin360', description: t('brand.baseline'), path: '/destinations', image: '/og-image.png' })
+setPageMeta({ title: t('meta.destinations_title'), description: t('meta.destinations_desc'), path: '/destinations', image: '/og-image.png' })
 const banner = destinationsBanner
 
 const route = useRoute(); const router = useRouter()

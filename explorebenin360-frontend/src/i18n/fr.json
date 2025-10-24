@@ -185,13 +185,17 @@
   },
   "search": { "placeholder": "Rechercher" },
   "meta": {
-    "home_title": "ExploreBenin360 — Accueil",
-    "home_desc": "Découvrez, connectez, vivez le Bénin.",
-    "destinations_title": "Destinations — ExploreBenin360",
-    "destinations_desc": "Explorez les destinations incontournables du Bénin.",
-    "hebergements_title": "Hébergements — ExploreBenin360",
-    "hebergements_desc": "Trouvez votre hébergement idéal au Bénin.",
-    "blog_title": "Blog — ExploreBenin360",
-    "blog_desc": "Conseils et inspirations voyage au Bénin."
+    "home_title": "ExploreBenin360 — Voyages, destinations et expériences au Bénin",
+    "home_desc": "Découvrez les plus belles destinations, hébergements, guides et activités au Bénin. Inspirez-vous et réservez des expériences authentiques en toute simplicité.",
+    "destinations_title": "Destinations au Bénin — Villes, sites et lieux incontournables",
+    "destinations_desc": "Parcourez notre sélection de villes, parcs, plages et sites historiques au Bénin. Filtrez par type, tags et carte interactive.",
+    "hebergements_title": "Hébergements au Bénin — Hôtels, maisons d’hôtes, écolodges",
+    "hebergements_desc": "Trouvez un hôtel, une maison d’hôtes ou un écolodge au meilleur prix. Photos, équipements, localisation et disponibilité.",
+    "blog_title": "Blog voyage Bénin — Conseils, itinéraires et culture",
+    "blog_desc": "Idées d’itinéraires, conseils pratiques, coups de cœur et culture béninoise pour préparer votre voyage.",
+    "agenda_title": "Agenda du Bénin — Festivals, événements et sorties",
+    "agenda_desc": "Découvrez les événements à venir au Bénin : festivals, musique, culture, sport. Filtrez par ville, date et catégorie.",
+    "explorer_title": "Explorer le Bénin — Carte interactive et recherche",
+    "explorer_desc": "Recherchez destinations, hébergements et guides sur une carte interactive du Bénin. Zoom, filtres et navigation rapide."
   }
 }

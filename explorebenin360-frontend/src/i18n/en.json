@@ -185,13 +185,17 @@
   },
   "search": { "placeholder": "Search" },
   "meta": {
-    "home_title": "ExploreBenin360 — Home",
-    "home_desc": "Discover. Connect. Experience Benin.",
-    "destinations_title": "Destinations — ExploreBenin360",
-    "destinations_desc": "Explore the must-see destinations in Benin.",
-    "hebergements_title": "Stays — ExploreBenin360",
-    "hebergements_desc": "Find your perfect stay in Benin.",
-    "blog_title": "Blog — ExploreBenin360",
-    "blog_desc": "Travel tips and inspiration in Benin."
+    "home_title": "ExploreBenin360 — Travel, destinations and experiences in Benin",
+    "home_desc": "Discover the best destinations, stays, guides and activities in Benin. Get inspired and book authentic experiences with ease.",
+    "destinations_title": "Benin destinations — Cities, sites and must‑see places",
+    "destinations_desc": "Browse cities, parks, beaches and heritage sites across Benin. Filter by type, tags and map.",
+    "hebergements_title": "Stays in Benin — Hotels, guesthouses, ecolodges",
+    "hebergements_desc": "Find a hotel, guesthouse or ecolodge at the right price. Photos, amenities, location and availability.",
+    "blog_title": "Benin travel blog — Tips, itineraries and culture",
+    "blog_desc": "Trip ideas, practical tips, highlights and Beninese culture to plan your journey.",
+    "agenda_title": "Benin events — Festivals and what’s on",
+    "agenda_desc": "See upcoming events in Benin: festivals, music, culture and sports. Filter by city, date and category.",
+    "explorer_title": "Explore Benin — Interactive map and search",
+    "explorer_desc": "Search destinations, stays and guides on an interactive map of Benin. Zoom, filters and quick navigation."
   }
 }
