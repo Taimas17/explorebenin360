@@ -52,6 +52,7 @@ import BrandBanner from '@/components/ui/BrandBanner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import Button from '@/components/ui/Button.vue'
 import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
+import { setPageMeta } from '@/utils/meta'
 
 const { t } = useI18n()
 const route = useRoute(); const router = useRouter()
@@ -145,5 +146,5 @@ const clearFilters = () => {
   load()
 }
 
-onMounted(() => { load() })
+onMounted(() => { setPageMeta({ title: 'Explorer — ExploreBenin360', description: t('brand.baseline'), path: '/explorer', image: '/og-image.png' }); load() })
 </script>
