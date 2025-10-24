@@ -12,4 +12,8 @@ const i18n = createI18n({
   messages: { fr, en },
 })
 
+if (typeof document !== 'undefined') {
+  document.documentElement.setAttribute('lang', locale)
+}
+
 export default i18n

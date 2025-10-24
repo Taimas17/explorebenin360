@@ -48,27 +48,68 @@ class DatabaseSeeder extends Seeder
         ]);
         $traveler->assignRole('traveler');
 
-        // Content seeds
-        Place::factory(15)->create();
-        Accommodation::factory(12)->create();
-        Guide::factory(10)->create();
-        Article::factory(20)->create();
-        Event::factory(6)->create();
+        // Content seeds (≥20 each)
+        $places = Place::factory(28)->create();
+        $accommodations = Accommodation::factory(24)->create();
+        $guides = Guide::factory(22)->create();
+        $articles = Article::factory(26)->create();
+        $events = Event::factory(20)->create();
 
-        // Offerings seeds (basic)
-        $places = Place::inRandomOrder()->take(6)->get();
-        foreach ($places as $idx => $pl) {
-            Offering::create([
-                'provider_id' => $providers[$idx % count($providers)]->id,
+        // Attach relations: map accommodations/events to nearest places by city when possible
+        $placesByCity = $places->groupBy('city');
+        $accommodations->each(function ($a) use ($placesByCity) {
+            $pl = optional($placesByCity[$a->city] ?? null)->first();
+            if ($pl) $a->update(['place_id' => $pl->id]);
+        });
+        $events->each(function ($e) use ($placesByCity) {
+            $pl = optional($placesByCity[$e->city] ?? null)->first();
+            if ($pl) $e->update(['place_id' => $pl->id]);
+        });
+
+        // Offerings seeds (experience + guide_service + accommodation)
+        $offerings = collect();
+        $pickPlace = fn() => $places->random();
+        for ($i=0; $i<30; $i++) {
+            $pl = $pickPlace();
+            $type = $i % 5 === 0 ? 'accommodation' : ($i % 3 === 0 ? 'guide_service' : 'experience');
+            $titlePrefix = $type === 'accommodation' ? 'Séjour' : ($type === 'guide_service' ? 'Guide' : 'Expérience');
+            $slugPrefix = $type === 'accommodation' ? 'sejour' : ($type === 'guide_service' ? 'guide' : 'experience');
+            $off = Offering::create([
+                'provider_id' => $providers[$i % count($providers)]->id,
                 'place_id' => $pl->id,
-                'type' => 'experience',
-                'title' => 'Experience at ' . $pl->title,
-                'slug' => 'experience-' . $pl->slug,
-                'description' => 'Guided visit at ' . $pl->title,
-                'price' => rand(10000, 50000) / 100,
+                'type' => $type,
+                'title' => $titlePrefix . ' — ' . $pl->title,
+                'slug' => $slugPrefix . '-' . $pl->slug . '-' . substr(uniqid('', true), -6),
+                'description' => 'Découverte de ' . $pl->title . ' avec un expert local.',
+                'price' => rand(1500, 150000) / 1.0,
                 'currency' => 'XOF',
-                'capacity' => rand(5, 20),
+                'capacity' => rand(2, 20),
                 'status' => 'published',
+            ]);
+            $offerings->push($off);
+        }
+
+        // Bookings seeds
+        $statuses = ['pending','authorized','confirmed','cancelled'];
+        for ($i=0; $i<36; $i++) {
+            $off = $offerings->random();
+            $start = now()->addDays(rand(-20, 40));
+            $end = (clone $start)->addDays(rand(0, 5));
+            $amount = $off->price * rand(1, 3);
+            $travelerId = $traveler->id;
+            \App\Models\Booking::create([
+                'user_id' => $travelerId,
+                'offering_id' => $off->id,
+                'start_date' => $start->toDateString(),
+                'end_date' => $end->toDateString(),
+                'guests' => rand(1, 5),
+                'status' => $statuses[array_rand($statuses)],
+                'amount' => $amount,
+                'currency' => 'XOF',
+                'commission_amount' => round($amount * 0.12, 2),
+                'payment_provider' => 'paystack',
+                'payment_ref' => null,
+                'payment_status' => null,
             ]);
         }
     }

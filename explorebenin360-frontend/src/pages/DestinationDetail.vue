@@ -25,6 +25,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { fetchPlace } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import MapShell from '@/components/maps/MapShell.vue'
@@ -44,6 +45,6 @@ onMounted(async () => {
   const slug = route.params.slug.toString()
   const { data } = await fetchPlace(slug)
   item.value = data
-  useHead({ title: `${data.title} — ExploreBenin360`, meta: [ { name: 'description', content: data.excerpt || data.description?.slice(0,150) } ] })
+  setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || (data.excerpt || (data.description || '').replace(/<[^>]+>/g,'').slice(0,150)), path: data.seo?.path || `/destinations/${data.slug}`, image: data.cover_image_url })
 })
 </script>

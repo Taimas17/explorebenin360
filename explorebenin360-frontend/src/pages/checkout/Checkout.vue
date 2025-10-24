@@ -27,6 +27,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchOffering, createCheckoutSession } from '@/lib/api'
+import { setPageMeta } from '@/utils/meta'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -39,6 +40,7 @@ const loading = ref(false)
 onMounted(async () => {
   const res = await fetchOffering(route.params.slug)
   offering.value = res.data
+  setPageMeta({ title: `${t('checkout.title')} — ExploreBenin360`, description: (offering.value?.description || '').slice(0,120), path: `/checkout/${offering.value?.slug}` })
 })
 
 const submit = async () => {

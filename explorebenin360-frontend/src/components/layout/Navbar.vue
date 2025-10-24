@@ -73,6 +73,7 @@ const isDark = computed(() => document.documentElement.classList.contains('dark'
 function setLocale(val) {
   locale.value = val
   localStorage.setItem('eb360:locale', val)
+  if (typeof document !== 'undefined') document.documentElement.setAttribute('lang', val)
 }
 
 function toggleDark() {

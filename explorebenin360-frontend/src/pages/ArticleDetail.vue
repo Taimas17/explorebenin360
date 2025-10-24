@@ -15,6 +15,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { fetchArticle } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
@@ -31,6 +32,6 @@ onMounted(async () => {
   const slug = route.params.slug.toString()
   const { data } = await fetchArticle(slug)
   item.value = data
-  useHead({ title: `${data.title} — ExploreBenin360`, meta: [ { name: 'description', content: data.excerpt?.slice(0,150) }, { property: 'og:image', content: data.cover_image_url || placeholder } ] })
+  setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || data.excerpt?.slice(0,150), path: data.seo?.path || `/blog/${data.slug}`, image: data.cover_image_url || placeholder })
 })
 </script>

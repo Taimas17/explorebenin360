@@ -15,6 +15,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { fetchEvent } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
@@ -28,6 +29,6 @@ onMounted(async () => {
   const slug = route.params.slug.toString()
   const { data } = await fetchEvent(slug)
   item.value = data
-  useHead({ title: `${data.title} — ExploreBenin360`, meta: [ { name: 'description', content: data.description?.slice(0,150) } ] })
+  setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || (data.description || '').slice(0,150), path: data.seo?.path || `/agenda/${data.slug}`, image: data.cover_image_url })
 })
 </script>

@@ -395,6 +395,13 @@ components:
         total: { type: integer }
         current_page: { type: integer }
         per_page: { type: integer }
+    Seo:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        image: { type: string, nullable: true }
+        path: { type: string }
     Place:
       type: object
       properties:
@@ -417,6 +424,7 @@ components:
         review_count: { type: integer }
         featured: { type: boolean }
         status: { type: string }
+        seo: { $ref: '#/components/schemas/Seo' }
     Accommodation:
       type: object
       properties:
@@ -440,6 +448,7 @@ components:
         featured: { type: boolean }
         status: { type: string }
         cover_image_url: { type: string, nullable: true }
+        seo: { $ref: '#/components/schemas/Seo' }
     Guide:
       type: object
       properties:
@@ -463,6 +472,7 @@ components:
         rating_avg: { type: number }
         review_count: { type: integer }
         status: { type: string }
+        seo: { $ref: '#/components/schemas/Seo' }
     Article:
       type: object
       properties:
@@ -479,6 +489,7 @@ components:
         cover_image_url: { type: string, nullable: true }
         status: { type: string }
         published_at: { type: string, format: date-time, nullable: true }
+        seo: { $ref: '#/components/schemas/Seo' }
     Event:
       type: object
       properties:
@@ -498,3 +509,4 @@ components:
         cover_image_url: { type: string, nullable: true }
         status: { type: string }
         featured: { type: boolean }
+        seo: { $ref: '#/components/schemas/Seo' }

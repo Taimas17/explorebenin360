@@ -13,6 +13,7 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchOffering } from '@/lib/api'
+import { setPageMeta } from '@/utils/meta'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -21,5 +22,6 @@ const item = ref(null)
 onMounted(async () => {
   const res = await fetchOffering(route.params.slug)
   item.value = res.data
+  setPageMeta({ title: `${item.value.title} — ExploreBenin360`, description: (item.value.description || '').slice(0,160), path: `/offerings/${item.value.slug}` })
 })
 </script>

@@ -57,6 +57,7 @@
 <script setup>
 import { onMounted, reactive, ref, watch, computed } from 'vue'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchEvents } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
@@ -65,7 +66,7 @@ import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import eventThumb from '@/assets/brand/images/thumbs/event-thumb.png'
 
-useHead({ title: 'Agenda — ExploreBenin360' })
+setPageMeta({ title: t('meta.agenda_title'), description: t('meta.agenda_desc'), path: '/agenda', image: '/og-image.png' })
 
 const route = useRoute(); const router = useRouter()
 const q = ref(route.query.q?.toString() || '')

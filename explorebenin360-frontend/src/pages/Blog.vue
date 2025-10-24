@@ -53,6 +53,7 @@
 import { onMounted, reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
+import { setPageMeta } from '@/utils/meta'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchArticles } from '@/lib/api'
 import Card from '@/components/ui/Card.vue'
@@ -66,7 +67,7 @@ import blogCover from '@/assets/brand/images/blog/cover-default.png'
 import articleThumb from '@/assets/brand/images/thumbs/article-thumb.png'
 
 const { t } = useI18n()
-useHead({ title: 'Blog — ExploreBenin360', meta: [ { name: 'description', content: t('brand.baseline') }, { property: 'og:image', content: '/og-image.png' } ] })
+setPageMeta({ title: t('meta.blog_title'), description: t('meta.blog_desc'), path: '/blog', image: '/og-image.png' })
 const banner = blogCover
 
 const route = useRoute(); const router = useRouter()

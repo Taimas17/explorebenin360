@@ -9,6 +9,7 @@ class GuideResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $plain = trim(strip_tags((string) $this->bio));
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -26,6 +27,12 @@ class GuideResource extends JsonResource
             'rating_avg' => (float) $this->rating_avg,
             'review_count' => $this->review_count,
             'status' => $this->status,
+            'seo' => [
+                'title' => $this->name . ' — Guide — ExploreBenin360',
+                'description' => mb_substr($plain, 0, 160),
+                'image' => $this->avatar_url,
+                'path' => '/guides',
+            ],
         ];
     }
 }
