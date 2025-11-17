@@ -170,7 +170,8 @@
     "revenue": "Revenus",
     "published": "publiées",
     "confirmed": "confirmées",
-    "gross": "Brut"
+    "gross": "Brut",
+    "verified": "Vérifié"
   },
   "admin": {
     "dashboard": "Tableau de bord admin",
@@ -197,7 +198,26 @@
     "approve": "Approuver",
     "reject": "Rejeter",
     "moderation": "Modération du contenu",
-    "nothing_to_moderate": "Rien à modérer"
+    "nothing_to_moderate": "Rien à modérer",
+    "no_providers": "Aucun provider",
+    "status_pending": "En attente",
+    "status_approved": "Approuvé",
+    "status_rejected": "Rejeté",
+    "status_suspended": "Suspendu",
+    "kyc_documents": "Documents KYC",
+    "document": "Document",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "view_details": "Voir détails",
+    "confirm_approve": "Confirmer l'approbation de ce provider ?",
+    "confirm_reactivate": "Réactiver ce provider ?",
+    "rejection_reason": "Raison du rejet",
+    "suspension_reason": "Raison de la suspension",
+    "provider_approved": "Provider approuvé avec succès",
+    "provider_rejected": "Provider rejeté",
+    "provider_suspended": "Provider suspendu",
+    "provider_reactivated": "Provider réactivé",
+    "action_error": "Erreur lors de l'action"
   },
   "statuses": {
     "pending": "En attente",

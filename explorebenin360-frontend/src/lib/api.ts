@@ -92,4 +92,24 @@ export const updateOfferingAvailability = (id: number, availability: any) =>
 // Provider Analytics
 export const fetchProviderAnalytics = () => get<{ data: any }>('/provider/analytics')
 
+// Admin Providers
+export const fetchProviders = (status: string = 'pending') =>
+  get<{ data: any[] }>('/admin/providers', { status })
+
+export const approveProvider = (id: number) =>
+  patch(`/admin/providers/${id}/approve`)
+
+export const rejectProvider = (id: number, reason: string) =>
+  patch(`/admin/providers/${id}/reject`, { reason })
+
+// Admin Providers (complements)
+export const fetchProviderKYC = (id: number) =>
+  get<{ data: any }>(`/admin/providers/${id}/kyc-documents`)
+
+export const suspendProvider = (id: number, reason: string) =>
+  patch(`/admin/providers/${id}/suspend`, { reason })
+
+export const reactivateProvider = (id: number) =>
+  patch(`/admin/providers/${id}/reactivate`)
+
 export default api

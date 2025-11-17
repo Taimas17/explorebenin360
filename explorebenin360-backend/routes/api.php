@@ -86,6 +86,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/admin/providers', [AdminProviderController::class, 'index']);
         Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
         Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+        Route::get('/admin/providers/{id}/kyc-documents', [AdminProviderController::class, 'viewKYCDocuments']);
+        Route::patch('/admin/providers/{id}/suspend', [AdminProviderController::class, 'suspend']);
+        Route::patch('/admin/providers/{id}/reactivate', [AdminProviderController::class, 'reactivate']);
 
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);

@@ -136,7 +136,8 @@
     "date": "Date",
     "amount": "Amount",
     "reference": "Reference",
-    "no_payouts": "No payouts yet"
+    "no_payouts": "No payouts yet",
+    "verified": "Verified"
   },
   "admin": {
     "dashboard": "Admin dashboard",
@@ -163,7 +164,26 @@
     "approve": "Approve",
     "reject": "Reject",
     "moderation": "Content moderation",
-    "nothing_to_moderate": "Nothing to moderate"
+    "nothing_to_moderate": "Nothing to moderate",
+    "no_providers": "No providers",
+    "status_pending": "Pending",
+    "status_approved": "Approved",
+    "status_rejected": "Rejected",
+    "status_suspended": "Suspended",
+    "kyc_documents": "KYC Documents",
+    "document": "Document",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "view_details": "View details",
+    "confirm_approve": "Confirm approval of this provider?",
+    "confirm_reactivate": "Reactivate this provider?",
+    "rejection_reason": "Rejection reason",
+    "suspension_reason": "Suspension reason",
+    "provider_approved": "Provider approved successfully",
+    "provider_rejected": "Provider rejected",
+    "provider_suspended": "Provider suspended",
+    "provider_reactivated": "Provider reactivated",
+    "action_error": "Error during action"
   },
   "statuses": {
     "pending": "Pending",
