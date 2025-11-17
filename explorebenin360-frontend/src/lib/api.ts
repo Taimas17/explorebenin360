@@ -92,4 +92,17 @@ export const updateOfferingAvailability = (id: number, availability: any) =>
 // Provider Analytics
 export const fetchProviderAnalytics = () => get<{ data: any }>('/provider/analytics')
 
+// Admin Dashboard
+export const fetchAdminKPIs = () => 
+  get<{ data: any }>('/admin/dashboard/kpis')
+
+export const fetchBookingsTimeseries = (days = 30) => 
+  get<{ data: any[] }>('/admin/dashboard/bookings-timeseries', { days })
+
+export const fetchRecentActivity = (limit = 20) => 
+  get<{ data: any[] }>('/admin/dashboard/recent-activity', { limit })
+
+export const fetchConversionStats = () => 
+  get<{ data: any }>('/admin/dashboard/conversion-stats')
+
 export default api

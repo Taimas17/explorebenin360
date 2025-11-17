@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
 use App\Http\Controllers\Api\AdminProviderController;
+use App\Http\Controllers\Api\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -86,6 +87,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/admin/providers', [AdminProviderController::class, 'index']);
         Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
         Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+
+        // Admin Dashboard
+        Route::prefix('admin/dashboard')->group(function () {
+            Route::get('/kpis', [AdminDashboardController::class, 'kpis']);
+            Route::get('/bookings-timeseries', [AdminDashboardController::class, 'bookingsTimeseries']);
+            Route::get('/recent-activity', [AdminDashboardController::class, 'recentActivity']);
+            Route::get('/conversion-stats', [AdminDashboardController::class, 'conversionStats']);
+        });
 
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);
