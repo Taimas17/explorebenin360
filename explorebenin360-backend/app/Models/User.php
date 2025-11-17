@@ -15,9 +15,9 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password', 'phone', 'business_name', 'bio',
+        'provider_status', 'kyc_submitted', 'kyc_verified', 'kyc_documents',
+        'provider_rejection_reason', 'provider_approved_at'
     ];
 
     protected $hidden = [
@@ -30,6 +30,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'kyc_submitted' => 'boolean',
+            'kyc_verified' => 'boolean',
+            'kyc_documents' => 'array',
+            'provider_approved_at' => 'datetime',
         ];
     }
 
@@ -41,5 +45,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function isProvider(): bool
+    {
+        return $this->provider_status === 'approved';
+    }
+
+    public function isProviderPending(): bool
+    {
+        return $this->provider_status === 'pending';
+    }
+
+    public function offerings()
+    {
+        return $this->hasMany(Offering::class, 'provider_id');
     }
 }

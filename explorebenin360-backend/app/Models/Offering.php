@@ -12,11 +12,13 @@ class Offering extends Model
 
     protected $fillable = [
         'provider_id', 'place_id', 'type', 'title', 'slug', 'description',
-        'price', 'currency', 'capacity', 'availability_json', 'status'
+        'price', 'currency', 'capacity', 'availability_json', 'status',
+        'cover_image_url', 'gallery_json', 'cancellation_policy'
     ];
 
     protected $casts = [
         'availability_json' => 'array',
+        'gallery_json' => 'array',
         'price' => 'decimal:2',
         'capacity' => 'integer',
     ];
