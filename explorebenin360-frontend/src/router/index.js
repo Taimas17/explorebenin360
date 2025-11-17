@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { fetchProviderStatus } from '@/lib/api'
 
 const Home = () => import('@/pages/Home.vue')
 const Destinations = () => import('@/pages/Destinations.vue')
@@ -17,6 +18,8 @@ const Login = () => import('@/pages/Auth/Login.vue')
 const Register = () => import('@/pages/Auth/Register.vue')
 const Profile = () => import('@/pages/Profile.vue')
 const Explorer = () => import('@/pages/Explorer.vue')
+
+const BecomeProvider = () => import('@/pages/BecomeProvider.vue')
 
 const Offerings = () => import('@/pages/offerings/Offerings.vue')
 const OfferingDetail = () => import('@/pages/offerings/OfferingDetail.vue')
@@ -60,6 +63,7 @@ const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
   { path: '/profile', name: 'profile', component: Profile },
+  { path: '/become-provider', name: 'become-provider', component: BecomeProvider, meta: { requiresAuth: true } },
   { path: '/explorer', name: 'explorer', component: Explorer },
 
   { path: '/offerings', name: 'offerings', component: Offerings },
@@ -74,13 +78,13 @@ const routes = [
   { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true, roles: ['traveler'] } },
 
   // Provider
-  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true, roles: ['provider'] } },
-  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true, roles: ['provider'] } },
+  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true, requiresProvider: true } },
 
   // Admin
   { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true, roles: ['admin'] } },
@@ -95,10 +99,21 @@ const router = createRouter({
   scrollBehavior() { return { top: 0 } },
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
   if (to.meta?.requiresAuth && !auth.isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath, reason: 'login_required' } }
+  }
+  if (to.meta?.requiresProvider) {
+    try {
+      const status = await fetchProviderStatus()
+      // @ts-ignore
+      if (status.data?.provider_status !== 'approved') {
+        return { name: 'become-provider' }
+      }
+    } catch (e) {
+      return { name: 'become-provider' }
+    }
   }
   const roles = to.meta?.roles as string[] | undefined
   if (roles && roles.length) {

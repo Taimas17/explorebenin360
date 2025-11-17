@@ -70,4 +70,22 @@ export const getFavorites = () => get<{ data: { destination: number[]; hebergeme
 export const addFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites', { type, id })
 export const removeFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites/remove', { type, id })
 
+// Provider Application
+export const applyAsProvider = (body: { business_name: string; phone: string; bio: string; kyc_documents?: string[] }) => 
+  post('/provider/apply', body)
+export const fetchProviderStatus = () => get<{ data: any }>('/provider/status')
+
+// Provider Offerings Management
+export const fetchProviderOfferings = (params?: { status?: string }) => 
+  get<{ data: any[] }>('/provider/offerings', params)
+export const createProviderOffering = (body: any) => post('/provider/offerings', body)
+export const fetchProviderOffering = (id: number) => get<{ data: any }>(`/provider/offerings/${id}`)
+export const updateProviderOffering = (id: number, body: any) => patch(`/provider/offerings/${id}`, body)
+export const deleteProviderOffering = (id: number) => del(`/provider/offerings/${id}`)
+export const updateOfferingAvailability = (id: number, availability: any) => 
+  patch(`/provider/offerings/${id}/availability`, { availability })
+
+// Provider Analytics
+export const fetchProviderAnalytics = () => get<{ data: any }>('/provider/analytics')
+
 export default api

@@ -1,58 +1,104 @@
-<template>
-  <div class="container-px mx-auto py-8 max-w-3xl">
-    <BrandBanner :src="banner" alt="Bannière Offres" :title="t('provider.create_offer')" class="mb-6" />
-    <form class="space-y-4" @submit.prevent="onSubmit">
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ t('provider.offer_title') }}</label>
-        <input v-model="form.title" required class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ t('provider.offer_description') }}</label>
-        <textarea v-model="form.description" rows="4" class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring"></textarea>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-sm font-medium mb-1">{{ t('provider.price') }}</label>
-          <input v-model.number="form.price" type="number" min="0" class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">{{ t('provider.currency') }}</label>
-          <input v-model="form.currency" class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring" />
-        </div>
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ t('provider.cover_image_url') }}</label>
-        <input v-model="form.cover_image_url" class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring" placeholder="https://..." />
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">{{ t('provider.status') }}</label>
-        <select v-model="form.status" class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring">
-          <option value="draft">draft</option>
-          <option value="published">published</option>
-        </select>
-      </div>
-      <div class="flex justify-end gap-2">
-        <RouterLink to="/provider/offers" class="btn-base focus-ring h-10 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('common.cancel') }}</RouterLink>
-        <button class="btn-base focus-ring h-10 px-4 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">{{ t('provider.create_offer') }}</button>
-      </div>
-    </form>
-  </div>
-</template>
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import BrandBanner from '@/components/ui/BrandBanner.vue'
+import Loader from '@/components/ui/Loader.vue'
 import { createOffering } from '@/lib/services/offerings'
 
 const { t } = useI18n()
 const router = useRouter()
-const banner = '/src/assets/brand/images/dashboard/provider/header.png'
 
-const form = reactive<any>({ title: '', description: '', price: 0, currency: 'XOF', status: 'draft', cover_image_url: '' })
+const form = reactive({
+  title: '',
+  type: 'accommodation',
+  description: '',
+  price: 0,
+  currency: 'XOF',
+  capacity: 1,
+  place_id: null as number | null,
+  cover_image_url: '',
+  gallery: [] as string[],
+  cancellation_policy: '',
+  status: 'draft'
+})
 
-async function onSubmit() {
-  const created = await createOffering(form)
-  router.push(`/provider/offers/${created.id}`)
+const submitting = ref(false)
+
+async function handleSubmit() {
+  submitting.value = true
+  try {
+    const created: any = await createOffering(form)
+    alert(t('provider.offer_created'))
+    router.push(`/provider/offers/${created.id}`)
+  } catch (error: any) {
+    alert(error.response?.data?.message || t('provider.offer_create_error'))
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
+
+<template>
+  <form @submit.prevent="handleSubmit" class="space-y-6">
+    <div>
+      <label class="block text-sm font-medium mb-2">{{ t('provider.title') }} *</label>
+      <input v-model="form.title" required class="w-full rounded-md border px-3 py-2 focus-ring" />
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">{{ t('provider.type') }} *</label>
+      <select v-model="form.type" required class="w-full rounded-md border px-3 py-2 focus-ring">
+        <option value="accommodation">{{ t('provider.type_accommodation') }}</option>
+        <option value="experience">{{ t('provider.type_experience') }}</option>
+        <option value="guide_service">{{ t('provider.type_guide_service') }}</option>
+      </select>
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">{{ t('provider.description') }}</label>
+      <textarea v-model="form.description" rows="5" class="w-full rounded-md border px-3 py-2 focus-ring" />
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-2">{{ t('provider.price') }} *</label>
+        <input v-model.number="form.price" type="number" min="0" required class="w-full rounded-md border px-3 py-2 focus-ring" />
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">{{ t('provider.capacity') }}</label>
+        <input v-model.number="form.capacity" type="number" min="1" class="w-full rounded-md border px-3 py-2 focus-ring" />
+      </div>
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">{{ t('provider.cover_image') }}</label>
+      <input v-model="form.cover_image_url" type="url" placeholder="https://..." class="w-full rounded-md border px-3 py-2 focus-ring" />
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">{{ t('provider.cancellation_policy') }}</label>
+      <textarea v-model="form.cancellation_policy" rows="3" class="w-full rounded-md border px-3 py-2 focus-ring" />
+    </div>
+    
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        :disabled="submitting"
+        class="btn-base focus-ring h-10 px-6 rounded-md text-white"
+        :style="{ backgroundColor: 'var(--color-primary)' }"
+      >
+        <Loader v-if="submitting" />
+        <span v-else>{{ form.status === 'published' ? t('provider.create_and_publish') : t('provider.save_draft') }}</span>
+      </button>
+      
+      <button
+        type="button"
+        @click="form.status = form.status === 'draft' ? 'published' : 'draft'"
+        class="btn-base focus-ring h-10 px-4 rounded-md border"
+      >
+        {{ form.status === 'published' ? t('provider.save_as_draft') : t('provider.publish_now') }}
+      </button>
+    </div>
+  </form>
+</template>
