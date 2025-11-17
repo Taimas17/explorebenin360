@@ -13,7 +13,8 @@ class Offering extends Model
     protected $fillable = [
         'provider_id', 'place_id', 'type', 'title', 'slug', 'description',
         'price', 'currency', 'capacity', 'availability_json', 'status',
-        'cover_image_url', 'gallery_json', 'cancellation_policy'
+        'cover_image_url', 'gallery_json', 'cancellation_policy',
+        'flagged_at', 'flagged_reason'
     ];
 
     protected $casts = [
@@ -21,6 +22,7 @@ class Offering extends Model
         'gallery_json' => 'array',
         'price' => 'decimal:2',
         'capacity' => 'integer',
+        'flagged_at' => 'datetime',
     ];
 
     public function provider()
@@ -37,4 +39,26 @@ class Offering extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function flag(string $reason): void
+    {
+        $this->update([
+            'flagged_at' => now(),
+            'flagged_reason' => $reason,
+        ]);
+    }
+
+    public function unflag(): void
+    {
+        $this->update([
+            'flagged_at' => null,
+            'flagged_reason' => null,
+        ]);
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(ContentReport::class, 'reportable');
+    }
 }
+

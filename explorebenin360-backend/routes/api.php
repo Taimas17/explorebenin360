@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
 use App\Http\Controllers\Api\AdminProviderController;
+use App\Http\Controllers\Api\ContentModerationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -65,6 +66,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
     });
 
+    // User content reporting
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/content/report', [ContentModerationController::class, 'createReport']);
+    });
+
     // Provider & Admin JSON endpoints
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
@@ -86,6 +92,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/admin/providers', [AdminProviderController::class, 'index']);
         Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
         Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+
+        // Admin moderation
+        Route::prefix('admin/moderation')->group(function () {
+            Route::get('/reports', [ContentModerationController::class, 'listReports']);
+            Route::post('/reports/{id}/resolve', [ContentModerationController::class, 'resolveReport']);
+            Route::post('/reports/{id}/dismiss', [ContentModerationController::class, 'dismissReport']);
+            Route::get('/flagged-content', [ContentModerationController::class, 'flaggedContent']);
+            Route::post('/unflag', [ContentModerationController::class, 'unflagContent']);
+        });
 
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);

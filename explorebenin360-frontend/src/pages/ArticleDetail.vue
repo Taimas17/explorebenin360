@@ -6,6 +6,13 @@
       </template>
     </BrandBanner>
     <article class="prose dark:prose-invert max-w-none" v-html="item.body"></article>
+    <div class="mt-6">
+      <ReportButton
+        v-if="item"
+        reportable-type="App\\Models\\Article"
+        :reportable-id="item.id"
+      />
+    </div>
   </div>
   <div class="container-px mx-auto py-16" v-else>
     <div class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
@@ -20,6 +27,7 @@ import { fetchArticle } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import ReportButton from '@/components/ui/ReportButton.vue'
 import { buildAlt } from '@/utils/a11y'
 import blogCoverDefault from '@/assets/brand/images/blog/cover-default.png'
 

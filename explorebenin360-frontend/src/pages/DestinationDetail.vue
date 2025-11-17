@@ -16,6 +16,14 @@
     <div class="prose dark:prose-invert max-w-none" v-html="item.description"></div>
 
     <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
+
+    <div class="mt-6">
+      <ReportButton
+        v-if="item"
+        reportable-type="App\\Models\\Place"
+        :reportable-id="item.id"
+      />
+    </div>
   </div>
   <div class="container-px mx-auto py-16" v-else>
     <div class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
@@ -31,6 +39,7 @@ import Loader from '@/components/ui/Loader.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import ReportButton from '@/components/ui/ReportButton.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import { mapToGalleryItems } from '@/utils/media'
 import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
