@@ -18,5 +18,27 @@ class Place extends Model
         'featured' => 'boolean',
         'rating_avg' => 'decimal:2',
         'price_from' => 'decimal:2',
+        'flagged_at' => 'datetime',
     ];
+
+    public function flag(string $reason): void
+    {
+        $this->update([
+            'flagged_at' => now(),
+            'flagged_reason' => $reason,
+        ]);
+    }
+
+    public function unflag(): void
+    {
+        $this->update([
+            'flagged_at' => null,
+            'flagged_reason' => null,
+        ]);
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(ContentReport::class, 'reportable');
+    }
 }

@@ -15,5 +15,27 @@ class Article extends Model
     protected $casts = [
         'tags' => 'array',
         'published_at' => 'datetime',
+        'flagged_at' => 'datetime',
     ];
+
+    public function flag(string $reason): void
+    {
+        $this->update([
+            'flagged_at' => now(),
+            'flagged_reason' => $reason,
+        ]);
+    }
+
+    public function unflag(): void
+    {
+        $this->update([
+            'flagged_at' => null,
+            'flagged_reason' => null,
+        ]);
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(ContentReport::class, 'reportable');
+    }
 }

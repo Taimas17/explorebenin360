@@ -92,4 +92,27 @@ export const updateOfferingAvailability = (id: number, availability: any) =>
 // Provider Analytics
 export const fetchProviderAnalytics = () => get<{ data: any }>('/provider/analytics')
 
+// Content Moderation
+export const reportContent = (body: {
+  reportable_type: string
+  reportable_id: number
+  reason: string
+  description?: string
+}) => post('/content/report', body)
+
+export const fetchModerationReports = (status = 'pending') =>
+  get<{ data: any[] }>('/admin/moderation/reports', { status })
+
+export const resolveReport = (id: number, action: 'remove' | 'flag' | 'warn', note?: string) =>
+  post(`/admin/moderation/reports/${id}/resolve`, { action, note })
+
+export const dismissReport = (id: number, note?: string) =>
+  post(`/admin/moderation/reports/${id}/dismiss`, { note })
+
+export const fetchFlaggedContent = (type?: string) =>
+  get<{ data: any[] }>('/admin/moderation/flagged-content', type ? { type } : {})
+
+export const unflagContent = (type: string, id: number) =>
+  post('/admin/moderation/unflag', { type, id })
+
 export default api

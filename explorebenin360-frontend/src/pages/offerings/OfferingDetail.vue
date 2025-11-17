@@ -6,6 +6,13 @@
     <RouterLink :to="{ name: 'checkout', params: { slug: item.slug } }" class="inline-flex btn-base focus-ring h-10 px-5 rounded-md text-white" :style="{ backgroundColor: 'var(--color-primary)' }">
       {{ t('checkout.book_now') }}
     </RouterLink>
+    <div class="mt-6">
+      <ReportButton
+        v-if="item"
+        reportable-type="App\\Models\\Offering"
+        :reportable-id="item.id"
+      />
+    </div>
   </div>
 </template>
 <script setup>
@@ -14,6 +21,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchOffering } from '@/lib/api'
 import { setPageMeta } from '@/utils/meta'
+import ReportButton from '@/components/ui/ReportButton.vue'
 
 const { t } = useI18n()
 const route = useRoute()
