@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\OfferingController;
 use App\Http\Controllers\Api\Payments\PaystackWebhookController;
 use App\Http\Controllers\Api\PlaceController;
+use App\Http\Controllers\Api\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -52,6 +53,13 @@ Route::prefix('v1')->group(function () {
         Route::get('/bookings', [BookingController::class, 'myIndex']);
         Route::get('/bookings/{id}', [BookingController::class, 'show']);
         Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
+    });
+
+    // Favorites
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/favorites', [FavoriteController::class, 'index']);
+        Route::post('/favorites', [FavoriteController::class, 'store']);
+        Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
     });
 
     // Provider & Admin JSON endpoints
