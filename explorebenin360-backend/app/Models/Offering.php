@@ -35,4 +35,24 @@ class Offering extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->reviews()->approved();
+    }
+
+    public function averageRating(): float
+    {
+        return (float) ($this->approvedReviews()->avg('rating') ?? 0);
+    }
+
+    public function reviewsCount(): int
+    {
+        return (int) $this->approvedReviews()->count();
+    }
 }

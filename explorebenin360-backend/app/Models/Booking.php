@@ -33,4 +33,14 @@ class Booking extends Model
     {
         return $this->belongsTo(Offering::class);
     }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    public function canBeReviewed(): bool
+    {
+        return $this->status === 'confirmed' && is_null($this->review);
+    }
 }

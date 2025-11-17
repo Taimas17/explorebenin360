@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\OfferingController;
 use App\Http\Controllers\Api\Payments\PaystackWebhookController;
 use App\Http\Controllers\Api\PlaceController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -33,6 +34,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/events/{slug}', [EventController::class, 'show']);
 
+    // Offerings - public read-only
+    Route::get('/offerings', [OfferingController::class, 'index']);
+    Route::get('/offerings/{slug}', [OfferingController::class, 'show']);
+
+    // Public reviews for an offering
+    Route::get('/offerings/{offeringId}/reviews', [ReviewController::class, 'index']);
+
     // Auth endpoints (Sanctum token based)
     Route::prefix('auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
@@ -42,10 +50,6 @@ Route::prefix('v1')->group(function () {
             Route::get('/me', [AuthController::class, 'me']);
         });
     });
-
-    // Offerings - public read-only
-    Route::get('/offerings', [OfferingController::class, 'index']);
-    Route::get('/offerings/{slug}', [OfferingController::class, 'show']);
 
     // Checkout / Bookings
     Route::middleware('auth:sanctum')->group(function () {
@@ -60,6 +64,17 @@ Route::prefix('v1')->group(function () {
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store']);
         Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
+    });
+
+    // Reviews - authenticated
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::get('/reviews/my', [ReviewController::class, 'myReviews']);
+
+        // Admin moderation
+        Route::get('/admin/reviews/pending', [ReviewController::class, 'pendingReviews']);
+        Route::post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve']);
+        Route::post('/admin/reviews/{id}/reject', [ReviewController::class, 'reject']);
     });
 
     // Provider & Admin JSON endpoints
