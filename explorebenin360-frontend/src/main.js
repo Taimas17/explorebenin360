@@ -15,7 +15,14 @@ app.use(router)
 app.use(i18n)
 app.use(createHead())
 
-useAuthStore().init()
-useFavoritesStore().init()
+const authStore = useAuthStore()
+const favoritesStore = useFavoritesStore()
+
+authStore.init()
+favoritesStore.init()
+
+if (authStore.isAuthenticated) {
+  favoritesStore.syncOnLogin().catch(console.error)
+}
 
 app.mount('#app')

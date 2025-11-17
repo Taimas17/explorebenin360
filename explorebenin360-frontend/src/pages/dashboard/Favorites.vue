@@ -70,6 +70,28 @@
             </Card>
           </div>
         </section>
+
+        <section v-if="data.guides.length">
+          <h2 class="text-xl font-semibold mb-3">{{ t('dashboard.favorite_guides') }}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <Card v-for="g in data.guides" :key="g.id">
+              <template #media>
+                <div class="aspect-[4/3] flex items-center justify-center bg-black/5 dark:bg-white/5">
+                  <img v-if="g.avatar_url" :src="g.avatar_url" :alt="g.name" class="w-20 h-20 rounded-full object-cover" />
+                  <AvatarFallback v-else :name="g.name" :size="72" />
+                  <div class="absolute top-2 right-2">
+                    <FavoriteToggle type="guide" :id="g.id" size="sm" :entity="g" />
+                  </div>
+                </div>
+              </template>
+              <template #title>{{ g.name }}</template>
+              {{ g.city }} · {{ g.languages?.join(', ') }}
+              <template #actions>
+                <RouterLink :to="{ name: 'guides', query: { q: g.name } }" class="btn-base focus-ring h-9 px-3 rounded-md border border-black/10 dark:border-white/10">{{ t('common.details') }}</RouterLink>
+              </template>
+            </Card>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -82,6 +104,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 import Card from '@/components/ui/Card.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import AvatarFallback from '@/components/ui/AvatarFallback.vue'
 import { fetchFavorites } from '@/lib/services/favorites'
 import travelerHeader from '@/assets/brand/images/dashboard/traveler/header.png'
 
@@ -91,11 +114,12 @@ const thumbs = {
   destination: '/src/assets/brand/images/thumbs/destination-thumb.png',
   hebergement: '/src/assets/brand/images/thumbs/hebergement-thumb.png',
   article: '/src/assets/brand/images/thumbs/article-thumb.png',
+  guide: '/src/assets/brand/images/thumbs/guide-thumb.png',
 }
 
-const data = ref({ places: [], accommodations: [], articles: [] })
+const data = ref({ places: [], accommodations: [], articles: [], guides: [] })
 const loading = ref(false)
-const totalCount = computed(() => data.value.places.length + data.value.accommodations.length + data.value.articles.length)
+const totalCount = computed(() => data.value.places.length + data.value.accommodations.length + data.value.articles.length + data.value.guides.length)
 
 onMounted(async () => {
   loading.value = true

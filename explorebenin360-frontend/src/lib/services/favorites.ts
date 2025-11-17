@@ -1,27 +1,139 @@
-import type { Place, Accommodation, Article } from '@/types/content'
+import { getFavorites as apiFetchFavorites, fetchPlaceById, fetchAccommodationById, fetchArticleById, fetchGuideById } from '@/lib/api'
+import { useFavoritesStore, type FavType } from '@/stores/favorites'
+import type { Place, Accommodation, Article, Guide } from '@/types/content'
 
-const useStubs = (import.meta.env.VITE_USE_STUBS === 'true')
-const delay = (ms = 200) => new Promise((r) => setTimeout(r, ms))
-
-export type Favorites = { places: Place[]; accommodations: Accommodation[]; articles: Article[] }
-
-const stub: Favorites = {
-  places: [
-    { id: 1, title: 'Ganvié', slug: 'ganvie', type: 'culture', description: 'Village lacustre', city: 'Abomey-Calavi', country: 'Benin', lat: 6.455, lng: 2.336, tags: ['lac','pêche'], cover_image_url: '/src/assets/brand/images/thumbs/destination-thumb.png', rating_avg: 4.7, review_count: 58, featured: true, status: 'published' },
-  ],
-  accommodations: [
-    { id: 10, title: 'Ecolodge Nokoué', slug: 'ecolodge-nokoue', type: 'ecolodge', description: 'Séjour écoresponsable', address: 'Lac Nokoué', city: 'Sô-Ava', lat: 6.5, lng: 2.4, price_per_night: 45000, currency: 'XOF', amenities: ['ponton','canoë'], capacity: 4, rating_avg: 4.5, review_count: 23, featured: false, status: 'published', cover_image_url: '/src/assets/brand/images/thumbs/hebergement-thumb.png' }
-  ],
-  articles: [
-    { id: 100, title: '5 lieux à voir au Bénin', slug: '5-lieux-a-voir', excerpt: 'Notre sélection…', body: '', author_name: 'Rédaction', category: 'Inspiration', tags: ['voyage'], cover_image_url: '/src/assets/brand/images/thumbs/article-thumb.png', status: 'published', published_at: new Date().toISOString() }
-  ]
+export type Favorites = {
+  places: Place[]
+  accommodations: Accommodation[]
+  articles: Article[]
+  guides: Guide[]
 }
 
 export async function fetchFavorites(): Promise<Favorites> {
-  if (useStubs) { await delay(); return stub }
-  // TODO: Replace with real endpoints when available
-  // Example: const res = await api.get('/dashboard/favorites')
-  // return res.data
-  await delay();
-  return { places: [], accommodations: [], articles: [] }
+  const favStore = useFavoritesStore()
+
+  if (!favStore.loaded) {
+    favStore.init()
+  }
+
+  let idsByType: Record<FavType, number[]>
+
+  try {
+    const response = await apiFetchFavorites()
+    const serverIds = response?.data || {}
+    idsByType = buildMergedIds(favStore, serverIds)
+    applyIdsToStore(favStore, idsByType)
+  } catch (error) {
+    console.error('Failed to fetch favorites:', error)
+    return collectFromStore(favStore)
+  }
+
+  const [places, accommodations, articles, guides] = await Promise.all([
+    fetchEntitiesByIds<Place>(idsByType.destination, favStore, 'destination', fetchPlaceById),
+    fetchEntitiesByIds<Accommodation>(idsByType.hebergement, favStore, 'hebergement', fetchAccommodationById),
+    fetchEntitiesByIds<Article>(idsByType.article, favStore, 'article', fetchArticleById),
+    fetchEntitiesByIds<Guide>(idsByType.guide, favStore, 'guide', fetchGuideById),
+  ])
+
+  return { places, accommodations, articles, guides }
+}
+
+function buildMergedIds(
+  favStore: ReturnType<typeof useFavoritesStore>,
+  serverIds: Partial<Record<FavType, number[]>>
+): Record<FavType, number[]> {
+  const types: FavType[] = ['destination', 'hebergement', 'article', 'guide']
+  const merged: Record<FavType, number[]> = {
+    destination: [],
+    hebergement: [],
+    article: [],
+    guide: [],
+  }
+
+  for (const type of types) {
+    const union = new Set<number>(serverIds[type] || [])
+    for (const id of favStore.items[type]) union.add(id)
+    merged[type] = Array.from(union)
+  }
+
+  return merged
+}
+
+function applyIdsToStore(
+  favStore: ReturnType<typeof useFavoritesStore>,
+  idsByType: Record<FavType, number[]>
+) {
+  const next = {
+    destination: new Set(idsByType.destination),
+    hebergement: new Set(idsByType.hebergement),
+    article: new Set(idsByType.article),
+    guide: new Set(idsByType.guide),
+  } as Record<FavType, Set<number>>
+
+  favStore.items = next
+  favStore.save()
+}
+
+async function fetchEntitiesByIds<T>(
+  ids: number[],
+  favStore: ReturnType<typeof useFavoritesStore>,
+  type: FavType,
+  fetchFn: (id: number) => Promise<{ data: T }>
+): Promise<T[]> {
+  if (!ids.length) return []
+
+  const uniqueIds = Array.from(new Set(ids))
+  const cache = favStore.entities[type] || {}
+  const existing = new Map<number, T>()
+  const missing: number[] = []
+
+  for (const id of uniqueIds) {
+    const cached = cache[id]
+    if (cached) existing.set(id, cached as T)
+    else missing.push(id)
+  }
+
+  if (missing.length) {
+    const results = await Promise.allSettled(missing.map((id) => fetchFn(id)))
+    results.forEach((result, index) => {
+      const id = missing[index]
+      if (result.status === 'fulfilled') {
+        const entity = result.value?.data
+        if (entity) {
+          favStore.remember(type, id, entity)
+          existing.set(id, entity)
+        }
+      } else {
+        const cached = cache[id]
+        if (cached) existing.set(id, cached as T)
+      }
+    })
+  }
+
+  return uniqueIds
+    .map((id) => {
+      const entity = existing.get(id) || (cache[id] as T | undefined)
+      return entity || null
+    })
+    .filter((entity): entity is T => entity !== null)
+}
+
+function collectFromStore(
+  favStore: ReturnType<typeof useFavoritesStore>
+): Favorites {
+  return {
+    places: collectType<Place>(favStore, 'destination'),
+    accommodations: collectType<Accommodation>(favStore, 'hebergement'),
+    articles: collectType<Article>(favStore, 'article'),
+    guides: collectType<Guide>(favStore, 'guide'),
+  }
+}
+
+function collectType<T>(
+  favStore: ReturnType<typeof useFavoritesStore>,
+  type: FavType
+): T[] {
+  return Array.from(favStore.items[type])
+    .map((id) => favStore.entities[type][id] as T | undefined)
+    .filter((entity): entity is T => !!entity)
 }

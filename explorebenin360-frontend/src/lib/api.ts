@@ -36,15 +36,19 @@ const patch = async <T>(url: string, body?: any) => {
 
 export const fetchPlaces = (filters: PlaceFilters = {}) => get<Paginated<Place>>('/places', filters)
 export const fetchPlace = (slug: string) => get<{ data: Place }>(`/places/${slug}`)
+export const fetchPlaceById = (id: number) => get<{ data: Place }>(`/places/${id}`)
 
 export const fetchAccommodations = (filters: AccommodationFilters = {}) => get<Paginated<Accommodation>>('/accommodations', filters)
 export const fetchAccommodation = (slug: string) => get<{ data: Accommodation }>(`/accommodations/${slug}`)
+export const fetchAccommodationById = (id: number) => get<{ data: Accommodation }>(`/accommodations/${id}`)
 
 export const fetchGuides = (filters: GuideFilters = {}) => get<Paginated<Guide>>('/guides', filters)
 export const fetchGuide = (slug: string) => get<{ data: Guide }>(`/guides/${slug}`)
+export const fetchGuideById = (id: number) => get<{ data: Guide }>(`/guides/${id}`)
 
 export const fetchArticles = (filters: ArticleFilters = {}) => get<Paginated<Article>>('/articles', filters)
 export const fetchArticle = (slug: string) => get<{ data: Article }>(`/articles/${slug}`)
+export const fetchArticleById = (id: number) => get<{ data: Article }>(`/articles/${id}`)
 
 export const fetchEvents = (filters: EventFilters = {}) => get<Paginated<Event>>('/events', filters)
 export const fetchEvent = (slug: string) => get<{ data: Event }>(`/events/${slug}`)
