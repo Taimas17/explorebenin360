@@ -11,6 +11,9 @@ use App\Services\PaystackClient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\NewBookingNotification;
+use App\Notifications\BookingConfirmedNotification;
+use App\Notifications\BookingStatusChangeNotification;
 
 class BookingController extends Controller
 {
@@ -45,6 +48,13 @@ class BookingController extends Controller
             'status' => 'pending',
             'payment_provider' => 'paystack',
         ]);
+
+        // Notify provider of new booking
+        $booking->load('offering','user');
+        $provider = $booking->offering->provider;
+        if ($provider) {
+            $provider->notify(new NewBookingNotification($booking));
+        }
 
         $reference = 'EB360-' . $booking->id . '-' . time();
         $callbackUrl = config('payments.paystack.callback_url');
@@ -144,6 +154,7 @@ class BookingController extends Controller
         $data = $request->validate([
             'status' => ['required','in:pending,authorized,confirmed,cancelled,refunded'],
         ]);
+        $prevStatus = $booking->status;
         $booking->status = $data['status'];
         if ($booking->status === 'confirmed') {
             $pct = (float) config('payments.commission_percent', 12);
@@ -151,11 +162,16 @@ class BookingController extends Controller
             Mail::to($booking->user->email)
                 ->cc(optional($booking->offering->provider)->email)
                 ->queue(new BookingConfirmed($booking));
+            // Database notification
+            $booking->user->notify(new BookingConfirmedNotification($booking));
         }
         if ($booking->status === 'cancelled') {
             Mail::to($booking->user->email)
                 ->cc(optional($booking->offering->provider)->email)
                 ->queue(new BookingCancelled($booking));
+        }
+        if (in_array($booking->status, ['authorized','cancelled','refunded'])) {
+            $booking->user->notify(new BookingStatusChangeNotification($booking, $prevStatus));
         }
         $booking->save();
         return response()->json(['data' => $booking]);
@@ -172,11 +188,15 @@ class BookingController extends Controller
         $data = $request->validate([
             'status' => ['required','in:authorized,cancelled'],
         ]);
+        $prevStatus = $booking->status;
         $booking->status = $data['status'];
         if ($booking->status === 'cancelled') {
             Mail::to($booking->user->email)
                 ->cc(optional($booking->offering->provider)->email)
                 ->queue(new BookingCancelled($booking));
+        }
+        if (in_array($booking->status, ['authorized','cancelled'])) {
+            $booking->user->notify(new BookingStatusChangeNotification($booking, $prevStatus));
         }
         $booking->save();
         return response()->json(['data' => $booking]);

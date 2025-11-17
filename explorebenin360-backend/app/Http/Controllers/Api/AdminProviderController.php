@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Notifications\ProviderStatusNotification;
 
 class AdminProviderController extends Controller
 {
@@ -50,6 +51,7 @@ class AdminProviderController extends Controller
         if (method_exists($user, 'assignRole')) {
             $user->assignRole('provider');
         }
+        $user->notify(new ProviderStatusNotification('approved'));
         return response()->json(['message' => 'Provider approved successfully']);
     }
 
@@ -67,6 +69,7 @@ class AdminProviderController extends Controller
             'provider_status' => 'rejected',
             'provider_rejection_reason' => $data['reason'],
         ]);
+        $user->notify(new ProviderStatusNotification('rejected', $data['reason']));
         return response()->json(['message' => 'Provider rejected']);
     }
 }

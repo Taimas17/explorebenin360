@@ -92,4 +92,17 @@ export const updateOfferingAvailability = (id: number, availability: any) =>
 // Provider Analytics
 export const fetchProviderAnalytics = () => get<{ data: any }>('/provider/analytics')
 
+// Notifications
+export const fetchNotifications = (unreadOnly = false, limit = 20) =>
+  get<{ data: any[]; meta: { unread_count: number } }>('/notifications', { unread_only: unreadOnly, limit })
+
+export const markNotificationAsRead = (id: string) =>
+  patch(`/notifications/${id}/read`)
+
+export const markAllNotificationsAsRead = () =>
+  post('/notifications/mark-all-read')
+
+export const deleteNotification = (id: string) =>
+  del(`/notifications/${id}`)
+
 export default api

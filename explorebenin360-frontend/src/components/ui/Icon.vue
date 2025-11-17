@@ -4,7 +4,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { HomeIcon, MapIcon, BookOpenIcon, BuildingOfficeIcon, UserIcon, SunIcon, MoonIcon, ArrowRightIcon, CheckIcon, WifiIcon, SparklesIcon, TruckIcon, TvIcon, HomeModernIcon, Cog6ToothIcon, HeartIcon } from '@heroicons/vue/24/outline'
+import { HomeIcon, MapIcon, BookOpenIcon, BuildingOfficeIcon, UserIcon, SunIcon, MoonIcon, ArrowRightIcon, CheckIcon, WifiIcon, SparklesIcon, TruckIcon, TvIcon, HomeModernIcon, Cog6ToothIcon, HeartIcon, BellIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({ name: { type: String, required: true } })
 
@@ -25,6 +25,7 @@ const map: Record<string, any> = {
   HomeModern: HomeModernIcon,
   Cog: Cog6ToothIcon,
   Heart: HeartIcon,
+  Bell: BellIcon,
 }
 
 const iconComp = computed(() => map[props.name] || ArrowRightIcon)

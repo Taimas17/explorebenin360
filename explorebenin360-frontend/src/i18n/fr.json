@@ -246,5 +246,10 @@
     "agenda_desc": "Découvrez les événements à venir au Bénin : festivals, musique, culture, sport. Filtrez par ville, date et catégorie.",
     "explorer_title": "Explorer le Bénin — Carte interactive et recherche",
     "explorer_desc": "Recherchez destinations, hébergements et guides sur une carte interactive du Bénin. Zoom, filtres et navigation rapide."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "no_notifications": "Aucune notification",
+    "mark_all_read": "Tout marquer comme lu"
   }
 }

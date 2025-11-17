@@ -23,6 +23,7 @@
           <button @click="toggleDark()" class="btn-base focus-ring h-9 w-9 rounded-full" :aria-label="isDark ? t('common.light_mode') : t('common.dark_mode')">
             <Icon :name="isDark ? 'Sun' : 'Moon'" />
           </button>
+          <NotificationCenter v-if="isAuthenticated" />
           <RouterLink to="/dashboard/favorites" class="btn-base focus-ring h-9 w-9 rounded-full inline-flex items-center justify-center" :aria-label="t('nav.favorites')">
             <Icon name="Heart" />
           </RouterLink>
@@ -51,6 +52,7 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import Icon from '@/components/ui/Icon.vue'
+import NotificationCenter from '@/components/ui/NotificationCenter.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const { t, locale } = useI18n()
