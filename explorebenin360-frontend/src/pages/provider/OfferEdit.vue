@@ -39,7 +39,7 @@
       <div>
         <h3 class="text-sm font-medium mb-2">{{ t('provider.gallery') }}</h3>
         <div class="grid grid-cols-2 gap-2 mb-3">
-          <EBImage v-for="(img, idx) in item.gallery" :key="idx" :src="img.src" :alt="img.alt || item.title" :width="800" :height="600" aspect-ratio="4 / 3" />
+          <EBImage v-for="(img, idx) in item.gallery" :key="idx" :src="typeof img === 'string' ? img : img.src" :alt="item.title" :width="800" :height="600" aspect-ratio="4 / 3" />
         </div>
         <div class="text-xs text-[color:var(--color-text-muted)] mb-2">{{ t('provider.gallery_hint') }}</div>
         <input v-model="newImage" placeholder="https://..." class="w-full rounded-md border border-black/10 dark:border-white/10 px-3 py-2 bg-transparent focus-ring mb-2" />
@@ -71,13 +71,17 @@ onMounted(async () => {
 })
 
 async function onSubmit() {
-  await updateOffering(item.value.id, item.value)
+  const payload: any = { ...item.value }
+  if (Array.isArray(payload.gallery)) {
+    payload.gallery = payload.gallery.map((g: any) => typeof g === 'string' ? g : g.src)
+  }
+  await updateOffering(item.value.id, payload)
   alert(t('provider.saved'))
 }
 
 function addImage() {
   const url = newImage.value.trim(); if (!url) return
-  item.value.gallery = [...(item.value.gallery || []), { src: url, alt: item.value.title }]
+  item.value.gallery = [...(item.value.gallery || []), url]
   newImage.value = ''
 }
 

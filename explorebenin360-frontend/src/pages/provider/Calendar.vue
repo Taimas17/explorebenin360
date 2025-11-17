@@ -42,7 +42,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BrandBanner from '@/components/ui/BrandBanner.vue'
-import { providerOfferings, updateOffering } from '@/lib/services/offerings'
+import { providerOfferings } from '@/lib/services/offerings'
+import { updateOfferingAvailability } from '@/lib/api'
 
 const { t } = useI18n()
 const banner = '/src/assets/brand/images/dashboard/provider/header.png'
@@ -72,17 +73,19 @@ onMounted(async () => {
 })
 
 function isBlocked(iso: string) {
-  const blocks: string[] = current.value?.availability_json?.blocks || []
+  const av = (current.value?.availability || current.value?.availability_json) as any || {}
+  const blocks: string[] = av.blocks || []
   return blocks.includes(iso)
 }
 
 async function addBlock() {
   if (!current.value || !blockDate.value) return
-  const blocks: string[] = current.value.availability_json?.blocks || []
+  const av = (current.value.availability || current.value.availability_json) as any || {}
+  const blocks: string[] = av.blocks || []
   if (!blocks.includes(blockDate.value)) {
-    const next = { ...(current.value.availability_json || {}), blocks: [...blocks, blockDate.value] }
-    current.value.availability_json = next
-    await updateOffering(current.value.id, { availability_json: next }) // stubbed if needed
+    const next = { ...av, blocks: [...blocks, blockDate.value] }
+    current.value.availability = next
+    await updateOfferingAvailability(current.value.id, next)
   }
 }
 
