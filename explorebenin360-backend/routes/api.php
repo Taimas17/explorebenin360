@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
 use App\Http\Controllers\Api\AdminProviderController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -90,6 +91,14 @@ Route::prefix('v1')->group(function () {
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
+    });
+
+    // Notifications (database channel)
+    Route::middleware('auth:sanctum')->prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+        Route::delete('/{id}', [NotificationController::class, 'destroy']);
     });
 
     // Paystack webhook

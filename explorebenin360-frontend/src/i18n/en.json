@@ -212,5 +212,10 @@
     "agenda_desc": "See upcoming events in Benin: festivals, music, culture and sports. Filter by city, date and category.",
     "explorer_title": "Explore Benin — Interactive map and search",
     "explorer_desc": "Search destinations, stays and guides on an interactive map of Benin. Zoom, filters and quick navigation."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "no_notifications": "No notifications",
+    "mark_all_read": "Mark all as read"
   }
 }
