@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\OfferingController;
 use App\Http\Controllers\Api\Payments\PaystackWebhookController;
 use App\Http\Controllers\Api\PlaceController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -65,6 +66,14 @@ Route::prefix('v1')->group(function () {
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
+    });
+
+    // Messages
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/messages/threads', [MessageController::class, 'listThreads']);
+        Route::post('/messages/threads', [MessageController::class, 'createThread']);
+        Route::get('/messages/threads/{threadId}', [MessageController::class, 'listMessages']);
+        Route::post('/messages/threads/{threadId}', [MessageController::class, 'sendMessage']);
     });
 
     // Paystack webhook
