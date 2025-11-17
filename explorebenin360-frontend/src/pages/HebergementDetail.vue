@@ -44,6 +44,37 @@
       </section>
 
       <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
+
+      <section class="mt-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">{{ t('reviews.title') }}</h2>
+          <div v-if="totalReviews > 0" class="flex items-center gap-2">
+            <StarRating :rating="averageRating" readonly showValue />
+            <span class="text-sm text-[color:var(--color-text-muted)]">
+              ({{ totalReviews }} {{ t('reviews.reviews') }})
+            </span>
+          </div>
+        </div>
+
+        <div v-if="loadingReviews" class="text-center py-8">
+          <Loader />
+        </div>
+
+        <EmptyState
+          v-else-if="reviews.length === 0"
+          variant="default"
+          :title="t('reviews.no_reviews')"
+        />
+
+        <div v-else class="space-y-4">
+          <ReviewCard
+            v-for="review in reviews"
+            :key="review.id"
+            :review="review"
+          />
+          <!-- TODO: Pagination si nécessaire -->
+        </div>
+      </section>
     </div>
   </div>
   <div class="container-px mx-auto py-16" v-else>
@@ -53,29 +84,66 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { setPageMeta } from '@/utils/meta'
-import { fetchAccommodation } from '@/lib/api'
+import { fetchAccommodation, fetchOfferingReviews } from '@/lib/api'
 import Loader from '@/components/ui/Loader.vue'
 import EBImage from '@/components/media/EBImage.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import AmenitiesIcons from '@/components/hebergements/AmenitiesIcons.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import EmptyState from '@/components/ui/EmptyState.vue'
+import ReviewCard from '@/components/reviews/ReviewCard.vue'
+import StarRating from '@/components/ui/StarRating.vue'
 import { buildAlt } from '@/utils/a11y'
 import { mapToGalleryItems } from '@/utils/media'
 import hebergementsBanner from '@/assets/brand/images/hebergements/banner-default.png'
+import type { Review } from '@/types/business'
 
 const route = useRoute()
+const { t } = useI18n()
 const item = ref<any>(null)
 const placeholder = hebergementsBanner
 
-const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
+const reviews = ref<Review[]>([])
+const reviewsMeta = ref<Record<string, any>>({})
+const loadingReviews = ref(false)
+
+const galleryItems = computed(() =>
+  item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : []
+)
+
+const averageRating = computed(() => {
+  if (reviews.value.length === 0) return 0
+  const sum = reviews.value.reduce((acc, r) => acc + r.rating, 0)
+  return sum / reviews.value.length
+})
+
+const totalReviews = computed(() => reviewsMeta.value?.total ?? reviews.value.length ?? 0)
+
+async function loadReviews(offeringId: number) {
+  loadingReviews.value = true
+  try {
+    const res = await fetchOfferingReviews(offeringId, { per_page: 10 })
+    reviews.value = res.data
+    reviewsMeta.value = res.meta
+  } finally {
+    loadingReviews.value = false
+  }
+}
 
 onMounted(async () => {
   const slug = route.params.slug.toString()
   const { data } = await fetchAccommodation(slug)
   item.value = data
-  setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || (data.description || '').replace(/<[^>]+>/g,'').slice(0,150), path: data.seo?.path || `/hebergements/${data.slug}`, image: data.cover_image_url })
+  setPageMeta({
+    title: data.seo?.title || `${data.title} — ExploreBenin360`,
+    description: data.seo?.description || (data.description || '').replace(/<[^>]+>/g, '').slice(0, 150),
+    path: data.seo?.path || `/hebergements/${data.slug}`,
+    image: data.cover_image_url
+  })
+  await loadReviews(data.id)
 })
 </script>

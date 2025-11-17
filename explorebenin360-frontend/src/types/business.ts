@@ -67,3 +67,22 @@ export type Message = {
   body: string
   created_at: string
 }
+
+export type Review = {
+  id: number
+  booking_id: number
+  rating: number
+  comment: string
+  photos: string[]
+  user: {
+    id: number
+    name: string
+  }
+  offering?: {
+    id: number
+    title: string
+    slug?: string
+  }
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+}

@@ -70,4 +70,16 @@ export const getFavorites = () => get<{ data: { destination: number[]; hebergeme
 export const addFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites', { type, id })
 export const removeFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites/remove', { type, id })
 
+// Reviews
+export const fetchOfferingReviews = (offeringId: number, params?: { page?: number; per_page?: number }) =>
+  get<{ data: any[]; meta: any }>(`/offerings/${offeringId}/reviews`, params)
+export const submitReview = (body: { booking_id: number; rating: number; comment: string; photos?: string[] }) =>
+  post('/reviews', body)
+export const fetchMyReviews = () => get<{ data: any[] }>('/reviews/my')
+
+// Admin
+export const fetchPendingReviews = () => get<{ data: any[] }>('/admin/reviews/pending')
+export const approveReview = (id: number) => post(`/admin/reviews/${id}/approve`)
+export const rejectReview = (id: number, reason: string) => post(`/admin/reviews/${id}/reject`, { reason })
+
 export default api

@@ -28,6 +28,7 @@ const TravelerReservations = () => import('@/pages/dashboard/Reservations.vue')
 const TravelerReservationDetail = () => import('@/pages/dashboard/ReservationDetail.vue')
 const TravelerFavorites = () => import('@/pages/dashboard/Favorites.vue')
 const TravelerMessages = () => import('@/pages/dashboard/Messages.vue')
+const TravelerMyReviews = () => import('@/pages/dashboard/MyReviews.vue')
 
 // Provider
 const ProviderDashboard = () => import('@/pages/provider/ProviderDashboard.vue')
@@ -72,6 +73,7 @@ const routes = [
   { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true, roles: ['traveler'] } },
   { path: '/dashboard/favorites', name: 'favorites', component: TravelerFavorites, meta: { requiresAuth: true, roles: ['traveler'] } },
   { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/reviews', name: 'my-reviews', component: TravelerMyReviews, meta: { requiresAuth: true, roles: ['traveler'] } },
 
   // Provider
   { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true, roles: ['provider'] } },
