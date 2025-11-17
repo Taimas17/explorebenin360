@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Media;
 use App\Models\Booking;
+use App\Models\Offering;
 use App\Policies\MediaPolicy;
 use App\Policies\BookingPolicy;
+use App\Policies\OfferingPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Media::class => MediaPolicy::class,
         Booking::class => BookingPolicy::class,
+        Offering::class => OfferingPolicy::class,
     ];
 
     public function boot(): void

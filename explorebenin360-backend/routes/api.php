@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\OfferingController;
 use App\Http\Controllers\Api\Payments\PaystackWebhookController;
 use App\Http\Controllers\Api\PlaceController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\ProviderOfferingController;
+use App\Http\Controllers\Api\ProviderApplicationController;
+use App\Http\Controllers\Api\AdminProviderController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -69,6 +72,20 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
         Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
+
+        Route::post('/provider/apply', [ProviderApplicationController::class, 'apply']);
+        Route::get('/provider/status', [ProviderApplicationController::class, 'status']);
+        Route::get('/provider/offerings', [ProviderOfferingController::class, 'index']);
+        Route::post('/provider/offerings', [ProviderOfferingController::class, 'store']);
+        Route::get('/provider/offerings/{id}', [ProviderOfferingController::class, 'show']);
+        Route::patch('/provider/offerings/{id}', [ProviderOfferingController::class, 'update']);
+        Route::delete('/provider/offerings/{id}', [ProviderOfferingController::class, 'destroy']);
+        Route::patch('/provider/offerings/{id}/availability', [ProviderOfferingController::class, 'updateAvailability']);
+        Route::get('/provider/analytics', [ProviderOfferingController::class, 'analytics']);
+
+        Route::get('/admin/providers', [AdminProviderController::class, 'index']);
+        Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
+        Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
 
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);
