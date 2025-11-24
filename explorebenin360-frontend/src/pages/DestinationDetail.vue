@@ -13,7 +13,7 @@
     </EBGallery>
     <BrandBanner v-else :src="item.cover_image_url || placeholder" alt="" :title="item.title" :subtitle="item.city + ' — ' + item.type" class="mb-4" />
 
-    <div class="prose dark:prose-invert max-w-none" v-html="item.description"></div>
+    <div class="prose dark:prose-invert max-w-none" v-html="sanitizedDescription"></div>
 
     <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
   </div>
@@ -33,6 +33,7 @@ import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import { mapToGalleryItems } from '@/utils/media'
+import { sanitizeHtml } from '@/utils/sanitize'
 import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 
 const route = useRoute()
@@ -40,6 +41,8 @@ const item = ref<any>(null)
 const placeholder = destinationsBanner
 
 const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
+
+const sanitizedDescription = computed(() => sanitizeHtml(item.value?.description))
 
 onMounted(async () => {
   const slug = route.params.slug.toString()
