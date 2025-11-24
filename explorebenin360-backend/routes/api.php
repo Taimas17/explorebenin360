@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\ProviderApplicationController;
 use App\Http\Controllers\Api\AdminProviderController;
 use App\Http\Controllers\Api\UserAdminController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -67,6 +68,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store']);
         Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
+    });
+
+    // User profile management
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:api'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::patch('/profile', [ProfileController::class, 'update']);
+        Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
+        Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar']);
+        Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
+        Route::post('/profile/cover', [ProfileController::class, 'uploadCover']);
+        Route::delete('/profile/cover', [ProfileController::class, 'deleteCover']);
+        Route::delete('/profile', [ProfileController::class, 'deleteAccount']);
     });
 
     // Provider & Admin - rate limiting API standard

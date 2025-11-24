@@ -73,18 +73,47 @@ export type User = {
   name: string
   email: string
   phone?: string | null
+  roles?: Array<{ name: string }>|string[]
+  provider_status?: 'none'|'pending'|'approved'|'rejected'|'suspended'
   business_name?: string | null
   bio?: string | null
-  roles: string[]
-  provider_status: 'none' | 'pending' | 'approved' | 'rejected'
-  account_status: 'active' | 'suspended' | 'banned'
+
+  // Profile fields
+  avatar_url?: string | null
+  cover_image_url?: string | null
+  date_of_birth?: string | null
+  age?: number | null
+  gender?: 'male' | 'female' | 'other' | 'prefer_not_to_say' | null
+  country?: string | null
+  city?: string | null
+  full_location?: string
+  address?: string | null
+  postal_code?: string | null
+  website_url?: string | null
+  social_links?: {
+    facebook?: string
+    instagram?: string
+    twitter?: string
+    linkedin?: string
+  } | null
+  preferences?: {
+    language?: 'fr' | 'en'
+    currency?: 'XOF' | 'EUR' | 'USD'
+    notifications_enabled?: boolean
+  } | null
+  about_me?: string | null
+
+  // Admin/account management
+  account_status?: 'active' | 'suspended' | 'banned'
   email_verified_at?: string | null
-  created_at: string
+  created_at?: string
   last_login_at?: string | null
-  login_count: number
+  login_count?: number
   suspended_at?: string | null
   suspension_reason?: string | null
   suspended_by?: { id: number; name: string } | null
+
+  // Counts
   bookings_count?: number
   favorites_count?: number
   offerings_count?: number

@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { apiLogin, apiRegister, apiLogout, apiMe } from '@/lib/api'
+import { updateProfile as apiUpdateProfile } from '@/lib/services/profile'
+import { uploadAvatar as apiUploadAvatar } from '@/lib/services/profile'
 import { useFavoritesStore } from './favorites'
 
 export const useAuthStore = defineStore('auth', {
@@ -47,5 +49,15 @@ export const useAuthStore = defineStore('auth', {
         this.logout()
       }
     },
+    async updateProfile(data: any) {
+      const updated = await apiUpdateProfile(data)
+      this.user = { ...(this.user || {}), ...updated }
+      return updated
+    },
+    async uploadAvatar(file: File) {
+      const url = await apiUploadAvatar(file)
+      if (this.user) this.user.avatar_url = url
+      return url
+    }
   }
 })

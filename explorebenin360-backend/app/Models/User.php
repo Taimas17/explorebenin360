@@ -22,8 +22,22 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'business_name',
         'bio',
+        // Admin management fields
         'account_status',
         'suspension_reason',
+        // Profile fields
+        'avatar_url',
+        'cover_image_url',
+        'date_of_birth',
+        'gender',
+        'country',
+        'city',
+        'address',
+        'postal_code',
+        'website_url',
+        'social_links',
+        'preferences',
+        'about_me',
     ];
 
     protected $hidden = [
@@ -46,9 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'kyc_verified' => 'boolean',
             'kyc_documents' => 'array',
             'provider_approved_at' => 'datetime',
+            // Admin management
             'suspended_at' => 'datetime',
             'last_login_at' => 'datetime',
             'login_count' => 'integer',
+            // Profile
+            'date_of_birth' => 'date',
+            'social_links' => 'array',
+            'preferences' => 'array',
         ];
     }
 
@@ -115,5 +134,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isProviderPending(): bool
     {
         return $this->provider_status === 'pending';
+    }
+
+    public function getAgeAttribute(): ?int
+    {
+        if (!$this->date_of_birth) return null;
+        return $this->date_of_birth->age;
+    }
+
+    public function getFullLocationAttribute(): string
+    {
+        $parts = array_filter([$this->city, $this->country]);
+        return implode(', ', $parts);
     }
 }
