@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Console\Commands\ValidateEnvCommand;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle.strict' => \Illuminate\Routing\Middleware\ThrottleRequests::class.':10,1',
             'throttle.auth' => \Illuminate\Routing\Middleware\ThrottleRequests::class.':5,1',
             'throttle.upload' => \Illuminate\Routing\Middleware\ThrottleRequests::class.':20,1',
+            'sanctum.cookie' => \App\Http\Middleware\SanctumCookieAuth::class,
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
 
         // Personnaliser les réponses 429
@@ -27,4 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->withCommands([
+        ValidateEnvCommand::class,
+    ])->create();

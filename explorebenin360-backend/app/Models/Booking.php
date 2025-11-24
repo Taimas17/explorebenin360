@@ -10,10 +10,21 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'offering_id', 'start_date', 'end_date', 'guests',
-        'status', 'amount', 'currency', 'commission_amount', 'payment_provider',
-        'payment_ref', 'payment_status', 'cancel_reason', 'meta'
+        'user_id',
+        'offering_id',
+        'start_date',
+        'end_date',
+        'guests',
+        'amount',
+        'currency',
     ];
+
+    protected $hidden = [
+        'payment_ref',
+        'payment_provider',
+    ];
+
+    protected $with = ['user', 'offering'];
 
     protected $casts = [
         'start_date' => 'date',
@@ -22,6 +33,7 @@ class Booking extends Model
         'amount' => 'decimal:2',
         'commission_amount' => 'decimal:2',
         'meta' => 'array',
+        'webhook_processed_at' => 'datetime',
     ];
 
     public function user()

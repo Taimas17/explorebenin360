@@ -15,14 +15,21 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'business_name', 'bio',
-        'provider_status', 'kyc_submitted', 'kyc_verified', 'kyc_documents',
-        'provider_rejection_reason', 'provider_approved_at'
+        'name',
+        'email',
+        'password',
+        'phone',
+        'business_name',
+        'bio',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'kyc_documents',
+        'kyc_verified',
+        'kyc_submitted',
+        'provider_rejection_reason',
     ];
 
     protected function casts(): array

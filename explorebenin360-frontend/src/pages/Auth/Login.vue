@@ -14,6 +14,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Button from '@/components/ui/Button.vue'
 import { useAuthStore } from '@/stores/auth'
+import { safeRedirect } from '@/utils/urlValidation'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -27,7 +28,9 @@ const submit = async () => {
   loading.value = true
   try {
     await auth.login({ email: email.value, password: password.value })
-    router.push(route.query.redirect || '/')
+    const q = route.query.redirect
+    const redirectTo = safeRedirect(typeof q === 'string' ? q : null, '/')
+    router.push(redirectTo)
   } catch (e) {
     alert(t('errors.login_failed'))
   } finally { loading.value = false }

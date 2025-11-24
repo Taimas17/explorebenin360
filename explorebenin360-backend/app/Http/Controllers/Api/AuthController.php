@@ -30,7 +30,18 @@ class AuthController extends Controller
         event(new Registered($user));
 
         $token = $user->createToken('spa')->plainTextToken;
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        return response()->json(['user' => $user], 201)
+            ->cookie(
+                'eb360_token',
+                $token,
+                config('session.lifetime', 120),
+                '/',
+                config('session.domain'),
+                config('session.secure_cookie', true),
+                true,
+                false,
+                config('session.same_site', 'lax')
+            );
     }
 
     public function login(Request $request)
@@ -46,13 +57,25 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('spa')->plainTextToken;
-        return response()->json(['user' => $user, 'token' => $token]);
+        return response()->json(['user' => $user])
+            ->cookie(
+                'eb360_token',
+                $token,
+                config('session.lifetime', 120),
+                '/',
+                config('session.domain'),
+                config('session.secure_cookie', true),
+                true,
+                false,
+                config('session.same_site', 'lax')
+            );
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()?->delete();
-        return response()->json(['message' => 'Logged out']);
+        return response()->json(['message' => 'Logged out'])
+            ->cookie('eb360_token', '', -1, '/', config('session.domain'), config('session.secure_cookie', true), true, false, config('session.same_site', 'lax'));
     }
 
     public function me(Request $request)

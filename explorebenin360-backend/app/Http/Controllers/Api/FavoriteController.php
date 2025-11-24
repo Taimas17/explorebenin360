@@ -15,20 +15,18 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $favorites = Favorite::where('user_id', $user->id)->get();
+        
+        $favorites = Favorite::where('user_id', $user->id)
+            ->get()
+            ->groupBy('type')
+            ->map(fn($items) => $items->pluck('item_id')->toArray());
 
         $grouped = [
-            'destination' => [],
-            'hebergement' => [],
-            'article' => [],
-            'guide' => []
+            'destination' => $favorites->get('destination', []),
+            'hebergement' => $favorites->get('hebergement', []),
+            'article' => $favorites->get('article', []),
+            'guide' => $favorites->get('guide', []),
         ];
-
-        foreach ($favorites as $fav) {
-            if (isset($grouped[$fav->type])) {
-                $grouped[$fav->type][] = $fav->item_id;
-            }
-        }
 
         return response()->json(['data' => $grouped]);
     }
@@ -37,38 +35,50 @@ class FavoriteController extends Controller
     {
         $data = $request->validate([
             'type' => ['required', 'in:destination,hebergement,article,guide'],
-            'id' => ['required', 'integer', 'min:1']
+            'id' => ['required', 'integer', 'min:1'],
         ]);
 
-        $exists = $this->checkItemExists($data['type'], (int) $data['id']);
-        if (!$exists) {
+        // Vérifier l'existence selon le type
+        if (!$this->checkItemExists($data['type'], $data['id'])) {
             return response()->json(['message' => 'Item not found'], 404);
         }
 
-        $user = $request->user();
-        Favorite::firstOrCreate([
-            'user_id' => $user->id,
+        // Vérifier que ce n'est pas déjà un favori (éviter duplicate)
+        $exists = Favorite::where('user_id', $request->user()->id)
+            ->where('type', $data['type'])
+            ->where('item_id', $data['id'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Already favorited'], 200);
+        }
+
+        $favorite = Favorite::create([
+            'user_id' => $request->user()->id,
             'type' => $data['type'],
-            'item_id' => (int) $data['id']
+            'item_id' => $data['id'],
         ]);
 
-        return response()->json(['message' => 'Added to favorites'], 201);
+        return response()->json(['data' => $favorite], 201);
     }
 
     public function remove(Request $request)
     {
         $data = $request->validate([
             'type' => ['required', 'in:destination,hebergement,article,guide'],
-            'id' => ['required', 'integer']
+            'id' => ['required', 'integer', 'min:1'],
         ]);
 
-        $user = $request->user();
-        Favorite::where('user_id', $user->id)
+        $deleted = Favorite::where('user_id', $request->user()->id)
             ->where('type', $data['type'])
-            ->where('item_id', (int) $data['id'])
+            ->where('item_id', $data['id'])
             ->delete();
 
-        return response()->json(['message' => 'Removed from favorites'], 200);
+        if ($deleted === 0) {
+            return response()->json(['message' => 'Favorite not found'], 404);
+        }
+
+        return response()->json(['message' => 'Removed'], 200);
     }
 
     private function checkItemExists(string $type, int $id): bool

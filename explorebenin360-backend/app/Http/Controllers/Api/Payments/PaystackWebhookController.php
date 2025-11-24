@@ -9,6 +9,7 @@ use App\Services\PaystackClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class PaystackWebhookController extends Controller
 {
@@ -26,33 +27,78 @@ class PaystackWebhookController extends Controller
         $reference = $data['reference'] ?? null;
         if (!$reference) return response()->json(['message' => 'No reference'], 400);
 
-        $booking = Booking::where('payment_ref', $reference)->first();
-        if (!$booking) return response()->json(['message' => 'Unknown reference'], 200);
+        try {
+            if ($event === 'charge.success') {
+                $result = DB::transaction(function () use ($reference) {
+                    $booking = Booking::where('payment_ref', $reference)
+                        ->lockForUpdate()
+                        ->first();
 
-        if ($event === 'charge.success') {
-            if (in_array($booking->status, ['confirmed','refunded'])) {
-                return response()->json(['message' => 'Already handled'], 200);
+                    if (!$booking) {
+                        return ['status' => 'unknown', 'booking' => null];
+                    }
+
+                    if (in_array($booking->status, ['confirmed','refunded'])) {
+                        return ['status' => 'already', 'booking' => $booking];
+                    }
+
+                    $booking->payment_status = 'success';
+                    $booking->status = 'confirmed';
+                    $pct = (float) config('payments.commission_percent', 12);
+                    $booking->commission_amount = round($booking->amount * ($pct/100), 2);
+                    $booking->webhook_processed_at = now();
+                    $booking->save();
+
+                    return ['status' => 'updated', 'booking' => $booking->fresh(['user','offering.provider'])];
+                }, 5);
+
+                if ($result['status'] === 'unknown') {
+                    return response()->json(['message' => 'Unknown reference'], 200);
+                }
+                if ($result['status'] === 'already') {
+                    return response()->json(['message' => 'Already handled'], 200);
+                }
+
+                $booking = $result['booking'];
+                Mail::to($booking->user->email)
+                    ->cc(optional($booking->offering->provider)->email)
+                    ->queue(new BookingConfirmed($booking));
+
+                return response()->json(['message' => 'ok']);
             }
-            $booking->payment_status = 'success';
-            $booking->status = 'confirmed';
-            $pct = (float) config('payments.commission_percent', 12);
-            $booking->commission_amount = round($booking->amount * ($pct/100), 2);
-            $booking->save();
 
-            Mail::to($booking->user->email)
-                ->cc(optional($booking->offering->provider)->email)
-                ->queue(new BookingConfirmed($booking));
+            if ($event === 'charge.failed') {
+                $result = DB::transaction(function () use ($reference) {
+                    $booking = Booking::where('payment_ref', $reference)
+                        ->lockForUpdate()
+                        ->first();
 
-            return response()->json(['message' => 'ok']);
-        }
+                    if (!$booking) {
+                        return ['status' => 'unknown', 'booking' => null];
+                    }
 
-        if ($event === 'charge.failed') {
-            if ($booking->status === 'pending') {
-                $booking->payment_status = 'failed';
-                $booking->status = 'cancelled';
-                $booking->save();
+                    if ($booking->status === 'pending') {
+                        $booking->payment_status = 'failed';
+                        $booking->status = 'cancelled';
+                        $booking->webhook_processed_at = now();
+                        $booking->save();
+                    }
+
+                    return ['status' => 'handled', 'booking' => $booking];
+                }, 5);
+
+                if ($result['status'] === 'unknown') {
+                    return response()->json(['message' => 'Unknown reference'], 200);
+                }
+
+                return response()->json(['message' => 'ok']);
             }
-            return response()->json(['message' => 'ok']);
+        } catch (\Throwable $e) {
+            Log::error('Webhook processing failed', [
+                'reference' => $reference,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['message' => 'Processing failed'], 500);
         }
 
         return response()->json(['message' => 'ignored']);

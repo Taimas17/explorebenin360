@@ -10,12 +10,38 @@ class Event extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = ['id'];
-
-    protected $casts = [
-        'featured' => 'boolean',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'price' => 'decimal:2',
+    protected $fillable = [
+        'place_id',
+        'title',
+        'slug',
+        'city',
+        'start_date',
+        'end_date',
+        'organizer_name',
+        'organizer_contact',
+        'description',
+        'price',
+        'currency',
+        'category',
+        'cover_image_url',
+        'status',
+        'featured',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'featured' => 'boolean',
+            'start_date' => 'date',
+            'end_date' => 'date',
+            'price' => 'decimal:2',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    public function place()
+    {
+        return $this->belongsTo(Place::class);
+    }
 }

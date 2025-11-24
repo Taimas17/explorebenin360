@@ -47,14 +47,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
         
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware(['sanctum.cookie', 'auth:sanctum'])->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/me', [AuthController::class, 'me']);
         });
     });
 
     // Checkout / Bookings - rate limiting standard
-    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:api'])->group(function () {
         Route::post('/checkout/session', [BookingController::class, 'createCheckoutSession']);
         Route::get('/bookings', [BookingController::class, 'myIndex']);
         Route::get('/bookings/{id}', [BookingController::class, 'show']);
@@ -62,14 +62,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // Favorites - rate limiting spécifique (30/min)
-    Route::middleware(['auth:sanctum', 'throttle:favorites'])->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:favorites'])->group(function () {
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store']);
         Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
     });
 
     // Provider & Admin - rate limiting API standard
-    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:api'])->group(function () {
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
         Route::patch('/provider/bookings/{id}', [BookingController::class, 'providerUpdate']);
 
@@ -83,26 +83,26 @@ Route::prefix('v1')->group(function () {
         Route::delete('/provider/offerings/{id}', [ProviderOfferingController::class, 'destroy']);
         Route::patch('/provider/offerings/{id}/availability', [ProviderOfferingController::class, 'updateAvailability']);
         Route::get('/provider/analytics', [ProviderOfferingController::class, 'analytics']);
-    });
-    
-    // Admin endpoints - rate limiting admin (20/min)
-    Route::middleware(['auth:sanctum', 'throttle:admin'])->group(function () {
-        Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
-        Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
-        
-        Route::get('/admin/providers', [AdminProviderController::class, 'index']);
-        Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
-        Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+
+        // Admin endpoints - avec middleware admin + rate limiting
+        Route::middleware(['admin', 'throttle:admin'])->group(function () {
+            Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
+            Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
+            
+            Route::get('/admin/providers', [AdminProviderController::class, 'index']);
+            Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
+            Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+        });
     });
     
     // Media upload - rate limiting upload (20/hour)
-    Route::middleware(['auth:sanctum', 'throttle:upload'])->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:upload'])->group(function () {
         Route::post('/media', [MediaController::class, 'store']);
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
     });
 
     // Notifications - rate limiting notifications (10/min)
-    Route::middleware(['auth:sanctum', 'throttle:notifications'])->prefix('notifications')->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'throttle:notifications'])->prefix('notifications')->group(function () {
         Route::get('/', [NotificationController::class, 'index']);
         Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
         Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);

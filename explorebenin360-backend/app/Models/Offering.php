@@ -11,10 +11,26 @@ class Offering extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'provider_id', 'place_id', 'type', 'title', 'slug', 'description',
-        'price', 'currency', 'capacity', 'availability_json', 'status',
-        'cover_image_url', 'gallery_json', 'cancellation_policy'
+        'place_id',
+        'type',
+        'title',
+        'slug',
+        'description',
+        'price',
+        'currency',
+        'capacity',
+        'availability_json',
+        'status',
+        'cover_image_url',
+        'gallery_json',
+        'cancellation_policy',
     ];
+
+    protected $hidden = [
+        'provider_id',
+    ];
+
+    protected $with = ['place'];
 
     protected $casts = [
         'availability_json' => 'array',

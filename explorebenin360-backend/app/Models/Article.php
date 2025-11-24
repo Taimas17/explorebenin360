@@ -10,10 +10,28 @@ class Article extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = ['id'];
-
-    protected $casts = [
-        'tags' => 'array',
-        'published_at' => 'datetime',
+    protected $fillable = [
+        'title',
+        'slug',
+        'excerpt',
+        'body',
+        'author_name',
+        'category',
+        'tags',
+        'cover_image_url',
+        'status',
+        'published_at',
     ];
+
+    protected $hidden = [];
+
+    protected function casts(): array
+    {
+        return [
+            'tags' => 'array',
+            'published_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 }
