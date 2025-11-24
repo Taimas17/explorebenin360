@@ -21,6 +21,18 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'business_name',
         'bio',
+        'avatar_url',
+        'cover_image_url',
+        'date_of_birth',
+        'gender',
+        'country',
+        'city',
+        'address',
+        'postal_code',
+        'website_url',
+        'social_links',
+        'preferences',
+        'about_me',
     ];
 
     protected $hidden = [
@@ -41,6 +53,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'kyc_verified' => 'boolean',
             'kyc_documents' => 'array',
             'provider_approved_at' => 'datetime',
+            'date_of_birth' => 'date',
+            'social_links' => 'array',
+            'preferences' => 'array',
         ];
     }
 
@@ -67,5 +82,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function offerings()
     {
         return $this->hasMany(Offering::class, 'provider_id');
+    }
+
+    public function getAgeAttribute(): ?int
+    {
+        if (!$this->date_of_birth) return null;
+        return $this->date_of_birth->age;
+    }
+
+    public function getFullLocationAttribute(): string
+    {
+        $parts = array_filter([$this->city, $this->country]);
+        return implode(', ', $parts);
     }
 }

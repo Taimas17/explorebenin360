@@ -33,6 +33,9 @@
             </RouterLink>
           </template>
           <template v-else>
+            <RouterLink to="/profile" class="hidden sm:inline-flex btn-base focus-ring h-9 px-3 rounded-md">
+              {{ t('nav.profile') }}
+            </RouterLink>
             <RouterLink to="/dashboard/reservations" class="hidden sm:inline-flex btn-base focus-ring h-9 px-3 rounded-md">
               {{ t('nav.my_reservations') }}
             </RouterLink>

@@ -62,7 +62,7 @@ const routes = [
   { path: '/contact', name: 'contact', component: Contact },
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
-  { path: '/profile', name: 'profile', component: Profile },
+  { path: '/profile', name: 'profile', component: Profile, meta: { requiresAuth: true } },
   { path: '/become-provider', name: 'become-provider', component: BecomeProvider, meta: { requiresAuth: true } },
   { path: '/explorer', name: 'explorer', component: Explorer },
 
