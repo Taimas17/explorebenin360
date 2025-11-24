@@ -78,6 +78,7 @@ import { useNotificationsStore } from '@/stores/notifications'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
 import EmptyState from './EmptyState.vue'
+import { isSafeRedirectUrl } from '@/utils/urlValidation'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -107,11 +108,22 @@ async function handleNotificationClick(notif: any) {
   if (!notif.read_at) {
     await store.markAsRead(notif.id)
   }
-  
-  if (notif.data.action_url) {
-    router.push(notif.data.action_url)
+
+  const actionUrl = notif?.data?.action_url as string | undefined
+  if (actionUrl) {
+    if (!isSafeRedirectUrl(actionUrl)) {
+      console.warn('Unsafe redirect URL blocked:', actionUrl)
+      closePanel()
+      return
+    }
+
+    if (actionUrl.startsWith('/')) {
+      router.push(actionUrl)
+    } else {
+      window.open(actionUrl, '_blank', 'noopener,noreferrer')
+    }
   }
-  
+
   closePanel()
 }
 
