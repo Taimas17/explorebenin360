@@ -5,14 +5,14 @@
         <FavoriteToggle type="article" :id="item.id" :entity="{ id: item.id, title: item.title, slug: item.slug, cover_image_url: item.cover_image_url, excerpt: item.excerpt }" />
       </template>
     </BrandBanner>
-    <article class="prose dark:prose-invert max-w-none" v-html="item.body"></article>
+    <article class="prose dark:prose-invert max-w-none" v-html="sanitizedBody"></article>
   </div>
   <div class="container-px mx-auto py-16" v-else>
     <div class="flex gap-3 items-center"><Loader/> <span>Chargement…</span></div>
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { setPageMeta } from '@/utils/meta'
@@ -22,11 +22,14 @@ import BrandBanner from '@/components/ui/BrandBanner.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
 import blogCoverDefault from '@/assets/brand/images/blog/cover-default.png'
+import { sanitizeHtml } from '@/utils/sanitize'
 
 const route = useRoute()
 const item = ref(null)
 const placeholder = blogCoverDefault
 const formatDate = (s) => s ? new Date(s).toLocaleDateString() : ''
+
+const sanitizedBody = computed(() => sanitizeHtml(item.value?.body))
 
 onMounted(async () => {
   const slug = route.params.slug.toString()
