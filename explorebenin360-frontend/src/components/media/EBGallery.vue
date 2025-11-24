@@ -21,13 +21,15 @@ const activeIndex = ref(0)
 const lightboxEl = ref<HTMLDivElement | null>(null)
 const heroEl = ref<HTMLElement | null>(null)
 const prefersReduced = ref(false)
-let timer: any
+let timer: number | null = null
+let mq: MediaQueryList | null = null
+const updatePrefersReduced = () => { prefersReduced.value = mq?.matches ?? false }
 
 function startAutoplay() {
   if (props.variant !== 'hero') return
   if (prefersReduced.value) return
   stopAutoplay()
-  timer = setInterval(() => next(), props.autoplayMs)
+  timer = window.setInterval(() => next(), props.autoplayMs)
 }
 function stopAutoplay() {
   if (timer) { clearInterval(timer); timer = null }
@@ -56,10 +58,9 @@ function onGlobalKey(e: KeyboardEvent) {
 onMounted(() => {
   window.addEventListener('keydown', onGlobalKey)
   if (props.variant === 'hero') {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => { prefersReduced.value = mq.matches }
-    mq.addEventListener?.('change', update)
-    update()
+    mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    updatePrefersReduced()
+    mq.addEventListener('change', updatePrefersReduced)
     startAutoplay()
 
     // Pause on focus inside hero
@@ -70,6 +71,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onGlobalKey)
   stopAutoplay()
+  if (mq) {
+    mq.removeEventListener('change', updatePrefersReduced)
+    mq = null
+  }
   heroEl.value?.removeEventListener('focusin', stopAutoplay)
   heroEl.value?.removeEventListener('focusout', startAutoplay)
 })

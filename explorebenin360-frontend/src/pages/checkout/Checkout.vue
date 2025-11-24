@@ -28,6 +28,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchOffering, createCheckoutSession } from '@/lib/api'
 import { setPageMeta } from '@/utils/meta'
+import { isSafeExternalUrl } from '@/utils/urlValidation'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -50,6 +51,16 @@ const submit = async () => {
     const body = { offering_id: offering.value.id, start_date: startDate.value, guests: guests.value }
     if (endDate.value) body.end_date = endDate.value
     const res = await createCheckoutSession(body)
+
+    if (!res.authorization_url || !isSafeExternalUrl(res.authorization_url)) {
+      throw new Error('Invalid payment URL received')
+    }
+
+    const url = new URL(res.authorization_url)
+    if (!url.hostname.endsWith('paystack.co')) {
+      throw new Error('Invalid payment provider URL')
+    }
+
     window.location.href = res.authorization_url
   } catch (e) {
     alert(t('errors.checkout_failed'))

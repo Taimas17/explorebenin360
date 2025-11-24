@@ -53,6 +53,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 import Button from '@/components/ui/Button.vue'
 import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 import { setPageMeta } from '@/utils/meta'
+import { isSafeRedirectUrl } from '@/utils/urlValidation'
 
 const { t } = useI18n()
 const route = useRoute(); const router = useRouter()
@@ -60,8 +61,21 @@ const banner = destinationsBanner
 
 const q = ref(route.query.q?.toString() || '')
 const types = ref(route.query.type ? route.query.type.toString().split(',') : ['destination','hebergement'])
-const zoom = ref(route.query.zoom ? Number(route.query.zoom) : 7)
-const center = ref(route.query.lat && route.query.lng ? { lat: Number(route.query.lat), lng: Number(route.query.lng) } : null)
+const zoom = ref(
+  route.query.zoom && !isNaN(Number(route.query.zoom))
+    ? Math.max(1, Math.min(18, Number(route.query.zoom)))
+    : 7
+)
+
+const center = ref(
+  route.query.lat && route.query.lng &&
+  !isNaN(Number(route.query.lat)) && !isNaN(Number(route.query.lng))
+    ? {
+        lat: Math.max(-90, Math.min(90, Number(route.query.lat))),
+        lng: Math.max(-180, Math.min(180, Number(route.query.lng))),
+      }
+    : null
+)
 const bbox = ref(route.query.bbox ? route.query.bbox.toString().split(',').map(Number) : null)
 
 const places = ref([])
@@ -115,9 +129,19 @@ const markers = computed(() => {
 })
 
 const onMarkerClick = (id) => {
-  // For now, just navigate if we can find a matching marker
   const m = markers.value.find(m => m.id === id)
-  if (m?.href) window.location.href = m.href
+  if (m?.href) {
+    if (!isSafeRedirectUrl(m.href)) {
+      console.warn('Unsafe URL blocked:', m.href)
+      return
+    }
+
+    if (m.href.startsWith('/')) {
+      router.push(m.href)
+    } else {
+      window.open(m.href, '_blank', 'noopener,noreferrer')
+    }
+  }
 }
 
 const load = async () => {
