@@ -67,3 +67,25 @@ export type Message = {
   body: string
   created_at: string
 }
+
+export type User = {
+  id: number
+  name: string
+  email: string
+  phone?: string | null
+  business_name?: string | null
+  bio?: string | null
+  roles: string[]
+  provider_status: 'none' | 'pending' | 'approved' | 'rejected'
+  account_status: 'active' | 'suspended' | 'banned'
+  email_verified_at?: string | null
+  created_at: string
+  last_login_at?: string | null
+  login_count: number
+  suspended_at?: string | null
+  suspension_reason?: string | null
+  suspended_by?: { id: number; name: string } | null
+  bookings_count?: number
+  favorites_count?: number
+  offerings_count?: number
+}

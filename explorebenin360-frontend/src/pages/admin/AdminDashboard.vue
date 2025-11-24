@@ -26,6 +26,13 @@
       <SmallAreaChart :data="series" color="#16a34a" />
     </div>
 
+    <div class="grid md:grid-cols-2 gap-3 mb-6">
+      <RouterLink to="/admin/users" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les utilisateurs</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Lister, modifier, suspendre et gérer les rôles</div>
+      </RouterLink>
+    </div>
+
     <div>
       <div class="text-sm font-medium mb-2">{{ t('admin.recent_activity') }}</div>
       <ul class="rounded-md border border-black/10 dark:border-white/10 divide-y divide-black/10 dark:divide-white/10">

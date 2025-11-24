@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -55,6 +56,12 @@ class AuthController extends Controller
         if (!$user || !Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages(['email' => ['The provided credentials are incorrect.']]);
         }
+
+        $user->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip(),
+            'login_count' => DB::raw('login_count + 1'),
+        ]);
 
         $token = $user->createToken('spa')->plainTextToken;
         return response()->json(['user' => $user])

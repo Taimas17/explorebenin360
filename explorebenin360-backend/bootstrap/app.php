@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle.upload' => \Illuminate\Routing\Middleware\ThrottleRequests::class.':20,1',
             'sanctum.cookie' => \App\Http\Middleware\SanctumCookieAuth::class,
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'account.active' => \App\Http\Middleware\CheckAccountStatus::class,
         ]);
 
         // Personnaliser les réponses 429
