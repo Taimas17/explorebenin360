@@ -12,6 +12,16 @@ const api = axios.create({
 api.interceptors.response.use(
   (res) => res,
   (err) => {
+    if (err.response?.status === 429) {
+      const retryAfter = err.response.headers['retry-after']
+      console.warn(`Rate limited. Retry after ${retryAfter} seconds`)
+      
+      // Afficher un toast/notification à l'utilisateur
+      // useNotificationStore().add({
+      //   type: 'warning',
+      //   message: `Too many requests. Please wait ${retryAfter} seconds.`
+      // })
+    }
     return Promise.reject(err)
   }
 )
