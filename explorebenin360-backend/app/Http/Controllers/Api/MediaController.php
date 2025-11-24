@@ -17,6 +17,8 @@ class MediaController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Media::class);
+
         $data = $request->validate([
             'model_type' => ['nullable', 'string', 'max:100'],
             'model_id' => ['nullable', 'integer', 'min:1'],
@@ -42,10 +44,11 @@ class MediaController extends Controller
         return response()->json($query->paginate($perPage));
     }
 
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $media = Media::findOrFail($id);
-        return response()->json($media);
+        $this->authorize('view', $media);
+        return response()->json(['data' => $media]);
     }
 
     public function store(Request $request, MediaStorage $storage)

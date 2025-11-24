@@ -179,11 +179,7 @@ class BookingController extends Controller
 
     public function providerUpdate(Request $request, int $id)
     {
-        $user = $request->user();
-        if (!$user->hasRole('provider') && !$user->hasRole('admin')) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
-        $booking = Booking::with('offering','user','offering.provider')->findOrFail($id);
+        $booking = Booking::with('offering', 'user')->findOrFail($id);
         $this->authorize('update', $booking);
         $data = $request->validate([
             'status' => ['required','in:authorized,cancelled'],
