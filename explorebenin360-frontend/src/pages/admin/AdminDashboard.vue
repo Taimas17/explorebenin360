@@ -31,6 +31,26 @@
         <div class="text-sm font-medium mb-1">Gérer les utilisateurs</div>
         <div class="text-xs text-[color:var(--color-text-muted)]">Lister, modifier, suspendre et gérer les rôles</div>
       </RouterLink>
+      <RouterLink to="/admin/accommodations" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les hébergements</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Lister, créer, éditer et supprimer</div>
+      </RouterLink>
+      <RouterLink to="/admin/articles" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les articles</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Blog et actualités</div>
+      </RouterLink>
+      <RouterLink to="/admin/events" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les événements</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Agenda et manifestations</div>
+      </RouterLink>
+      <RouterLink to="/admin/guides" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les guides</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Annuaire des guides</div>
+      </RouterLink>
+      <RouterLink to="/admin/places" class="rounded-md border border-black/10 dark:border-white/10 p-4 hover:bg-black/5 dark:hover:bg-white/5">
+        <div class="text-sm font-medium mb-1">Gérer les destinations</div>
+        <div class="text-xs text-[color:var(--color-text-muted)]">Lieux et attractions</div>
+      </RouterLink>
     </div>
 
     <div>

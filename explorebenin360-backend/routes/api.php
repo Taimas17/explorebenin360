@@ -10,6 +10,11 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\OfferingController;
 use App\Http\Controllers\Api\Payments\PaystackWebhookController;
 use App\Http\Controllers\Api\PlaceController;
+use App\Http\Controllers\Api\Admin\AccommodationAdminController;
+use App\Http\Controllers\Api\Admin\ArticleAdminController;
+use App\Http\Controllers\Api\Admin\EventAdminController;
+use App\Http\Controllers\Api\Admin\GuideAdminController;
+use App\Http\Controllers\Api\Admin\PlaceAdminController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
@@ -118,6 +123,37 @@ Route::prefix('v1')->group(function () {
 
             Route::patch('/admin/users/{id}/roles', [UserAdminController::class, 'updateRoles']);
             Route::post('/admin/users/{id}/reset-password', [UserAdminController::class, 'resetPassword']);
+
+            // Admin content management
+            Route::get('/admin/accommodations', [AccommodationAdminController::class, 'index']);
+            Route::post('/admin/accommodations', [AccommodationAdminController::class, 'store']);
+            Route::get('/admin/accommodations/{id}', [AccommodationAdminController::class, 'show']);
+            Route::patch('/admin/accommodations/{id}', [AccommodationAdminController::class, 'update']);
+            Route::delete('/admin/accommodations/{id}', [AccommodationAdminController::class, 'destroy']);
+
+            Route::get('/admin/articles', [ArticleAdminController::class, 'index']);
+            Route::post('/admin/articles', [ArticleAdminController::class, 'store']);
+            Route::get('/admin/articles/{id}', [ArticleAdminController::class, 'show']);
+            Route::patch('/admin/articles/{id}', [ArticleAdminController::class, 'update']);
+            Route::delete('/admin/articles/{id}', [ArticleAdminController::class, 'destroy']);
+
+            Route::get('/admin/events', [EventAdminController::class, 'index']);
+            Route::post('/admin/events', [EventAdminController::class, 'store']);
+            Route::get('/admin/events/{id}', [EventAdminController::class, 'show']);
+            Route::patch('/admin/events/{id}', [EventAdminController::class, 'update']);
+            Route::delete('/admin/events/{id}', [EventAdminController::class, 'destroy']);
+
+            Route::get('/admin/guides', [GuideAdminController::class, 'index']);
+            Route::post('/admin/guides', [GuideAdminController::class, 'store']);
+            Route::get('/admin/guides/{id}', [GuideAdminController::class, 'show']);
+            Route::patch('/admin/guides/{id}', [GuideAdminController::class, 'update']);
+            Route::delete('/admin/guides/{id}', [GuideAdminController::class, 'destroy']);
+
+            Route::get('/admin/places', [PlaceAdminController::class, 'index']);
+            Route::post('/admin/places', [PlaceAdminController::class, 'store']);
+            Route::get('/admin/places/{id}', [PlaceAdminController::class, 'show']);
+            Route::patch('/admin/places/{id}', [PlaceAdminController::class, 'update']);
+            Route::delete('/admin/places/{id}', [PlaceAdminController::class, 'destroy']);
         });
     });
     
