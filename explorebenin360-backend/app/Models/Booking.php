@@ -22,6 +22,7 @@ class Booking extends Model
         'amount' => 'decimal:2',
         'commission_amount' => 'decimal:2',
         'meta' => 'array',
+        'webhook_processed_at' => 'datetime',
     ];
 
     public function user()
