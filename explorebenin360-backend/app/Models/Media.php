@@ -12,14 +12,42 @@ class Media extends Model
 
     protected $table = 'media';
 
-    protected $guarded = [
-        'id',
-        'created_at',
-        'updated_at',
-        'deleted_at',
+    protected $fillable = [
+        'model_type',
+        'model_id',
+        'type',
+        'url',
+        'provider',
+        'alt',
+        'caption',
+        'width',
+        'height',
+        'size_bytes',
+        'mime',
+        'metadata_json',
+        'created_by',
     ];
 
-    protected $casts = [
-        'metadata_json' => 'array',
+    protected $hidden = [
+        'created_by',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'metadata_json' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function mediable()
+    {
+        return $this->morphTo('model');
+    }
 }

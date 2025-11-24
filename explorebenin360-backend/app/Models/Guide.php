@@ -10,13 +10,42 @@ class Guide extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = ['id'];
-
-    protected $casts = [
-        'languages_json' => 'array',
-        'specialties_json' => 'array',
-        'verified' => 'boolean',
-        'rating_avg' => 'decimal:2',
-        'price_per_day' => 'decimal:2',
+    protected $fillable = [
+        'user_id',
+        'name',
+        'slug',
+        'languages_json',
+        'specialties_json',
+        'bio',
+        'avatar_url',
+        'city',
+        'lat',
+        'lng',
+        'price_per_day',
+        'currency',
+        'verified',
+        'status',
     ];
+
+    protected $hidden = [
+        'user_id',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'languages_json' => 'array',
+            'specialties_json' => 'array',
+            'verified' => 'boolean',
+            'rating_avg' => 'decimal:2',
+            'price_per_day' => 'decimal:2',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

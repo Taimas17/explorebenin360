@@ -10,13 +10,33 @@ class Place extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = ['id'];
-
-    protected $casts = [
-        'opening_hours_json' => 'array',
-        'tags' => 'array',
-        'featured' => 'boolean',
-        'rating_avg' => 'decimal:2',
-        'price_from' => 'decimal:2',
+    protected $fillable = [
+        'title',
+        'slug',
+        'type',
+        'description',
+        'city',
+        'country',
+        'lat',
+        'lng',
+        'price_from',
+        'opening_hours_json',
+        'tags',
+        'cover_image_url',
+        'featured',
+        'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'opening_hours_json' => 'array',
+            'tags' => 'array',
+            'featured' => 'boolean',
+            'rating_avg' => 'decimal:2',
+            'price_from' => 'decimal:2',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 }

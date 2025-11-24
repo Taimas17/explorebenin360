@@ -83,8 +83,8 @@ class ProviderOfferingController extends Controller
             'status' => ['nullable', 'in:draft,published'],
         ]);
         $user = $request->user();
-        $offering = Offering::create([
-            'provider_id' => $user->id,
+
+        $offering = new Offering([
             'title' => $data['title'],
             'slug' => Str::slug($data['title']) . '-' . Str::random(6),
             'type' => $data['type'],
@@ -98,6 +98,9 @@ class ProviderOfferingController extends Controller
             'cancellation_policy' => $data['cancellation_policy'] ?? null,
             'status' => $data['status'] ?? 'draft',
         ]);
+        $offering->provider_id = $user->id;
+        $offering->save();
+
         return response()->json([
             'data' => [
                 'id' => $offering->id,

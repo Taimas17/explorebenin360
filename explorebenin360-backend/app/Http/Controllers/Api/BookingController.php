@@ -46,7 +46,6 @@ class BookingController extends Controller
             'amount' => $amount,
             'currency' => $offering->currency,
             'status' => 'pending',
-            'payment_provider' => 'paystack',
         ]);
 
         // Notify provider of new booking
@@ -71,6 +70,7 @@ class BookingController extends Controller
         ];
 
         $tx = $paystack->initializeTransaction($payload);
+        $booking->payment_provider = 'paystack';
         $booking->payment_ref = $reference;
         $booking->payment_status = 'initialized';
         $booking->save();
