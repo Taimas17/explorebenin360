@@ -11,6 +11,8 @@ class Review extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['is_editable'];
+
     protected $fillable = [
         'reviewable_type',
         'reviewable_id',
