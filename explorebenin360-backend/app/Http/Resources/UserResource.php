@@ -14,16 +14,15 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $roles = [];
-        if ($this->relationLoaded('roles')) {
-            $roles = $this->roles->map(fn($r) => ['name' => is_string($r) ? $r : $r->name])->values();
-        }
+        $roles = $this->relationLoaded('roles') ? $this->roles->pluck('name') : [];
 
         $data = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+
+            // Profile fields from main
             'avatar_url' => $this->avatar_url,
             'cover_image_url' => $this->cover_image_url,
             'date_of_birth' => optional($this->date_of_birth)?->toDateString(),
@@ -38,21 +37,33 @@ class UserResource extends JsonResource
             'social_links' => $this->social_links,
             'preferences' => $this->preferences,
             'about_me' => $this->about_me,
+
+            // Business/provider fields
             'roles' => $roles,
             'provider_status' => $this->provider_status,
             'business_name' => $this->business_name,
             'bio' => $this->bio,
-        ];
 
-        if ($this->whenLoaded('bookings_count')) {
-            $data['bookings_count'] = $this->bookings_count;
-        }
-        if ($this->whenLoaded('favorites_count')) {
-            $data['favorites_count'] = $this->favorites_count;
-        }
-        if ($this->whenLoaded('offerings_count')) {
-            $data['offerings_count'] = $this->offerings_count;
-        }
+            // Admin management fields
+            'account_status' => $this->account_status,
+            'email_verified_at' => $this->email_verified_at,
+            'created_at' => $this->created_at,
+            'last_login_at' => $this->last_login_at,
+            'login_count' => $this->login_count,
+
+            // Suspension details (conditional)
+            'suspended_at' => $this->when($this->isSuspended() || $this->isBanned(), $this->suspended_at),
+            'suspension_reason' => $this->when($this->isSuspended() || $this->isBanned(), $this->suspension_reason),
+            'suspended_by' => $this->when($this->suspendedBy, fn () => [
+                'id' => $this->suspendedBy->id,
+                'name' => $this->suspendedBy->name,
+            ]),
+
+            // Counts
+            'bookings_count' => $this->whenCounted('bookings'),
+            'favorites_count' => $this->whenCounted('favorites'),
+            'offerings_count' => $this->whenCounted('offerings'),
+        ];
 
         return $data;
     }

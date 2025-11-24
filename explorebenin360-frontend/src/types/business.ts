@@ -69,7 +69,7 @@ export type Message = {
 }
 
 export type User = {
-  id?: number
+  id: number
   name: string
   email: string
   phone?: string | null
@@ -78,6 +78,7 @@ export type User = {
   business_name?: string | null
   bio?: string | null
 
+  // Profile fields
   avatar_url?: string | null
   cover_image_url?: string | null
   date_of_birth?: string | null
@@ -101,4 +102,19 @@ export type User = {
     notifications_enabled?: boolean
   } | null
   about_me?: string | null
+
+  // Admin/account management
+  account_status?: 'active' | 'suspended' | 'banned'
+  email_verified_at?: string | null
+  created_at?: string
+  last_login_at?: string | null
+  login_count?: number
+  suspended_at?: string | null
+  suspension_reason?: string | null
+  suspended_by?: { id: number; name: string } | null
+
+  // Counts
+  bookings_count?: number
+  favorites_count?: number
+  offerings_count?: number
 }

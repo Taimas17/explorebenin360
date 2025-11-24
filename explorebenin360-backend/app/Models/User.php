@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -21,6 +22,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'business_name',
         'bio',
+        // Admin management fields
+        'account_status',
+        'suspension_reason',
+        // Profile fields
         'avatar_url',
         'cover_image_url',
         'date_of_birth',
@@ -42,6 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'kyc_verified',
         'kyc_submitted',
         'provider_rejection_reason',
+        'suspended_by',
+        'last_login_ip',
     ];
 
     protected function casts(): array
@@ -53,6 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'kyc_verified' => 'boolean',
             'kyc_documents' => 'array',
             'provider_approved_at' => 'datetime',
+            // Admin management
+            'suspended_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'login_count' => 'integer',
+            // Profile
             'date_of_birth' => 'date',
             'social_links' => 'array',
             'preferences' => 'array',
@@ -69,6 +81,51 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Favorite::class);
     }
 
+    public function offerings()
+    {
+        return $this->hasMany(Offering::class, 'provider_id');
+    }
+
+    public function suspendedBy()
+    {
+        return $this->belongsTo(User::class, 'suspended_by');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('account_status', 'active');
+    }
+
+    public function scopeSuspended($query)
+    {
+        return $query->where('account_status', 'suspended');
+    }
+
+    public function scopeBanned($query)
+    {
+        return $query->where('account_status', 'banned');
+    }
+
+    public function scopeHasRole($query, $role)
+    {
+        return $query->whereHas('roles', fn($q) => $q->where('name', $role));
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->account_status === 'suspended';
+    }
+
+    public function isBanned(): bool
+    {
+        return $this->account_status === 'banned';
+    }
+
+    public function isActive(): bool
+    {
+        return $this->account_status === 'active';
+    }
+
     public function isProvider(): bool
     {
         return $this->provider_status === 'approved';
@@ -77,11 +134,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isProviderPending(): bool
     {
         return $this->provider_status === 'pending';
-    }
-
-    public function offerings()
-    {
-        return $this->hasMany(Offering::class, 'provider_id');
     }
 
     public function getAgeAttribute(): ?int

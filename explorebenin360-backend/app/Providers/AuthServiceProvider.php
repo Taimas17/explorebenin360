@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\Media;
 use App\Models\Booking;
 use App\Models\Offering;
+use App\Models\User;
+use App\Policies\UserPolicy;
 use App\Policies\MediaPolicy;
 use App\Policies\BookingPolicy;
 use App\Policies\OfferingPolicy;
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
         Media::class => MediaPolicy::class,
         Booking::class => BookingPolicy::class,
         Offering::class => OfferingPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     public function boot(): void
