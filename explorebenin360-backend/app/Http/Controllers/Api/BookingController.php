@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookingResource;
 use App\Mail\BookingCancelled;
 use App\Mail\BookingConfirmed;
 use App\Models\Booking;
@@ -84,14 +85,25 @@ class BookingController extends Controller
 
     public function myIndex(Request $request)
     {
-        $user = $request->user();
-        $query = Booking::with('offering')->where('user_id', $user->id)->orderByDesc('id');
-        return response()->json(['data' => $query->paginate(20)]);
+        $bookings = Booking::with([
+            'offering:id,provider_id,title,slug,price,currency,cover_image_url',
+            'offering.provider:id,name,business_name',
+            'user:id,name,email',
+        ])
+        ->where('user_id', $request->user()->id)
+        ->orderByDesc('id')
+        ->paginate(20);
+
+        return BookingResource::collection($bookings);
     }
 
     public function show(Request $request, int $id)
     {
-        $booking = Booking::with('offering','offering.provider','user')->findOrFail($id);
+        $booking = Booking::with([
+            'offering:id,provider_id,title,slug,description,price,currency,cover_image_url',
+            'offering.provider:id,name,email,business_name,phone',
+            'user:id,name,email',
+        ])->findOrFail($id);
         $this->authorize('view', $booking);
         return response()->json(['data' => $booking]);
     }
@@ -120,9 +132,13 @@ class BookingController extends Controller
         if (!$user->hasRole('provider') && !$user->hasRole('admin')) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
-        $query = Booking::with('offering','user')
-            ->whereHas('offering', fn($q)=>$q->where('provider_id', $user->id))
-            ->orderByDesc('id');
+        $query = Booking::with([
+            'offering:id,provider_id,title,slug',
+            'user:id,name,email',
+        ])
+        ->whereHas('offering', fn($q) => $q->where('provider_id', $user->id))
+        ->orderByDesc('id');
+
         return response()->json(['data' => $query->paginate(20)]);
     }
 
@@ -132,16 +148,25 @@ class BookingController extends Controller
         if (!$user->hasRole('admin')) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
+
         $data = $request->validate([
-            'status' => ['nullable','in:pending,authorized,confirmed,cancelled,refunded'],
-            'from' => ['nullable','date'],
-            'to' => ['nullable','date'],
+            'status' => ['nullable', 'in:pending,authorized,confirmed,cancelled,refunded'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
         ]);
-        $query = Booking::with('offering','user')->orderByDesc('id');
-        if (!empty($data['status'])) $query->where('status',$data['status']);
-        if (!empty($data['from'])) $query->whereDate('created_at','>=',$data['from']);
-        if (!empty($data['to'])) $query->whereDate('created_at','<=',$data['to']);
-        return response()->json(['data' => $query->paginate(20)]);
+
+        $query = Booking::with([
+            'offering:id,provider_id,title,slug',
+            'offering.provider:id,name,business_name',
+            'user:id,name,email',
+        ])
+        ->orderByDesc('id');
+
+        if (!empty($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
+        $perPage = $data['per_page'] ?? 20;
+        return response()->json(['data' => $query->paginate($perPage)]);
     }
 
     public function adminUpdate(Request $request, int $id)

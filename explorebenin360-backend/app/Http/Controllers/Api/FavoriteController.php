@@ -15,20 +15,18 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $favorites = Favorite::where('user_id', $user->id)->get();
+        
+        $favorites = Favorite::where('user_id', $user->id)
+            ->get()
+            ->groupBy('type')
+            ->map(fn($items) => $items->pluck('item_id')->toArray());
 
         $grouped = [
-            'destination' => [],
-            'hebergement' => [],
-            'article' => [],
-            'guide' => []
+            'destination' => $favorites->get('destination', []),
+            'hebergement' => $favorites->get('hebergement', []),
+            'article' => $favorites->get('article', []),
+            'guide' => $favorites->get('guide', []),
         ];
-
-        foreach ($favorites as $fav) {
-            if (isset($grouped[$fav->type])) {
-                $grouped[$fav->type][] = $fav->item_id;
-            }
-        }
 
         return response()->json(['data' => $grouped]);
     }

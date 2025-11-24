@@ -170,36 +170,40 @@ class ProviderOfferingController extends Controller
     public function analytics(Request $request)
     {
         $user = $request->user();
+        
         if (!method_exists($user, 'isProvider') || !$user->isProvider()) {
             return response()->json(['message' => 'Provider account required'], 403);
         }
-        $offeringsCount = $user->offerings()->count();
-        $publishedCount = $user->offerings()->where('status', 'published')->count();
+
+        $offeringsStats = DB::table('offerings')
+            ->selectRaw('
+                COUNT(*) as total,
+                SUM(CASE WHEN status = "published" THEN 1 ELSE 0 END) as published
+            ')
+            ->where('provider_id', $user->id)
+            ->whereNull('deleted_at')
+            ->first();
+
         $bookingsStats = DB::table('bookings')
             ->join('offerings', 'bookings.offering_id', '=', 'offerings.id')
             ->where('offerings.provider_id', $user->id)
             ->selectRaw('
                 COUNT(*) as total_bookings,
                 SUM(CASE WHEN bookings.status = "confirmed" THEN 1 ELSE 0 END) as confirmed_bookings,
-                SUM(CASE WHEN bookings.status = "confirmed" THEN bookings.amount ELSE 0 END) as total_revenue,
-                SUM(CASE WHEN bookings.status = "confirmed" THEN (bookings.amount - bookings.commission_amount) ELSE 0 END) as net_revenue
+                COALESCE(SUM(CASE WHEN bookings.status = "confirmed" THEN bookings.amount ELSE 0 END), 0) as total_revenue,
+                COALESCE(SUM(CASE WHEN bookings.status = "confirmed" THEN bookings.commission_amount ELSE 0 END), 0) as total_commission
             ')
             ->first();
+
         return response()->json([
             'data' => [
-                'offerings' => [
-                    'total' => $offeringsCount,
-                    'published' => $publishedCount,
-                ],
-                'bookings' => [
-                    'total' => (int) ($bookingsStats->total_bookings ?? 0),
-                    'confirmed' => (int) ($bookingsStats->confirmed_bookings ?? 0),
-                ],
-                'revenue' => [
-                    'gross' => (float) ($bookingsStats->total_revenue ?? 0),
-                    'net' => (float) ($bookingsStats->net_revenue ?? 0),
-                    'currency' => 'XOF',
-                ],
+                'offerings_count' => $offeringsStats->total ?? 0,
+                'published_count' => $offeringsStats->published ?? 0,
+                'total_bookings' => $bookingsStats->total_bookings ?? 0,
+                'confirmed_bookings' => $bookingsStats->confirmed_bookings ?? 0,
+                'total_revenue' => (float) ($bookingsStats->total_revenue ?? 0),
+                'total_commission' => (float) ($bookingsStats->total_commission ?? 0),
+                'net_earnings' => (float) (($bookingsStats->total_revenue ?? 0) - ($bookingsStats->total_commission ?? 0)),
             ]
         ]);
     }
