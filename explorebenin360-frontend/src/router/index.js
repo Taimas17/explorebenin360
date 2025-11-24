@@ -95,6 +95,27 @@ const routes = [
   { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users/:id', name: 'admin-user-detail', component: AdminUserDetail, meta: { requiresAuth: true, roles: ['admin'] } },
+
+  // Admin content management
+  { path: '/admin/accommodations', name: 'admin-accommodations', component: () => import('@/pages/admin/content/AccommodationsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/accommodations/new', name: 'admin-accommodation-create', component: () => import('@/pages/admin/content/AccommodationForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/accommodations/:id/edit', name: 'admin-accommodation-edit', component: () => import('@/pages/admin/content/AccommodationForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/articles', name: 'admin-articles', component: () => import('@/pages/admin/content/ArticlesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/articles/new', name: 'admin-article-create', component: () => import('@/pages/admin/content/ArticleForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/articles/:id/edit', name: 'admin-article-edit', component: () => import('@/pages/admin/content/ArticleForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/events', name: 'admin-events', component: () => import('@/pages/admin/content/EventsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/events/new', name: 'admin-event-create', component: () => import('@/pages/admin/content/EventForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/events/:id/edit', name: 'admin-event-edit', component: () => import('@/pages/admin/content/EventForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/guides', name: 'admin-guides', component: () => import('@/pages/admin/content/GuidesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/guides/new', name: 'admin-guide-create', component: () => import('@/pages/admin/content/GuideForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/guides/:id/edit', name: 'admin-guide-edit', component: () => import('@/pages/admin/content/GuideForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/places', name: 'admin-places', component: () => import('@/pages/admin/content/PlacesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/places/new', name: 'admin-place-create', component: () => import('@/pages/admin/content/PlaceForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/places/:id/edit', name: 'admin-place-edit', component: () => import('@/pages/admin/content/PlaceForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
 ]
 
 const router = createRouter({
