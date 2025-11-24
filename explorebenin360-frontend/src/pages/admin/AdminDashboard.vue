@@ -9,6 +9,7 @@ import Loader from '@/components/ui/Loader.vue'
 import Alert from '@/components/ui/Alert.vue'
 
 const overview = ref<AnalyticsOverview | null>(null)
+const banner = '/src/assets/brand/images/dashboard/admin/header.png'
 const bookingsTimeseries = ref<TimeseriesData | null>(null)
 const revenueTimeseries = ref<TimeseriesData | null>(null)
 const topAccommodations = ref<any[]>([])
@@ -67,7 +68,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <BrandBanner title="Dashboard Admin" />
+  <BrandBanner :src="banner" alt="Bannière Admin" title="Dashboard Admin" />
   
   <div class="container-px py-8">
     <div class="flex justify-between items-center mb-6">
