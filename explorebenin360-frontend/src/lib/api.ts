@@ -3,12 +3,11 @@ import type { Paginated } from '@/types/pagination'
 import type { Place, Accommodation, Guide, Article, Event } from '@/types/content'
 import type { PlaceFilters, AccommodationFilters, GuideFilters, ArticleFilters, EventFilters } from '@/types/filters'
 
-const api = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1' })
+const api = axios.create({ 
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
+  withCredentials: true
+})
 
-export const setAuthToken = (token?: string | null) => {
-  if (token) api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  else delete api.defaults.headers.common['Authorization']
-}
 
 api.interceptors.response.use(
   (res) => res,
