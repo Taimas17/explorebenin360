@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
 use App\Http\Controllers\Api\AdminProviderController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\Admin\ReviewAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -40,6 +42,9 @@ Route::prefix('v1')->group(function () {
         
         Route::get('/offerings', [OfferingController::class, 'index']);
         Route::get('/offerings/{slug}', [OfferingController::class, 'show']);
+
+        Route::get('/reviews', [ReviewController::class, 'index']);
+        Route::get('/reviews/{id}', [ReviewController::class, 'show']);
     });
 
     // Auth endpoints - rate limiting strict (5/min)
@@ -84,6 +89,12 @@ Route::prefix('v1')->group(function () {
         Route::patch('/provider/offerings/{id}/availability', [ProviderOfferingController::class, 'updateAvailability']);
         Route::get('/provider/analytics', [ProviderOfferingController::class, 'analytics']);
 
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::patch('/reviews/{id}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+        Route::post('/reviews/{id}/helpful', [ReviewController::class, 'helpful']);
+        Route::post('/reviews/{id}/respond', [ReviewController::class, 'respond']);
+
         // Admin endpoints - avec middleware admin + rate limiting
         Route::middleware(['admin', 'throttle:admin'])->group(function () {
             Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
@@ -92,6 +103,10 @@ Route::prefix('v1')->group(function () {
             Route::get('/admin/providers', [AdminProviderController::class, 'index']);
             Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
             Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+
+            Route::get('/admin/reviews', [ReviewAdminController::class, 'index']);
+            Route::patch('/admin/reviews/{id}/approve', [ReviewAdminController::class, 'approve']);
+            Route::patch('/admin/reviews/{id}/reject', [ReviewAdminController::class, 'reject']);
         });
     });
     

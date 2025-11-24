@@ -44,6 +44,13 @@
       </section>
 
       <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
+
+      <section class="mt-8 space-y-4">
+        <h2 class="text-xl font-semibold">Avis</h2>
+        <RatingSummary v-if="item.reviews_summary" :summary="item.reviews_summary" />
+        <ReviewForm v-if="isAuthenticated" :reviewable-type="'App\\\\Models\\\\Accommodation'" :reviewable-id="item.id" @success="reloadReviews" />
+        <ReviewsList :reviewable-type="'App\\\\Models\\\\Accommodation'" :reviewable-id="item.id" @updated="reloadReviews" />
+      </section>
     </div>
   </div>
   <div class="container-px mx-auto py-16" v-else>
@@ -62,6 +69,10 @@ import EBGallery from '@/components/media/EBGallery.vue'
 import MapShell from '@/components/maps/MapShell.vue'
 import AmenitiesIcons from '@/components/hebergements/AmenitiesIcons.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
+import RatingSummary from '@/components/reviews/RatingSummary.vue'
+import ReviewsList from '@/components/reviews/ReviewsList.vue'
+import ReviewForm from '@/components/reviews/ReviewForm.vue'
+import { useAuthStore } from '@/stores/auth'
 import { buildAlt } from '@/utils/a11y'
 import { mapToGalleryItems } from '@/utils/media'
 import hebergementsBanner from '@/assets/brand/images/hebergements/banner-default.png'
@@ -69,13 +80,19 @@ import hebergementsBanner from '@/assets/brand/images/hebergements/banner-defaul
 const route = useRoute()
 const item = ref<any>(null)
 const placeholder = hebergementsBanner
+const auth = useAuthStore()
+const isAuthenticated = computed(() => auth.isAuthenticated)
 
 const galleryItems = computed(() => item.value ? mapToGalleryItems(item.value, { title: item.value.title, fallbackUrl: placeholder }) : [])
 
-onMounted(async () => {
+onMounted(load)
+
+async function load() {
   const slug = route.params.slug.toString()
   const { data } = await fetchAccommodation(slug)
   item.value = data
   setPageMeta({ title: data.seo?.title || `${data.title} — ExploreBenin360`, description: data.seo?.description || (data.description || '').replace(/<[^>]+>/g,'').slice(0,150), path: data.seo?.path || `/hebergements/${data.slug}`, image: data.cover_image_url })
-})
+}
+
+function reloadReviews() { load() }
 </script>

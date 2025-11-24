@@ -27,6 +27,17 @@ class EventResource extends JsonResource
             'cover_image_url' => $this->cover_image_url,
             'status' => $this->status,
             'featured' => (bool) $this->featured,
+            'rating' => round((float) ($this->average_rating ?? 0), 1),
+            'total_reviews' => (int) ($this->total_reviews ?? 0),
+            'reviews_summary' => [
+                'average' => round((float) ($this->average_rating ?? 0), 1),
+                'total' => (int) ($this->total_reviews ?? 0),
+                '5_star' => $this->publishedReviews()->where('rating', 5)->count(),
+                '4_star' => $this->publishedReviews()->where('rating', 4)->count(),
+                '3_star' => $this->publishedReviews()->where('rating', 3)->count(),
+                '2_star' => $this->publishedReviews()->where('rating', 2)->count(),
+                '1_star' => $this->publishedReviews()->where('rating', 1)->count(),
+            ],
             'seo' => [
                 'title' => $this->title . ' — ExploreBenin360',
                 'description' => mb_substr($plain, 0, 160),

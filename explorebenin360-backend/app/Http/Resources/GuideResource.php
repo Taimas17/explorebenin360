@@ -26,6 +26,17 @@ class GuideResource extends JsonResource
             'verified' => (bool) $this->verified,
             'rating_avg' => (float) $this->rating_avg,
             'review_count' => $this->review_count,
+            'rating' => round((float) ($this->rating_avg ?? $this->average_rating), 1),
+            'total_reviews' => (int) ($this->total_reviews ?? $this->review_count),
+            'reviews_summary' => [
+                'average' => round((float) ($this->average_rating ?? $this->rating_avg), 1),
+                'total' => (int) ($this->total_reviews ?? $this->review_count),
+                '5_star' => $this->publishedReviews()->where('rating', 5)->count(),
+                '4_star' => $this->publishedReviews()->where('rating', 4)->count(),
+                '3_star' => $this->publishedReviews()->where('rating', 3)->count(),
+                '2_star' => $this->publishedReviews()->where('rating', 2)->count(),
+                '1_star' => $this->publishedReviews()->where('rating', 1)->count(),
+            ],
             'status' => $this->status,
             'seo' => [
                 'title' => $this->name . ' — Guide — ExploreBenin360',

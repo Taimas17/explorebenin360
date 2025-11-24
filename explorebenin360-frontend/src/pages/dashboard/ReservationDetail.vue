@@ -13,6 +13,11 @@
         <button v-if="item.status==='pending' || item.status==='authorized'" @click="cancel" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.cancel') }}</button>
       </div>
     </div>
+
+    <div v-if="item.status==='confirmed'" class="mt-6">
+      <h2 class="text-lg font-semibold mb-2">Laisser un avis</h2>
+      <ReviewForm :reviewable-type="'App\\\\Models\\\\Offering'" :reviewable-id="item.offering.id" :booking-id="item.id" @success="onReviewSuccess" />
+    </div>
   </div>
 </template>
 <script setup>
@@ -22,6 +27,7 @@ import { useI18n } from 'vue-i18n'
 import { fetchBookingService, cancelBookingService } from '@/lib/services/bookings'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Alert from '@/components/ui/Alert.vue'
+import ReviewForm from '@/components/reviews/ReviewForm.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -30,6 +36,10 @@ const item = ref<any>(null)
 onMounted(async () => {
   item.value = await fetchBookingService(Number(route.params.id))
 })
+
+function onReviewSuccess() {
+  // No-op; could reload booking if needed
+}
 
 const cancel = async () => {
   if (!item.value) return

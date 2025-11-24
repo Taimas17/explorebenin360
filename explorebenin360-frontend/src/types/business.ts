@@ -67,3 +67,43 @@ export type Message = {
   body: string
   created_at: string
 }
+
+export type Review = {
+  id: number
+  reviewable_type: string
+  reviewable_id: number
+  user: { id: number; name: string }
+  booking_id?: number | null
+  rating: number
+  title?: string | null
+  body: string
+  response?: string | null
+  responder?: { id: number; name: string } | null
+  response_at?: string | null
+  helpful_count: number
+  verified_purchase: boolean
+  status: 'pending' | 'published' | 'rejected'
+  is_editable: boolean
+  created_at: string
+}
+
+export type ReviewsResponse = {
+  data: Review[]
+  meta: {
+    total: number
+    current_page: number
+    per_page: number
+    average_rating: number
+    total_reviews: number
+  }
+}
+
+export type ReviewsSummary = {
+  average: number
+  total: number
+  '5_star': number
+  '4_star': number
+  '3_star': number
+  '2_star': number
+  '1_star': number
+}

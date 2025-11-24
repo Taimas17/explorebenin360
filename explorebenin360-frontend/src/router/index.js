@@ -46,6 +46,7 @@ const AdminDashboard = () => import('@/pages/admin/AdminDashboard.vue')
 const AdminReservations = () => import('@/pages/admin/Reservations.vue')
 const AdminProviders = () => import('@/pages/admin/Providers.vue')
 const AdminModeration = () => import('@/pages/admin/ContentModeration.vue')
+const AdminReviewsModeration = () => import('@/pages/admin/ReviewsModeration.vue')
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -91,6 +92,7 @@ const routes = [
   { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/providers', name: 'admin-providers', component: AdminProviders, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/reviews', name: 'admin-reviews', component: AdminReviewsModeration, meta: { requiresAuth: true, roles: ['admin'] } },
 ]
 
 const router = createRouter({

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Review;
+use App\Observers\ReviewObserver;
 use App\Services\MediaStorage\CloudinaryStorage;
 use App\Services\MediaStorage\MediaStorage;
 use App\Services\MediaStorage\S3Storage;
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Review::observe(ReviewObserver::class);
+
         if (app()->environment('local')) {
             DB::listen(function ($query) {
                 Log::channel('queries')->info(
