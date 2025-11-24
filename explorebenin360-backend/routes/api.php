@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Admin\ArticleAdminController;
 use App\Http\Controllers\Api\Admin\EventAdminController;
 use App\Http\Controllers\Api\Admin\GuideAdminController;
 use App\Http\Controllers\Api\Admin\PlaceAdminController;
+use App\Http\Controllers\Api\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProviderOfferingController;
 use App\Http\Controllers\Api\ProviderApplicationController;
@@ -154,6 +155,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/admin/places/{id}', [PlaceAdminController::class, 'show']);
             Route::patch('/admin/places/{id}', [PlaceAdminController::class, 'update']);
             Route::delete('/admin/places/{id}', [PlaceAdminController::class, 'destroy']);
+
+            // Admin analytics
+            Route::prefix('admin/analytics')->group(function () {
+                Route::get('/overview', [AdminAnalyticsController::class, 'overview']);
+                Route::get('/timeseries', [AdminAnalyticsController::class, 'timeseries']);
+                Route::get('/top-content', [AdminAnalyticsController::class, 'topContent']);
+                Route::get('/recent-activity', [AdminAnalyticsController::class, 'recentActivity']);
+                Route::get('/export', [AdminAnalyticsController::class, 'export']);
+            });
         });
     });
     
