@@ -90,60 +90,80 @@ onMounted(() => {
     
     <div v-else-if="overview">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Card title="Utilisateurs">
+        <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+          <div class="text-xs text-[color:var(--color-text-muted)]">Utilisateurs</div>
           <div class="text-3xl font-bold">{{ overview.kpis.users.total.toLocaleString() }}</div>
-          <div class="text-sm text-muted">{{ overview.kpis.users.new }} nouveaux</div>
+          <div class="text-sm text-[color:var(--color-text-muted)]">{{ overview.kpis.users.new }} nouveaux</div>
           <div class="text-sm" :class="overview.kpis.users.growth >= 0 ? 'text-green-600' : 'text-red-600'">
             {{ overview.kpis.users.growth > 0 ? '+' : '' }}{{ overview.kpis.users.growth }}%
           </div>
-        </Card>
+        </div>
         
-        <Card title="Réservations">
+        <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+          <div class="text-xs text-[color:var(--color-text-muted)]">Réservations</div>
           <div class="text-3xl font-bold">{{ overview.kpis.bookings.total.toLocaleString() }}</div>
-          <div class="text-sm text-muted">{{ overview.kpis.bookings.confirmed }} confirmées</div>
+          <div class="text-sm text-[color:var(--color-text-muted)]">{{ overview.kpis.bookings.confirmed }} confirmées</div>
           <div class="text-sm text-green-600">{{ overview.kpis.bookings.conversion_rate }}% conversion</div>
-        </Card>
+        </div>
         
-        <Card title="Revenue">
+        <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+          <div class="text-xs text-[color:var(--color-text-muted)]">Revenue</div>
           <div class="text-3xl font-bold">{{ overview.kpis.revenue.currency }} {{ overview.kpis.revenue.total.toLocaleString() }}</div>
-          <div class="text-sm text-muted">Commission: {{ overview.kpis.revenue.commission.toLocaleString() }}</div>
-          <div class="text-sm text-muted">Moyenne: {{ overview.kpis.revenue.average.toLocaleString() }}</div>
-        </Card>
+          <div class="text-sm text-[color:var(--color-text-muted)]">Commission: {{ overview.kpis.revenue.commission.toLocaleString() }}</div>
+          <div class="text-sm text-[color:var(--color-text-muted)]">Moyenne: {{ overview.kpis.revenue.average.toLocaleString() }}</div>
+        </div>
         
-        <Card title="Providers">
+        <div class="rounded-md border border-black/10 dark:border-white/10 p-4">
+          <div class="text-xs text-[color:var(--color-text-muted)]">Providers</div>
           <div class="text-3xl font-bold">{{ overview.kpis.providers.total.toLocaleString() }}</div>
-          <div class="text-sm text-muted">{{ overview.kpis.providers.pending }} en attente</div>
+          <div class="text-sm text-[color:var(--color-text-muted)]">{{ overview.kpis.providers.pending }} en attente</div>
           <div class="text-sm text-green-600">{{ overview.kpis.providers.active }} actifs</div>
-        </Card>
+        </div>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card title="Réservations">
-          <SmallAreaChart v-if="bookingsTimeseries" :data="bookingsTimeseries.series.map(s => ({ date: s.date, value: s.value }))" color="#3b82f6" />
+        <Card>
+          <template #title>Réservations</template>
+          <template #media>
+            <div class="p-4">
+              <SmallAreaChart v-if="bookingsTimeseries" :data="bookingsTimeseries.series.map(s => ({ date: s.date, value: s.value }))" color="#3b82f6" />
+            </div>
+          </template>
         </Card>
         
-        <Card title="Revenue">
-          <SmallAreaChart v-if="revenueTimeseries" :data="revenueTimeseries.series.map(s => ({ date: s.date, value: s.value }))" color="#10b981" />
+        <Card>
+          <template #title>Revenue</template>
+          <template #media>
+            <div class="p-4">
+              <SmallAreaChart v-if="revenueTimeseries" :data="revenueTimeseries.series.map(s => ({ date: s.date, value: s.value }))" color="#10b981" />
+            </div>
+          </template>
         </Card>
       </div>
       
       <div class="mb-8">
-        <Card title="Top Accommodations (par réservations)">
-          <ul class="space-y-2">
-            <li v-for="item in topAccommodations" :key="item.id" class="flex justify-between items-center border-b pb-2">
-              <span>{{ item.title }}</span>
-              <span class="font-semibold">{{ item.metric_value }} bookings</span>
-            </li>
-          </ul>
+        <Card>
+          <template #title>Top Accommodations (par réservations)</template>
+          <template #media>
+            <ul class="p-4 space-y-2">
+              <li v-for="item in topAccommodations" :key="item.id" class="flex justify-between items-center border-b pb-2">
+                <span>{{ item.title }}</span>
+                <span class="font-semibold">{{ item.metric_value }} bookings</span>
+              </li>
+            </ul>
+          </template>
         </Card>
       </div>
       
-      <Card title="Activités récentes">
-        <ul class="space-y-2">
-          <li v-for="act in recentActivity" :key="act.id" class="text-sm">
-            {{ act.description }} <span class="text-muted">- {{ new Date(act.created_at).toLocaleString() }}</span>
-          </li>
-        </ul>
+      <Card>
+        <template #title>Activités récentes</template>
+        <template #media>
+          <ul class="p-4 space-y-2">
+            <li v-for="act in recentActivity" :key="act.id" class="text-sm">
+              {{ act.description }} <span class="text-[color:var(--color-text-muted)]">- {{ new Date(act.created_at).toLocaleString() }}</span>
+            </li>
+          </ul>
+        </template>
       </Card>
     </div>
   </div>
