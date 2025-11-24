@@ -28,6 +28,8 @@ class NotificationController extends Controller
         }
 
         $notifications = $query->limit($limit)->get();
+        
+        $unreadCount = $unreadOnly ? $notifications->count() : $user->unreadNotifications->count();
 
         return response()->json([
             'data' => $notifications->map(function ($notification) {
@@ -40,7 +42,7 @@ class NotificationController extends Controller
                 ];
             }),
             'meta' => [
-                'unread_count' => $user->unreadNotifications()->count(),
+                'unread_count' => $unreadCount,
             ]
         ]);
     }
