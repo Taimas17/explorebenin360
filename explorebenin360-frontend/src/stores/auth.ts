@@ -1,26 +1,25 @@
 import { defineStore } from 'pinia'
-import { apiLogin, apiRegister, apiLogout, apiMe, setAuthToken } from '@/lib/api'
+import { apiLogin, apiRegister, apiLogout, apiMe } from '@/lib/api'
 import { useFavoritesStore } from './favorites'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ user: null as any, token: (typeof window !== 'undefined' ? localStorage.getItem('eb360_token') : null) as string | null, loading: false }),
+  state: () => ({ 
+    user: null as any,
+    loading: false 
+  }),
   getters: {
-    isAuthenticated: (s) => !!s.token,
+    isAuthenticated: (s) => !!s.user,
     roles: (s) => Array.isArray(s.user?.roles) ? s.user.roles.map((r: any) => (typeof r === 'string' ? r : r.name)) : [],
     hasRole() { return (role: string) => (this.roles as string[]).includes(role) },
   },
   actions: {
     init() {
-      if (this.token) setAuthToken(this.token)
-      if (this.token) this.fetchMe()
+      this.fetchMe()
     },
     async register(payload: { name: string; email: string; password: string }) {
       this.loading = true
       try {
         const res: any = await apiRegister(payload)
-        this.token = res.token
-        localStorage.setItem('eb360_token', this.token!)
-        setAuthToken(this.token)
         this.user = res.user
         await this.fetchMe()
         try { await useFavoritesStore().syncOnLogin() } catch {}
@@ -30,9 +29,6 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       try {
         const res: any = await apiLogin(payload)
-        this.token = res.token
-        localStorage.setItem('eb360_token', this.token!)
-        setAuthToken(this.token)
         this.user = res.user
         await this.fetchMe()
         try { await useFavoritesStore().syncOnLogin() } catch {}
@@ -40,10 +36,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       try { await apiLogout() } catch {}
-      this.token = null
       this.user = null
-      localStorage.removeItem('eb360_token')
-      setAuthToken(null)
       try { useFavoritesStore().onLogout() } catch {}
     },
     async fetchMe() {

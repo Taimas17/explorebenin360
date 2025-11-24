@@ -41,7 +41,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware(['sanctum.cookie', 'auth:sanctum'])->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/me', [AuthController::class, 'me']);
         });
@@ -52,7 +52,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/offerings/{slug}', [OfferingController::class, 'show']);
 
     // Checkout / Bookings
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum'])->group(function () {
         Route::post('/checkout/session', [BookingController::class, 'createCheckoutSession']);
         Route::get('/bookings', [BookingController::class, 'myIndex']);
         Route::get('/bookings/{id}', [BookingController::class, 'show']);
@@ -60,14 +60,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // Favorites
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum'])->group(function () {
         Route::get('/favorites', [FavoriteController::class, 'index']);
         Route::post('/favorites', [FavoriteController::class, 'store']);
         Route::post('/favorites/remove', [FavoriteController::class, 'remove']);
     });
 
     // Provider & Admin JSON endpoints
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['sanctum.cookie', 'auth:sanctum'])->group(function () {
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
         Route::patch('/provider/bookings/{id}', [BookingController::class, 'providerUpdate']);
 
