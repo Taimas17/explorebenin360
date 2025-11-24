@@ -67,3 +67,38 @@ export type Message = {
   body: string
   created_at: string
 }
+
+export type User = {
+  id?: number
+  name: string
+  email: string
+  phone?: string | null
+  roles?: Array<{ name: string }>|string[]
+  provider_status?: 'none'|'pending'|'approved'|'rejected'|'suspended'
+  business_name?: string | null
+  bio?: string | null
+
+  avatar_url?: string | null
+  cover_image_url?: string | null
+  date_of_birth?: string | null
+  age?: number | null
+  gender?: 'male' | 'female' | 'other' | 'prefer_not_to_say' | null
+  country?: string | null
+  city?: string | null
+  full_location?: string
+  address?: string | null
+  postal_code?: string | null
+  website_url?: string | null
+  social_links?: {
+    facebook?: string
+    instagram?: string
+    twitter?: string
+    linkedin?: string
+  } | null
+  preferences?: {
+    language?: 'fr' | 'en'
+    currency?: 'XOF' | 'EUR' | 'USD'
+    notifications_enabled?: boolean
+  } | null
+  about_me?: string | null
+}
