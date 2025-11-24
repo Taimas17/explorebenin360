@@ -12,18 +12,23 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
+        $data = $request->validate([
+            'unread_only' => ['nullable', 'boolean'],
+            'limit' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $user = $request->user();
-        $limit = min((int)$request->get('limit', 20), 100);
-        $unreadOnly = $request->boolean('unread_only');
-        
+        $limit = $data['limit'] ?? 20;
+        $unreadOnly = $data['unread_only'] ?? false;
+
         $query = $user->notifications();
         
         if ($unreadOnly) {
             $query->whereNull('read_at');
         }
-        
+
         $notifications = $query->limit($limit)->get();
-        
+
         return response()->json([
             'data' => $notifications->map(function ($notification) {
                 return [
