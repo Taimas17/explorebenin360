@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\AdminProviderController;
 use App\Http\Controllers\Api\UserAdminController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -66,6 +67,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/bookings', [BookingController::class, 'myIndex']);
         Route::get('/bookings/{id}', [BookingController::class, 'show']);
         Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
+    });
+
+    // Messages - rate limiting standard (60/min)
+    Route::middleware(['sanctum.cookie', 'auth:sanctum', 'account.active', 'throttle:api'])->prefix('messages')->group(function () {
+        Route::get('/threads', [MessageController::class, 'listThreads']);
+        Route::post('/threads', [MessageController::class, 'store']);
+        Route::get('/threads/{id}', [MessageController::class, 'show']);
+        Route::post('/threads/{id}', [MessageController::class, 'reply']);
+        Route::patch('/threads/{id}/close', [MessageController::class, 'close'])->middleware('admin');
     });
 
     // Favorites - rate limiting spécifique (30/min)

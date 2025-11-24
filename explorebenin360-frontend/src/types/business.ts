@@ -52,19 +52,26 @@ export type Payout = {
   reference: string
 }
 
-export type Thread = {
+export type MessageThread = {
   id: number
   subject: string
+  status: 'open' | 'closed'
+  traveler: { id: number; name: string }
+  provider: { id: number; name: string; business_name?: string }
+  booking?: { id: number; offering_title: string; start_date: string } | null
+  offering?: { id: number; title: string; slug: string } | null
   unread_count: number
   last_message_preview: string
-  updated_at: string
+  last_message_at: string
+  created_at: string
 }
 
 export type Message = {
   id: number
   thread_id: number
-  author: { id: number; name: string }
+  sender: { id: number; name: string }
   body: string
+  read_at: string | null
   created_at: string
 }
 

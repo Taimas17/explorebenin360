@@ -86,6 +86,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Offering::class, 'provider_id');
     }
 
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function threadsAsProvider()
+    {
+        return $this->hasMany(MessageThread::class, 'provider_id');
+    }
+
+    public function threadsAsTraveler()
+    {
+        return $this->hasMany(MessageThread::class, 'traveler_id');
+    }
+
     public function suspendedBy()
     {
         return $this->belongsTo(User::class, 'suspended_by');

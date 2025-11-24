@@ -11,6 +11,7 @@ use App\Models\Article;
 use App\Models\Event;
 use App\Models\Guide;
 use App\Models\Place;
+use App\Models\MessageThread;
 use App\Policies\UserPolicy;
 use App\Policies\MediaPolicy;
 use App\Policies\BookingPolicy;
@@ -20,6 +21,7 @@ use App\Policies\ArticlePolicy;
 use App\Policies\EventPolicy;
 use App\Policies\GuidePolicy;
 use App\Policies\PlacePolicy;
+use App\Policies\MessageThreadPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -35,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         Event::class => EventPolicy::class,
         Guide::class => GuidePolicy::class,
         Place::class => PlacePolicy::class,
+        MessageThread::class => MessageThreadPolicy::class,
     ];
 
     public function boot(): void
