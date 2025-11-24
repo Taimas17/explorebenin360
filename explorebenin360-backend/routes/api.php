@@ -71,8 +71,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
         Route::patch('/provider/bookings/{id}', [BookingController::class, 'providerUpdate']);
 
-        Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
-        Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
+        Route::middleware(['admin'])->group(function () {
+            Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
+            Route::patch('/admin/bookings/{id}', [BookingController::class, 'adminUpdate']);
+        });
 
         Route::post('/provider/apply', [ProviderApplicationController::class, 'apply']);
         Route::get('/provider/status', [ProviderApplicationController::class, 'status']);
@@ -84,9 +86,11 @@ Route::prefix('v1')->group(function () {
         Route::patch('/provider/offerings/{id}/availability', [ProviderOfferingController::class, 'updateAvailability']);
         Route::get('/provider/analytics', [ProviderOfferingController::class, 'analytics']);
 
-        Route::get('/admin/providers', [AdminProviderController::class, 'index']);
-        Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
-        Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+        Route::middleware(['admin'])->group(function () {
+            Route::get('/admin/providers', [AdminProviderController::class, 'index']);
+            Route::patch('/admin/providers/{id}/approve', [AdminProviderController::class, 'approve']);
+            Route::patch('/admin/providers/{id}/reject', [AdminProviderController::class, 'reject']);
+        });
 
         // Protected media mgmt
         Route::post('/media', [MediaController::class, 'store']);

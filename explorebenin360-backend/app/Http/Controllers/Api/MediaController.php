@@ -17,6 +17,7 @@ class MediaController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Media::class);
         $query = Media::query();
         if ($request->filled('model_type')) {
             $query->where('model_type', $request->string('model_type'));
@@ -27,10 +28,11 @@ class MediaController extends Controller
         return response()->json($query->latest()->paginate(20));
     }
 
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $media = Media::findOrFail($id);
-        return response()->json($media);
+        $this->authorize('view', $media);
+        return response()->json(['data' => $media]);
     }
 
     public function store(Request $request, MediaStorage $storage)
