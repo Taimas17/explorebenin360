@@ -17,49 +17,62 @@ class MediaController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Media::class);
+
+        $data = $request->validate([
+            'model_type' => ['nullable', 'string', 'max:100'],
+            'model_id' => ['nullable', 'integer', 'min:1'],
+            'type' => ['nullable', 'in:image,video,panorama,document'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+
         $query = Media::query();
+
         if ($request->filled('model_type')) {
-            $query->where('model_type', $request->string('model_type'));
+            $query->where('model_type', $data['model_type']);
         }
+
         if ($request->filled('model_id')) {
-            $query->where('model_id', $request->integer('model_id'));
+            $query->where('model_id', $data['model_id']);
         }
-        return response()->json($query->latest()->paginate(20));
+        
+        if ($request->filled('type')) {
+            $query->where('type', $data['type']);
+        }
+
+        $perPage = $data['per_page'] ?? 15;
+        return response()->json($query->paginate($perPage));
     }
 
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $media = Media::findOrFail($id);
-        return response()->json($media);
+        $this->authorize('view', $media);
+        return response()->json(['data' => $media]);
     }
 
     public function store(Request $request, MediaStorage $storage)
     {
         $this->authorize('create', Media::class);
 
+        $data = $request->validate([
+            'model_type' => ['nullable', 'string', 'max:100'],
+            'model_id' => ['nullable', 'integer', 'min:1'],
+            'files' => ['required_without:file', 'array', 'max:10'],
+            'files.*' => ['file', 'max:' . (config('media.max_size_mb') * 1024)],
+            'file' => ['required_without:files', 'file', 'max:' . (config('media.max_size_mb') * 1024)],
+            'type' => ['nullable', Rule::in(['image', 'video', 'panorama', 'document'])],
+            'alt' => ['nullable', 'string', 'max:255'],
+            'caption' => ['nullable', 'string'],
+        ]);
+
         $maxSizeMb = (int) Config::get('media.max_size_mb', 15);
         $allowedMimes = Config::get('media.allowed_mimes');
 
-        $rules = [
-            'files' => ['required'],
-            'files.*' => [
-                'file',
-                'max:' . ($maxSizeMb * 1024), // in kilobytes
-                Rule::in($allowedMimes),
-            ],
-            'type' => ['nullable', Rule::in(['image', 'video', 'panorama', 'document'])],
-            'model_type' => ['nullable', 'string'],
-            'model_id' => ['nullable', 'integer'],
-            'alt' => ['nullable', 'string', 'max:255'],
-            'caption' => ['nullable', 'string'],
-        ];
-
-        // Manually validate MIME since Laravel's Rule::in isn't for mimetypes on files
         $validator = Validator::make($request->all(), [
-            'files' => ['required'],
             'type' => ['nullable', Rule::in(['image', 'video', 'panorama', 'document'])],
-            'model_type' => ['nullable', 'string'],
-            'model_id' => ['nullable', 'integer'],
+            'model_type' => ['nullable', 'string', 'max:100'],
+            'model_id' => ['nullable', 'integer', 'min:1'],
             'alt' => ['nullable', 'string', 'max:255'],
             'caption' => ['nullable', 'string'],
         ]);
@@ -68,6 +81,9 @@ class MediaController extends Controller
             if (empty($files)) {
                 $v->errors()->add('files', 'No files provided.');
                 return;
+            }
+            if (count($files) > 10) {
+                $v->errors()->add('files', 'Too many files. Maximum is 10.');
             }
             foreach ($files as $file) {
                 if ($file->getSize() > $maxSizeMb * 1024 * 1024) {

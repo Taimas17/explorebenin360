@@ -43,7 +43,7 @@ class ProviderOfferingController extends Controller
     public function show(Request $request, int $id)
     {
         $offering = Offering::findOrFail($id);
-        $this->authorize('update', $offering);
+        $this->authorize('view', $offering);
         return response()->json([
             'data' => [
                 'id' => $offering->id,
