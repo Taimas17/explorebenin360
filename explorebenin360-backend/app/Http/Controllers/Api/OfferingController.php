@@ -53,6 +53,18 @@ class OfferingController extends Controller
     public function show(string $slug)
     {
         $item = Offering::with('place','provider')->where('slug',$slug)->where('status','published')->firstOrFail();
+        $summary = [
+            'average' => round((float) ($item->average_rating ?? 0), 1),
+            'total' => (int) ($item->total_reviews ?? 0),
+            '5_star' => $item->publishedReviews()->where('rating', 5)->count(),
+            '4_star' => $item->publishedReviews()->where('rating', 4)->count(),
+            '3_star' => $item->publishedReviews()->where('rating', 3)->count(),
+            '2_star' => $item->publishedReviews()->where('rating', 2)->count(),
+            '1_star' => $item->publishedReviews()->where('rating', 1)->count(),
+        ];
+        $item->setAttribute('rating', round((float) ($item->average_rating ?? 0), 1));
+        $item->setAttribute('total_reviews', (int) ($item->total_reviews ?? 0));
+        $item->setAttribute('reviews_summary', $summary);
         return response()->json(['data' => $item]);
     }
 }
