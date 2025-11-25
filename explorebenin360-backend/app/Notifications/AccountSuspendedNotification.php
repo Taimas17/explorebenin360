@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class AccountSuspendedNotification extends Notification
+class AccountSuspendedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -15,7 +16,7 @@ class AccountSuspendedNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toArray($notifiable): array
@@ -26,5 +27,11 @@ class AccountSuspendedNotification extends Notification
             'suspended_at' => now(),
             'action_url' => '/contact',
         ];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new \App\Mail\AccountSuspended($notifiable, $this->reason))
+            ->to($notifiable->email);
     }
 }

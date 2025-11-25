@@ -4,9 +4,10 @@ namespace App\Notifications;
 
 use App\Models\Booking;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class NewBookingNotification extends Notification
+class NewBookingNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -16,7 +17,7 @@ class NewBookingNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toArray($notifiable): array
@@ -34,5 +35,11 @@ class NewBookingNotification extends Notification
             ),
             'action_url' => "/provider/reservations/{$this->booking->id}",
         ];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new \App\Mail\NewBookingProvider($this->booking))
+            ->to($notifiable->email);
     }
 }

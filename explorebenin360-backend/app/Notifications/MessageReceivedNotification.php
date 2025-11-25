@@ -5,10 +5,11 @@ namespace App\Notifications;
 use App\Models\MessageThread;
 use App\Models\Message;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-class MessageReceivedNotification extends Notification
+class MessageReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -18,7 +19,7 @@ class MessageReceivedNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toArray($notifiable): array
@@ -36,5 +37,11 @@ class MessageReceivedNotification extends Notification
                 Str::limit($this->message->body, 80)
             ),
         ];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new \App\Mail\MessageReceived($this->thread, $this->message))
+            ->to($notifiable->email);
     }
 }
