@@ -85,7 +85,6 @@ export type User = {
   business_name?: string | null
   bio?: string | null
 
-  // Profile fields
   avatar_url?: string | null
   cover_image_url?: string | null
   date_of_birth?: string | null
@@ -110,7 +109,6 @@ export type User = {
   } | null
   about_me?: string | null
 
-  // Admin/account management
   account_status?: 'active' | 'suspended' | 'banned'
   email_verified_at?: string | null
   created_at?: string
@@ -120,8 +118,31 @@ export type User = {
   suspension_reason?: string | null
   suspended_by?: { id: number; name: string } | null
 
-  // Counts
   bookings_count?: number
   favorites_count?: number
   offerings_count?: number
+}
+
+export type ReviewStatus = 'pending' | 'approved' | 'rejected'
+
+export type Review = {
+  id: number
+  user: {
+    id: number
+    name: string
+    avatar_url?: string | null
+  }
+  booking_id?: number
+  reviewable_type?: string
+  reviewable_id?: number
+  rating: number
+  comment: string | null
+  status: ReviewStatus
+  created_at: string
+  approved_at?: string | null
+}
+
+export type ReviewStats = {
+  rating_avg: number
+  review_count: number
 }

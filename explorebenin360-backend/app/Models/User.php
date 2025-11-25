@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Review;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -99,6 +100,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function threadsAsTraveler()
     {
         return $this->hasMany(MessageThread::class, 'traveler_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     public function suspendedBy()

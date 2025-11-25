@@ -15,6 +15,10 @@
 
     <div class="prose dark:prose-invert max-w-none" v-html="sanitizedDescription"></div>
 
+    <div class="mt-8">
+      <ReviewsList reviewable-type="places" :reviewable-id="item.id" />
+    </div>
+
     <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
   </div>
   <div class="container-px mx-auto py-16" v-else>
@@ -34,6 +38,7 @@ import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import EBGallery from '@/components/media/EBGallery.vue'
 import { mapToGalleryItems } from '@/utils/media'
 import { sanitizeHtml } from '@/utils/sanitize'
+import ReviewsList from '@/components/reviews/ReviewsList.vue'
 import destinationsBanner from '@/assets/brand/images/destinations/banner-default.png'
 
 const route = useRoute()

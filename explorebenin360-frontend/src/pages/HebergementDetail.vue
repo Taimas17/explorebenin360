@@ -43,6 +43,10 @@
         <AmenitiesIcons :amenities="item.amenities || []" />
       </section>
 
+      <div class="mt-8">
+        <ReviewsList reviewable-type="accommodations" :reviewable-id="item.id" />
+      </div>
+
       <MapShell :markers="[{ lat: item.lat, lng: item.lng, title: item.title }]" />
     </div>
   </div>
@@ -64,6 +68,7 @@ import AmenitiesIcons from '@/components/hebergements/AmenitiesIcons.vue'
 import FavoriteToggle from '@/components/ui/FavoriteToggle.vue'
 import { buildAlt } from '@/utils/a11y'
 import { mapToGalleryItems } from '@/utils/media'
+import ReviewsList from '@/components/reviews/ReviewsList.vue'
 import hebergementsBanner from '@/assets/brand/images/hebergements/banner-default.png'
 
 const route = useRoute()

@@ -95,6 +95,7 @@ const routes = [
   { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users/:id', name: 'admin-user-detail', component: AdminUserDetail, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/reviews', name: 'admin-reviews', component: () => import('@/pages/admin/ReviewsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
 
   // Admin content management
   { path: '/admin/accommodations', name: 'admin-accommodations', component: () => import('@/pages/admin/content/AccommodationsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
