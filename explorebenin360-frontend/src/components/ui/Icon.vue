@@ -2,11 +2,11 @@
   <component :is="iconComp" class="h-6 w-6" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { HomeIcon, MapIcon, BookOpenIcon, BuildingOfficeIcon, UserIcon, SunIcon, MoonIcon, ArrowRightIcon, CheckIcon, WifiIcon, SparklesIcon, TruckIcon, TvIcon, HomeModernIcon, Cog6ToothIcon, HeartIcon, BellIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps({ name: { type: String, required: true } })
+const props = defineProps<{ name: string }>()
 
 const map: Record<string, any> = {
   Home: HomeIcon,

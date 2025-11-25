@@ -1,0 +1,157 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { fetchProviderStatus } from '@/lib/api'
+
+const Home = () => import('@/pages/Home.vue')
+const Destinations = () => import('@/pages/Destinations.vue')
+const DestinationDetail = () => import('@/pages/DestinationDetail.vue')
+const Experiences = () => import('@/pages/Experiences.vue')
+const Hebergements = () => import('@/pages/Hebergements.vue')
+const HebergementDetail = () => import('@/pages/HebergementDetail.vue')
+const Guides = () => import('@/pages/Guides.vue')
+const Blog = () => import('@/pages/Blog.vue')
+const ArticleDetail = () => import('@/pages/ArticleDetail.vue')
+const Agenda = () => import('@/pages/Agenda.vue')
+const EventDetail = () => import('@/pages/EventDetail.vue')
+const Contact = () => import('@/pages/Contact.vue')
+const Login = () => import('@/pages/Auth/Login.vue')
+const Register = () => import('@/pages/Auth/Register.vue')
+const Profile = () => import('@/pages/Profile.vue')
+const Explorer = () => import('@/pages/Explorer.vue')
+
+const BecomeProvider = () => import('@/pages/BecomeProvider.vue')
+
+const Offerings = () => import('@/pages/offerings/Offerings.vue')
+const OfferingDetail = () => import('@/pages/offerings/OfferingDetail.vue')
+const Checkout = () => import('@/pages/checkout/Checkout.vue')
+const Callback = () => import('@/pages/checkout/Callback.vue')
+
+// Traveler
+const TravelerReservations = () => import('@/pages/dashboard/Reservations.vue')
+const TravelerReservationDetail = () => import('@/pages/dashboard/ReservationDetail.vue')
+const TravelerFavorites = () => import('@/pages/dashboard/Favorites.vue')
+const TravelerMessages = () => import('@/pages/dashboard/Messages.vue')
+
+// Provider
+const ProviderDashboard = () => import('@/pages/provider/ProviderDashboard.vue')
+const ProviderReservations = () => import('@/pages/provider/Reservations.vue')
+const ProviderOffers = () => import('@/pages/provider/Offers.vue')
+const ProviderOfferCreate = () => import('@/pages/provider/OfferCreate.vue')
+const ProviderOfferEdit = () => import('@/pages/provider/OfferEdit.vue')
+const ProviderCalendar = () => import('@/pages/provider/Calendar.vue')
+const ProviderEarnings = () => import('@/pages/provider/Earnings.vue')
+
+// Admin
+const AdminDashboard = () => import('@/pages/admin/AdminDashboard.vue')
+const AdminReservations = () => import('@/pages/admin/Reservations.vue')
+const AdminProviders = () => import('@/pages/admin/Providers.vue')
+const AdminModeration = () => import('@/pages/admin/ContentModeration.vue')
+const AdminUsers = () => import('@/pages/admin/UsersManagement.vue')
+const AdminUserDetail = () => import('@/pages/admin/UserDetail.vue')
+
+const routes = [
+  { path: '/', name: 'home', component: Home },
+  { path: '/destinations', name: 'destinations', component: Destinations },
+  { path: '/destinations/:slug', name: 'destination-detail', component: DestinationDetail },
+  { path: '/experiences', name: 'experiences', component: Experiences },
+  { path: '/hebergements', name: 'hebergements', component: Hebergements },
+  { path: '/hebergements/:slug', name: 'hebergement-detail', component: HebergementDetail },
+  { path: '/guides', name: 'guides', component: Guides },
+  { path: '/blog', name: 'blog', component: Blog },
+  { path: '/blog/:slug', name: 'article-detail', component: ArticleDetail },
+  { path: '/agenda', name: 'agenda', component: Agenda },
+  { path: '/agenda/:slug', name: 'event-detail', component: EventDetail },
+  { path: '/contact', name: 'contact', component: Contact },
+  { path: '/login', name: 'login', component: Login },
+  { path: '/register', name: 'register', component: Register },
+  { path: '/profile', name: 'profile', component: Profile, meta: { requiresAuth: true } },
+  { path: '/become-provider', name: 'become-provider', component: BecomeProvider, meta: { requiresAuth: true } },
+  { path: '/explorer', name: 'explorer', component: Explorer },
+
+  { path: '/offerings', name: 'offerings', component: Offerings },
+  { path: '/offerings/:slug', name: 'offering-detail', component: OfferingDetail },
+  { path: '/checkout/:slug', name: 'checkout', component: Checkout, meta: { requiresAuth: true, roles: ['traveler','provider','admin'] } },
+  { path: '/checkout/callback', name: 'checkout-callback', component: Callback },
+
+  // Traveler
+  { path: '/dashboard/reservations', name: 'reservations', component: TravelerReservations, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/reservations/:id', name: 'reservation-detail', component: TravelerReservationDetail, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/favorites', name: 'favorites', component: TravelerFavorites, meta: { requiresAuth: true, roles: ['traveler'] } },
+  { path: '/dashboard/messages', name: 'messages', component: TravelerMessages, meta: { requiresAuth: true, roles: ['traveler'] } },
+
+  // Provider
+  { path: '/provider', name: 'provider-dashboard', component: ProviderDashboard, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/reservations', name: 'provider-reservations', component: ProviderReservations, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers', name: 'provider-offers', component: ProviderOffers, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers/new', name: 'provider-offer-create', component: ProviderOfferCreate, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/payment-methods', name: 'provider-payment-methods', component: () => import('@/pages/provider/PaymentMethods.vue'), meta: { requiresAuth: true, requiresProvider: true } },
+
+  // Admin
+  { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/reservations', name: 'admin-reservations', component: AdminReservations, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/providers', name: 'admin-providers', component: AdminProviders, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/users', name: 'admin-users', component: AdminUsers, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/users/:id', name: 'admin-user-detail', component: AdminUserDetail, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/payouts', name: 'admin-payouts', component: () => import('@/pages/admin/PayoutsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  // Admin content management
+  { path: '/admin/accommodations', name: 'admin-accommodations', component: () => import('@/pages/admin/content/AccommodationsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/accommodations/new', name: 'admin-accommodation-create', component: () => import('@/pages/admin/content/AccommodationForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/accommodations/:id/edit', name: 'admin-accommodation-edit', component: () => import('@/pages/admin/content/AccommodationForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/articles', name: 'admin-articles', component: () => import('@/pages/admin/content/ArticlesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/articles/new', name: 'admin-article-create', component: () => import('@/pages/admin/content/ArticleForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/articles/:id/edit', name: 'admin-article-edit', component: () => import('@/pages/admin/content/ArticleForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/events', name: 'admin-events', component: () => import('@/pages/admin/content/EventsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/events/new', name: 'admin-event-create', component: () => import('@/pages/admin/content/EventForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/events/:id/edit', name: 'admin-event-edit', component: () => import('@/pages/admin/content/EventForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/guides', name: 'admin-guides', component: () => import('@/pages/admin/content/GuidesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/guides/new', name: 'admin-guide-create', component: () => import('@/pages/admin/content/GuideForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/guides/:id/edit', name: 'admin-guide-edit', component: () => import('@/pages/admin/content/GuideForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+
+  { path: '/admin/places', name: 'admin-places', component: () => import('@/pages/admin/content/PlacesManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/places/new', name: 'admin-place-create', component: () => import('@/pages/admin/content/PlaceForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/places/:id/edit', name: 'admin-place-edit', component: () => import('@/pages/admin/content/PlaceForm.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+  scrollBehavior() { return { top: 0 } },
+})
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+  if (to.meta?.requiresAuth && !auth.isAuthenticated) {
+    return { name: 'login', query: { redirect: to.fullPath, reason: 'login_required' } }
+  }
+  if (to.meta?.requiresProvider) {
+    try {
+      const status = await fetchProviderStatus()
+      // @ts-ignore
+      if (status.data?.provider_status !== 'approved') {
+        return { name: 'become-provider' }
+      }
+    } catch (e) {
+      return { name: 'become-provider' }
+    }
+  }
+  const roles = (to.meta?.roles) as string[] | undefined
+  if (roles && roles.length) {
+    const hasRole = roles.some((r) => auth.hasRole(r))
+    if (!hasRole) {
+      if (auth.hasRole('admin')) return { name: 'admin-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('provider')) return { name: 'provider-dashboard', query: { guard: 'access_denied' } }
+      if (auth.hasRole('traveler')) return { name: 'reservations', query: { guard: 'access_denied' } }
+      return { name: 'home', query: { guard: 'access_denied' } }
+    }
+  }
+})
+
+export default router
