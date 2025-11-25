@@ -87,6 +87,7 @@ const routes = [
   { path: '/provider/offers/:id', name: 'provider-offer-edit', component: ProviderOfferEdit, meta: { requiresAuth: true, requiresProvider: true } },
   { path: '/provider/calendar', name: 'provider-calendar', component: ProviderCalendar, meta: { requiresAuth: true, requiresProvider: true } },
   { path: '/provider/earnings', name: 'provider-earnings', component: ProviderEarnings, meta: { requiresAuth: true, requiresProvider: true } },
+  { path: '/provider/payment-methods', name: 'provider-payment-methods', component: () => import('@/pages/provider/PaymentMethods.vue'), meta: { requiresAuth: true, requiresProvider: true } },
 
   // Admin
   { path: '/admin', name: 'admin-dashboard', component: AdminDashboard, meta: { requiresAuth: true, roles: ['admin'] } },
@@ -95,6 +96,7 @@ const routes = [
   { path: '/admin/moderation', name: 'admin-moderation', component: AdminModeration, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/admin/users/:id', name: 'admin-user-detail', component: AdminUserDetail, meta: { requiresAuth: true, roles: ['admin'] } },
+  { path: '/admin/payouts', name: 'admin-payouts', component: () => import('@/pages/admin/PayoutsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },
 
   // Admin content management
   { path: '/admin/accommodations', name: 'admin-accommodations', component: () => import('@/pages/admin/content/AccommodationsManagement.vue'), meta: { requiresAuth: true, roles: ['admin'] } },

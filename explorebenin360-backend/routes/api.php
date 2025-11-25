@@ -114,6 +114,19 @@ Route::prefix('v1')->group(function () {
         Route::patch('/provider/offerings/{id}/availability', [ProviderOfferingController::class, 'updateAvailability']);
         Route::get('/provider/analytics', [ProviderOfferingController::class, 'analytics']);
 
+        Route::prefix('provider')->group(function () {
+            Route::get('/payment-methods', [\App\Http\Controllers\Api\Provider\PaymentMethodController::class, 'index']);
+            Route::post('/payment-methods', [\App\Http\Controllers\Api\Provider\PaymentMethodController::class, 'store']);
+            Route::patch('/payment-methods/{id}/set-default', [\App\Http\Controllers\Api\Provider\PaymentMethodController::class, 'setDefault']);
+            Route::delete('/payment-methods/{id}', [\App\Http\Controllers\Api\Provider\PaymentMethodController::class, 'destroy']);
+
+            Route::get('/balance', [\App\Http\Controllers\Api\Provider\PayoutController::class, 'balance']);
+            Route::get('/payouts', [\App\Http\Controllers\Api\Provider\PayoutController::class, 'index']);
+            Route::get('/payouts/{id}', [\App\Http\Controllers\Api\Provider\PayoutController::class, 'show']);
+            Route::post('/payouts', [\App\Http\Controllers\Api\Provider\PayoutController::class, 'store']);
+            Route::patch('/payouts/{id}/cancel', [\App\Http\Controllers\Api\Provider\PayoutController::class, 'cancel']);
+        });
+
         // Admin endpoints - avec middleware admin + rate limiting
         Route::middleware(['admin', 'throttle:admin'])->group(function () {
             Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
@@ -165,6 +178,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/admin/places/{id}', [PlaceAdminController::class, 'show']);
             Route::patch('/admin/places/{id}', [PlaceAdminController::class, 'update']);
             Route::delete('/admin/places/{id}', [PlaceAdminController::class, 'destroy']);
+
+            // Admin payouts management
+            Route::prefix('admin/payouts')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Admin\AdminPayoutController::class, 'index']);
+                Route::patch('/{id}/process', [\App\Http\Controllers\Api\Admin\AdminPayoutController::class, 'process']);
+                Route::patch('/{id}/complete', [\App\Http\Controllers\Api\Admin\AdminPayoutController::class, 'complete']);
+                Route::patch('/{id}/fail', [\App\Http\Controllers\Api\Admin\AdminPayoutController::class, 'fail']);
+            });
 
             // Admin analytics
             Route::prefix('admin/analytics')->group(function () {
