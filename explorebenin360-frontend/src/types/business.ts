@@ -43,13 +43,49 @@ export type ProviderUser = {
   created_at?: string
 }
 
+export type PaymentMethodType = 'bank_account' | 'mobile_money' | 'paypal'
+
+export type PaymentMethod = {
+  id: number
+  type: PaymentMethodType
+  account_name: string
+  account_number_masked: string
+  bank_name?: string | null
+  mobile_provider?: string | null
+  country: string
+  is_default: boolean
+  is_verified: boolean
+  verified_at?: string | null
+  created_at: string
+}
+
+export type PayoutStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled'
+
 export type Payout = {
   id: number
-  date: string
+  provider_id: number
+  payment_method_id: number
+  payment_method?: PaymentMethod
   amount: number
   currency: string
-  status: 'pending'|'paid'|'failed'
+  status: PayoutStatus
   reference: string
+  transaction_ref?: string | null
+  admin_notes?: string | null
+  failure_reason?: string | null
+  requested_at: string
+  processed_at?: string | null
+  completed_at?: string | null
+  processed_by?: { id: number; name: string } | null
+  created_at: string
+}
+
+export type Balance = {
+  total_earnings: number
+  total_payouts: number
+  pending_payouts: number
+  available_balance: number
+  currency: string
 }
 
 export type MessageThread = {
