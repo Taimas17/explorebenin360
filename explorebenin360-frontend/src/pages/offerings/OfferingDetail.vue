@@ -33,6 +33,10 @@
         </form>
       </div>
     </div>
+
+    <div class="mt-8">
+      <ReviewsList v-if="item?.place?.id" reviewable-type="places" :reviewable-id="item.place.id" />
+    </div>
   </div>
 </template>
 <script setup>
@@ -42,6 +46,7 @@ import { useI18n } from 'vue-i18n'
 import { fetchOffering } from '@/lib/api'
 import { setPageMeta } from '@/utils/meta'
 import { createThread } from '@/lib/services/messages'
+import ReviewsList from '@/components/reviews/ReviewsList.vue'
 
 const { t } = useI18n()
 const route = useRoute()

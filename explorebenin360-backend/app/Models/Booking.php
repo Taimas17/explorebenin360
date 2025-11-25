@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Review;
 
 class Booking extends Model
 {
@@ -44,5 +45,10 @@ class Booking extends Model
     public function offering()
     {
         return $this->belongsTo(Offering::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

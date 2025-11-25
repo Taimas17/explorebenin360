@@ -12,6 +12,7 @@
         <a v-if="item.receipt_url" :href="item.receipt_url" target="_blank" rel="noopener" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.view_receipt') }}</a>
         <button v-if="item.status==='pending' || item.status==='authorized'" @click="cancel" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('dashboard.cancel') }}</button>
         <button @click="openContact" class="btn-base focus-ring h-9 px-4 rounded-md border border-black/10 dark:border-white/10">{{ t('common.contact_provider') || 'Contacter le provider' }}</button>
+        <button v-if="canReview" @click="showReviewModal = true" class="btn-base focus-ring h-9 px-4 rounded-md text-white" :style="{ backgroundColor: 'var(--color-secondary)' }">⭐ Laisser un avis</button>
       </div>
     </div>
 
@@ -38,6 +39,14 @@
         </form>
       </div>
     </div>
+
+    <ReviewFormModal 
+      :is-open="showReviewModal"
+      :booking-id="item.id"
+      :offering-title="item.offering.title"
+      @close="showReviewModal = false"
+      @submitted="canReview = false"
+    />
   </div>
 </template>
 <script setup>
@@ -46,6 +55,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchBookingService, cancelBookingService } from '@/lib/services/bookings'
 import { createThread } from '@/lib/services/messages'
+import { canReviewBooking } from '@/lib/services/reviews'
+import ReviewFormModal from '@/components/reviews/ReviewFormModal.vue'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Alert from '@/components/ui/Alert.vue'
 
@@ -56,9 +67,15 @@ const item = ref<any>(null)
 const modals = ref({ contact: false })
 const form = ref({ subject: '', initial_message: '' })
 const loading = ref(false)
+const canReview = ref(false)
+const showReviewModal = ref(false)
 
 onMounted(async () => {
   item.value = await fetchBookingService(Number(route.params.id))
+  if (item.value && item.value.status === 'confirmed') {
+    const result = await canReviewBooking(item.value.id)
+    canReview.value = result.can_review
+  }
 })
 
 const cancel = async () => {

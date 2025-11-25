@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Review;
+use App\Observers\ReviewObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Review::observe(ReviewObserver::class);
+
         if (app()->environment('local')) {
             DB::listen(function ($query) {
                 Log::channel('queries')->info(

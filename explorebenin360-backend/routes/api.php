@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\UserAdminController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -49,6 +50,8 @@ Route::prefix('v1')->group(function () {
         
         Route::get('/offerings', [OfferingController::class, 'index']);
         Route::get('/offerings/{slug}', [OfferingController::class, 'show']);
+
+        Route::get('/reviews', [ReviewController::class, 'index']);
     });
 
     // Auth endpoints - rate limiting strict (5/min)
@@ -100,6 +103,13 @@ Route::prefix('v1')->group(function () {
 
     // Provider & Admin - rate limiting API standard
     Route::middleware(['sanctum.cookie', 'auth:sanctum', 'account.active', 'throttle:api'])->group(function () {
+        Route::get('/reviews/my', [ReviewController::class, 'myReviews']);
+        Route::get('/reviews/can-review/{bookingId}', [ReviewController::class, 'canReview']);
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+        Route::patch('/reviews/{id}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
         Route::get('/provider/bookings', [BookingController::class, 'providerIndex']);
         Route::patch('/provider/bookings/{id}', [BookingController::class, 'providerUpdate']);
 
@@ -173,6 +183,13 @@ Route::prefix('v1')->group(function () {
                 Route::get('/top-content', [AdminAnalyticsController::class, 'topContent']);
                 Route::get('/recent-activity', [AdminAnalyticsController::class, 'recentActivity']);
                 Route::get('/export', [AdminAnalyticsController::class, 'export']);
+            });
+
+            Route::prefix('admin/reviews')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Admin\AdminReviewController::class, 'index']);
+                Route::patch('/{id}/approve', [\App\Http\Controllers\Api\Admin\AdminReviewController::class, 'approve']);
+                Route::patch('/{id}/reject', [\App\Http\Controllers\Api\Admin\AdminReviewController::class, 'reject']);
+                Route::delete('/{id}', [\App\Http\Controllers\Api\Admin\AdminReviewController::class, 'destroy']);
             });
         });
     });
