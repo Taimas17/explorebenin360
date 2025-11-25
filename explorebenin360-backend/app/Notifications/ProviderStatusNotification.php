@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class ProviderStatusNotification extends Notification
+class ProviderStatusNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -17,7 +18,7 @@ class ProviderStatusNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toArray($notifiable): array
@@ -34,5 +35,11 @@ class ProviderStatusNotification extends Notification
             'reason' => $this->rejectionReason,
             'action_url' => '/become-provider',
         ];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new \App\Mail\ProviderStatus($notifiable, $this->status, $this->rejectionReason))
+            ->to($notifiable->email);
     }
 }
