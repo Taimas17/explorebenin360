@@ -10,7 +10,10 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->index('created_at');
-            $table->index('last_login_at');
+            // last_login_at may be added by a later migration; only create index if column exists
+            if (Schema::hasColumn('users', 'last_login_at')) {
+                $table->index('last_login_at');
+            }
         });
         
         Schema::table('bookings', function (Blueprint $table) {
@@ -50,8 +53,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
-            $table->dropIndex(['last_login_at']);
+            if (Schema::hasColumn('users', 'created_at')) {
+                $table->dropIndex(['created_at']);
+            }
+            if (Schema::hasColumn('users', 'last_login_at')) {
+                $table->dropIndex(['last_login_at']);
+            }
         });
         
         Schema::table('bookings', function (Blueprint $table) {
