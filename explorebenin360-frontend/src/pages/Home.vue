@@ -138,8 +138,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
-import { setPageMeta } from '@/utils/meta'},{"old_string":"useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: hero1, imagesrcset: hero1 + ' 1x', fetchpriority: 'high' } ] })","new_string":"setPageMeta({ title: t('meta.home_title'), description: t('meta.home_desc'), path: '/' })
-useHead({ link: [ { rel: 'preload', as: 'image', href: hero1, imagesrcset: hero1 + ' 1x', fetchpriority: 'high' } ] })
+import { setPageMeta } from '@/utils/meta'
 import { fetchPlaces, fetchAccommodations, fetchGuides, fetchArticles, fetchEvents } from '@/lib/api'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
@@ -159,7 +158,9 @@ import hero2 from '@/assets/brand/images/home/hero-2.png'
 import hero3 from '@/assets/brand/images/home/hero-3.png'
 
 const { t } = useI18n()
-useHead({ title: 'ExploreBenin360 — Accueil', meta: [ { name: 'description', content: t('brand.baseline') } ], link: [ { rel: 'preload', as: 'image', href: hero1, imagesrcset: hero1 + ' 1x', fetchpriority: 'high' } ] })
+setPageMeta({ title: t('meta.home_title'), description: t('meta.home_desc'), path: '/' })
+useHead({ link: [ { rel: 'preload', as: 'image', href: hero1, imagesrcset: hero1 + ' 1x', fetchpriority: 'high' } ] })
+
 
 const svg = (label, from = '#FF6B35', to = '#FFD166') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(`
