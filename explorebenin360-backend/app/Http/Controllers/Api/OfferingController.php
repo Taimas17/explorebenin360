@@ -17,6 +17,7 @@ class OfferingController extends Controller
             'max_price' => ['nullable','numeric','min:0'],
             'capacity' => ['nullable','integer','min:1'],
             'city' => ['nullable','string','max:80'],
+            'sort' => ['nullable','in:popular,price_asc,price_desc,newest'],
             'page' => ['nullable','integer','min:1'],
             'per_page' => ['nullable','integer','min:1','max:50'],
         ]);
@@ -39,7 +40,18 @@ class OfferingController extends Controller
             $query->whereHas('place', fn($q) => $q->where('city', $data['city']));
         }
 
-        $paginator = $query->orderBy('price')->paginate((int)($data['per_page'] ?? 15))->appends($request->query());
+        $sort = $data['sort'] ?? null;
+        if ($sort === 'popular') {
+            $query->withCount('bookings')->orderByDesc('bookings_count');
+        } elseif ($sort === 'price_desc') {
+            $query->orderByDesc('price');
+        } elseif ($sort === 'newest') {
+            $query->orderByDesc('created_at');
+        } else {
+            $query->orderBy('price');
+        }
+
+        $paginator = $query->paginate((int)($data['per_page'] ?? 15))->appends($request->query());
         return response()->json([
             'data' => $paginator->items(),
             'meta' => [

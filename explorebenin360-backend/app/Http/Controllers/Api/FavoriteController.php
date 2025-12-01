@@ -8,6 +8,7 @@ use App\Models\Place;
 use App\Models\Accommodation;
 use App\Models\Article;
 use App\Models\Guide;
+use App\Models\Offering;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
@@ -26,6 +27,7 @@ class FavoriteController extends Controller
             'hebergement' => $favorites->get('hebergement', []),
             'article' => $favorites->get('article', []),
             'guide' => $favorites->get('guide', []),
+            'offering' => $favorites->get('offering', []),
         ];
 
         return response()->json(['data' => $grouped]);
@@ -34,7 +36,7 @@ class FavoriteController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => ['required', 'in:destination,hebergement,article,guide'],
+            'type' => ['required', 'in:destination,hebergement,article,guide,offering'],
             'id' => ['required', 'integer', 'min:1'],
         ]);
 
@@ -65,7 +67,7 @@ class FavoriteController extends Controller
     public function remove(Request $request)
     {
         $data = $request->validate([
-            'type' => ['required', 'in:destination,hebergement,article,guide'],
+            'type' => ['required', 'in:destination,hebergement,article,guide,offering'],
             'id' => ['required', 'integer', 'min:1'],
         ]);
 
@@ -88,6 +90,7 @@ class FavoriteController extends Controller
             'hebergement' => Accommodation::where('id', $id)->exists(),
             'article' => Article::where('id', $id)->exists(),
             'guide' => Guide::where('id', $id)->exists(),
+            'offering' => Offering::where('id', $id)->exists(),
             default => false
         };
     }
