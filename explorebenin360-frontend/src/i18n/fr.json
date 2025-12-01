@@ -38,7 +38,46 @@
     "optional": "optionnel",
     "details": "Détails",
     "cancel": "Annuler",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "change": "Modifier",
+    "uploading": "Envoi en cours...",
+    "saving": "Enregistrement...",
+    "processing": "Traitement...",
+    "sending": "Envoi...",
+    "create": "Créer",
+    "contact_provider": "Contacter le prestataire",
+    "about": "À propos",
+    "view": "Voir",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "all": "Tous",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "and": "et"
+  },
+  "profile": {
+    "change_password": "Changer le mot de passe",
+    "current_password": "Mot de passe actuel",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "change_cover": "Changer l'image de couverture",
+    "delete_account": "Supprimer mon compte",
+    "delete_warning": "Cette action est irréversible. Toutes vos données seront supprimées définitivement.",
+    "password_confirm": "Entrez votre mot de passe pour confirmer",
+    "delete_ack": "Je comprends que cette action est irréversible",
+    "update_success": "Profil mis à jour avec succès",
+    "password_changed": "Mot de passe modifié avec succès",
+    "avatar_updated": "Photo de profil mise à jour",
+    "cover_updated": "Image de couverture mise à jour"
   },
   "auth": { "name": "Nom", "password": "Mot de passe" },
   "offerings": { "title": "Offres réservables", "capacity": "Capacité" },
@@ -85,6 +124,26 @@
     "send_message": "Envoyer un message",
     "type_message": "Écrivez votre message...",
     "send": "Envoyer"
+  },
+  "messages": {
+    "title": "Messages",
+    "new_thread": "Nouveau message",
+    "no_messages": "Aucun message",
+    "send": "Envoyer",
+    "placeholder": "Écrivez votre message...",
+    "select_thread": "Sélectionnez une conversation"
+  },
+  "reservations": {
+    "title": "Mes réservations",
+    "empty": "Aucune réservation",
+    "status": {
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "cancelled": "Annulée",
+      "completed": "Terminée"
+    },
+    "cancel": "Annuler la réservation",
+    "cancel_confirm": "Êtes-vous sûr de vouloir annuler cette réservation ?"
   },
   "provider": {
     "dashboard": "Tableau de bord prestataire",
@@ -220,9 +279,21 @@
     "empty_desc": "Ajoutez des destinations, hébergements, articles et guides à vos favoris pour les retrouver ici.",
     "explore_cta": "Commencer à explorer",
     "add_aria": "Ajouter aux favoris",
-    "remove_aria": "Retirer des favoris"
+    "remove_aria": "Retirer des favoris",
+    "empty": "Aucun favori pour le moment",
+    "added": "Ajouté aux favoris",
+    "removed": "Retiré des favoris"
   },
   "errors": {
+    "generic": "Une erreur est survenue. Veuillez réessayer.",
+    "network": "Erreur de connexion. Vérifiez votre connexion internet.",
+    "password_min": "Le mot de passe doit contenir au moins 8 caractères",
+    "password_mismatch": "Les mots de passe ne correspondent pas",
+    "required": "Ce champ est requis",
+    "invalid_email": "Adresse email invalide",
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action",
+    "not_found": "Ressource non trouvée",
+    "rate_limit": "Trop de requêtes. Veuillez patienter.",
     "login_failed": "Échec de la connexion",
     "register_failed": "Échec de l'inscription",
     "checkout_failed": "Échec de l'initialisation du paiement"
