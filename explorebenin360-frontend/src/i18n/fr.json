@@ -81,6 +81,23 @@
   },
   "auth": { "name": "Nom", "password": "Mot de passe" },
   "offerings": { "title": "Offres réservables", "capacity": "Capacité" },
+  "experiences": {
+    "title": "Expériences",
+    "empty": "Aucune expérience disponible",
+    "empty_desc": "Revenez bientôt pour découvrir nos expériences uniques au Bénin",
+    "filters": {
+      "category": "Catégorie",
+      "price_range": "Budget",
+      "location": "Localisation",
+      "duration": "Durée"
+    },
+    "sort": {
+      "popular": "Les plus populaires",
+      "price_asc": "Prix croissant",
+      "price_desc": "Prix décroissant",
+      "newest": "Les plus récents"
+    }
+  },
   "checkout": {
     "title": "Réserver",
     "book_now": "Réserver",
@@ -311,6 +328,8 @@
     "destinations_desc": "Parcourez notre sélection de villes, parcs, plages et sites historiques au Bénin. Filtrez par type, tags et carte interactive.",
     "hebergements_title": "Hébergements au Bénin — Hôtels, maisons d’hôtes, écolodges",
     "hebergements_desc": "Trouvez un hôtel, une maison d’hôtes ou un écolodge au meilleur prix. Photos, équipements, localisation et disponibilité.",
+    "experiences_title": "Expériences au Bénin — Activités, tours et services guidés",
+    "experiences_desc": "Découvrez les expériences réservables au Bénin : activités, excursions et services de guides. Filtrez par catégorie, budget et localisation.",
     "blog_title": "Blog voyage Bénin — Conseils, itinéraires et culture",
     "blog_desc": "Idées d’itinéraires, conseils pratiques, coups de cœur et culture béninoise pour préparer votre voyage.",
     "agenda_title": "Agenda du Bénin — Festivals, événements et sorties",

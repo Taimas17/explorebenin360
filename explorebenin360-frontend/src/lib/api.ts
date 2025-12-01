@@ -79,9 +79,9 @@ export const adminBookings = (filters: any = {}) => get('/admin/bookings', filte
 export const adminUpdateBooking = (id: number, body: any) => patch(`/admin/bookings/${id}`, body)
 
 // Favorites (graceful 404 fallback expected by callers)
-export const getFavorites = () => get<{ data: { destination: number[]; hebergement: number[]; article: number[]; guide: number[] } }>('/favorites')
-export const addFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites', { type, id })
-export const removeFavorite = (type: 'destination'|'hebergement'|'article'|'guide', id: number) => post('/favorites/remove', { type, id })
+export const getFavorites = () => get<{ data: { destination: number[]; hebergement: number[]; article: number[]; guide: number[]; offering: number[] } }>('/favorites')
+export const addFavorite = (type: 'destination'|'hebergement'|'article'|'guide'|'offering', id: number) => post('/favorites', { type, id })
+export const removeFavorite = (type: 'destination'|'hebergement'|'article'|'guide'|'offering', id: number) => post('/favorites/remove', { type, id })
 
 // Provider Application
 export const applyAsProvider = (body: { business_name: string; phone: string; bio: string; kyc_documents?: string[] }) => 

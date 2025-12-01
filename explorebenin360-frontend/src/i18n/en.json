@@ -81,6 +81,23 @@
   },
   "auth": { "name": "Name", "password": "Password" },
   "offerings": { "title": "Bookable offerings", "capacity": "Capacity" },
+  "experiences": {
+    "title": "Experiences",
+    "empty": "No experiences available",
+    "empty_desc": "Check back soon to discover our unique experiences in Benin",
+    "filters": {
+      "category": "Category",
+      "price_range": "Budget",
+      "location": "Location",
+      "duration": "Duration"
+    },
+    "sort": {
+      "popular": "Most popular",
+      "price_asc": "Price: low to high",
+      "price_desc": "Price: high to low",
+      "newest": "Newest"
+    }
+  },
   "checkout": {
     "title": "Checkout",
     "book_now": "Book now",
@@ -277,6 +294,8 @@
     "destinations_desc": "Browse cities, parks, beaches and heritage sites across Benin. Filter by type, tags and map.",
     "hebergements_title": "Stays in Benin — Hotels, guesthouses, ecolodges",
     "hebergements_desc": "Find a hotel, guesthouse or ecolodge at the right price. Photos, amenities, location and availability.",
+    "experiences_title": "Experiences in Benin — Tours, activities and guided services",
+    "experiences_desc": "Browse bookable experiences, tours and activities in Benin. Filter by category, budget and location.",
     "blog_title": "Benin travel blog — Tips, itineraries and culture",
     "blog_desc": "Trip ideas, practical tips, highlights and Beninese culture to plan your journey.",
     "agenda_title": "Benin events — Festivals and what’s on",
